@@ -1,7 +1,7 @@
 # CppPlot - A Matplotlib-style Plotting Library for C++
 
 <p align="center">
-  <img src="docs/logo.svg" alt="CppPlot Logo" width="200">
+  <img src="docs/logo.png" alt="CppPlot Logo" width="200">
 </p>
 
 ## 🎯 Overview
