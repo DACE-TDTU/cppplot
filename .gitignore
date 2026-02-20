@@ -1,0 +1,38 @@
+# Build artifacts
+build/
+out/
+bin/
+.cmake/
+CMakeCache.txt
+CMakeFiles/
+*.exe
+*.o
+*.obj
+
+# Generated outputs
+examples/output/
+*.png
+*.pdf
+
+# Temporary files
+temp_plot.svg
+*.tmp
+
+# IDE
+.vscode/
+.vs/
+*.swp
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Node
+node_modules/
+dist/
+.npm/
+# Môi trường và API Key (Tuyệt đối không push)
+.env
+.env.local
+.env.*.local
