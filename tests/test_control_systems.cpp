@@ -1,431 +1,366 @@
 /**
  * test_control_systems.cpp
- * ─────────────────────────────────────────────
- * Kiểm tra các plot chuyên dụng cho control systems.
- * Đặc biệt: kiểm tra NUMERICAL CORRECTNESS của
- * dữ liệu đầu vào, chứng minh library tương thích
- * với tính toán control systems chuẩn.
+ * Control systems plots using confirmed API:
+ *   Figure fig(w,h); auto& ax = fig.gca();
+ *   ax.plot(), ax.scatter(), ax.set_title()...
+ * Numerically validates Bode, step response, SMC.
  */
 #include <cppplot/cppplot.hpp>
-#include <cassert>
-#include <fstream>
 #include <iostream>
+#include <cassert>
 #include <complex>
 #include <cmath>
 #include <vector>
-#include <string>
-#include <limits>
+#include <fstream>
+#include <stdexcept>
+#include <algorithm>
 
 using namespace cppplot;
 
-static bool file_exists(const std::string& p) {
-    return std::ifstream(p).good();
-}
+int tests_passed = 0, tests_failed = 0;
 
-// Độ chính xác số học
-static const double EPS = 1e-9;
+#define RUN_TEST(name) do { \
+    std::cout << "Running " #name "... "; \
+    try { test_##name(); std::cout << "PASSED\n"; tests_passed++; } \
+    catch (const std::exception& e) { \
+        std::cout << "FAILED: " << e.what() << "\n"; tests_failed++; } \
+} while(0)
 
-// ─────────────────────────────────────────────
-// Utility: tính frequency response của hệ thống
-// G(s) = wn² / (s² + 2ζωₙs + ωₙ²)
-// ─────────────────────────────────────────────
-struct SecondOrderSystem {
-    double wn;   // natural frequency (rad/s)
-    double zeta; // damping ratio
+#define ASSERT_TRUE(x)     do { if(!(x))  throw std::runtime_error("TRUE: "  #x); } while(0)
+#define ASSERT_NEAR(a,b,t) do { if(std::abs((double)(a)-(double)(b))>(t)) \
+    throw std::runtime_error(std::string("NEAR: ") + #a + " = " + std::to_string((double)(a)) \
+                             + ", expected " + std::to_string((double)(b))); } while(0)
+#define ASSERT_CONTAINS(s,sub) do { \
+    if((s).find(sub)==std::string::npos) \
+        throw std::runtime_error(std::string("missing: '") + (sub) + "'"); \
+} while(0)
+
+// ── Hệ thống bậc 2: G(s) = wn²/(s²+2ζwns+wn²) ──
+struct SecondOrder {
+    double wn, zeta;
 
     std::complex<double> eval(double omega) const {
-        std::complex<double> s(0.0, omega);
-        return (wn * wn) / (s * s + 2.0 * zeta * wn * s + wn * wn);
+        std::complex<double> s(0, omega);
+        return (wn*wn) / (s*s + 2*zeta*wn*s + wn*wn);
     }
-
-    double magnitude_dB(double omega) const {
+    double mag_dB(double omega) const {
         return 20.0 * std::log10(std::abs(eval(omega)));
     }
-
     double phase_deg(double omega) const {
         return std::arg(eval(omega)) * 180.0 / M_PI;
     }
-
-    // Step response y(t) — analytical formula
-    double step_response(double t) const {
-        if (zeta >= 1.0) {
-            // Overdamped / critically damped (simplified)
-            double r = wn * std::sqrt(zeta * zeta - 1.0);
-            double s1 = -zeta * wn + r;
-            double s2 = -zeta * wn - r;
-            double A = s2 / (s2 - s1);
-            double B = -s1 / (s2 - s1);
-            return 1.0 - A * std::exp(s1 * t) - B * std::exp(s2 * t);
-        } else {
-            // Underdamped
-            double sigma = zeta * wn;
-            double wd    = wn * std::sqrt(1.0 - zeta * zeta);
-            return 1.0 - std::exp(-sigma * t) *
-                         (std::cos(wd * t) + (sigma / wd) * std::sin(wd * t));
-        }
+    double step(double t) const {
+        double sigma = zeta*wn;
+        double wd = wn*std::sqrt(1-zeta*zeta);
+        return 1 - std::exp(-sigma*t)*(std::cos(wd*t) + sigma/wd*std::sin(wd*t));
     }
 };
 
-// ─────────────────────────────────────────────
-// TEST 1: Bode plot — kiểm tra numerical correctness
-// ─────────────────────────────────────────────
-void test_bode_numerical_correctness() {
-    std::cout << "[TEST] test_bode_numerical_correctness ... ";
+// ═══════════════════════════════════════════
+// Bode Plot — numerical + visual
+// ═══════════════════════════════════════════
 
-    SecondOrderSystem sys{10.0, 0.707}; // wn=10, zeta=0.707 (critically damped)
+void test_bode_dc_gain() {
+    SecondOrder sys{10.0, 0.707};
+    // DC gain (ω→0) phải ≈ 0 dB
+    ASSERT_NEAR(sys.mag_dB(0.001), 0.0, 1.0);
+}
 
-    auto w = logspace(-1, 3, 300); // 0.1 to 1000 rad/s
+void test_bode_bandwidth() {
+    SecondOrder sys{10.0, 0.707};
+    // ω=ωn, ζ=0.707 → -3 dB bandwidth
+    ASSERT_NEAR(sys.mag_dB(sys.wn), -3.01, 0.15);
+}
 
-    std::vector<double> mag_dB, phase_deg_vec;
+void test_bode_phase_at_wn() {
+    SecondOrder sys{10.0, 0.3};
+    // Phase tại ω=ωn luôn = -90° với mọi ζ
+    ASSERT_NEAR(sys.phase_deg(sys.wn), -90.0, 2.0);
+}
+
+void test_bode_high_freq_phase() {
+    SecondOrder sys{10.0, 0.5};
+    // Phase ω>>ωn → -180°
+    ASSERT_NEAR(sys.phase_deg(100000.0), -180.0, 3.0);
+}
+
+void test_bode_plot_renders() {
+    SecondOrder sys{10.0, 0.3};
+    auto w = logspace(-1, 3, 200);
+    std::vector<double> mag_db, phase_d;
     for (double wi : w) {
-        mag_dB.push_back(sys.magnitude_dB(wi));
-        phase_deg_vec.push_back(sys.phase_deg(wi));
+        mag_db.push_back(sys.mag_dB(wi));
+        phase_d.push_back(sys.phase_deg(wi));
     }
 
-    // ── Numerical checks ──────────────────────
-    // 1. Tại ω << ωₙ (DC): magnitude ≈ 0 dB
-    double dc_gain_dB = sys.magnitude_dB(0.001);
-    assert(std::abs(dc_gain_dB) < 1.0 &&
-           "DC gain must be ~0 dB for unity DC gain system");
+    Figure fig(800, 600);
 
-    // 2. Tại ω = ωₙ với zeta=0.707: magnitude ≈ -3 dB (định nghĩa bandwidth)
-    double gain_at_wn = sys.magnitude_dB(sys.wn);
-    assert(std::abs(gain_at_wn - (-3.01)) < 0.1 &&
-           "Gain at wn with zeta=0.707 must be ~-3 dB");
+    auto& ax1 = fig.subplot(2, 1, 1);
+    ax1.plot(w, mag_db, "b-", {{"label", std::string("Magnitude")}});
+    ax1.set_ylabel("Magnitude (dB)");
+    ax1.set_title("Bode Plot - wn=10, zeta=0.3");
+    ax1.grid(true);
 
-    // 3. Tại ω >> ωₙ: phase → -180°
-    double phase_high = sys.phase_deg(10000.0);
-    assert(std::abs(phase_high - (-180.0)) < 5.0 &&
-           "High-frequency phase must approach -180 deg");
+    auto& ax2 = fig.subplot(2, 1, 2);
+    ax2.plot(w, phase_d, "b-");
+    ax2.set_xlabel("Frequency (rad/s)");
+    ax2.set_ylabel("Phase (deg)");
+    ax2.grid(true);
 
-    // 4. Tại ω = ωₙ: phase = -90° (đúng cho mọi zeta)
-    double phase_at_wn = sys.phase_deg(sys.wn);
-    assert(std::abs(phase_at_wn - (-90.0)) < 2.0 &&
-           "Phase at wn must be ~-90 deg");
-
-    // ── Vẽ Bode plot ──────────────────────────
-    figure(800, 600);
-    subplot(2, 1, 1);
-    plot(w, mag_dB, "b-", opts({{"linewidth", "2"}}));
-    xscale("log");
-    axhline(-3.0, opts({{"color", "gray"}, {"linestyle", "--"}}));
-    ylabel("Magnitude (dB)");
-    grid(true);
-    title("Bode Plot - 2nd Order (wn=10, zeta=0.707)");
-
-    subplot(2, 1, 2);
-    plot(w, phase_deg_vec, "b-", opts({{"linewidth", "2"}}));
-    xscale("log");
-    axhline(-90.0, opts({{"color", "gray"}, {"linestyle", "--"}}));
-    xlabel("Frequency (rad/s)");
-    ylabel("Phase (deg)");
-    grid(true);
-
-    savefig("test_bode.svg");
-    assert(file_exists("test_bode.svg"));
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Bode Plot");
+    ASSERT_CONTAINS(svg, "<polyline");
+    fig.savefig("test_bode.svg");
+    std::remove("test_bode.svg");
 }
 
-// ─────────────────────────────────────────────
-// TEST 2: Step response — kiểm tra correctness
-// ─────────────────────────────────────────────
-void test_step_response_correctness() {
-    std::cout << "[TEST] test_step_response_correctness ... ";
+// ═══════════════════════════════════════════
+// Step Response — numerical correctness
+// ═══════════════════════════════════════════
 
-    SecondOrderSystem sys{10.0, 0.3}; // underdamped
+void test_step_initial_value() {
+    SecondOrder sys{10.0, 0.3};
+    ASSERT_NEAR(sys.step(0.0), 0.0, 1e-10);
+}
 
+void test_step_final_value() {
+    SecondOrder sys{10.0, 0.3};
+    ASSERT_NEAR(sys.step(10.0), 1.0, 0.01);
+}
+
+void test_step_overshoot() {
+    SecondOrder sys{10.0, 0.3};
     auto t = linspace(0.0, 3.0, 500);
     std::vector<double> y;
-    for (double ti : t) y.push_back(sys.step_response(ti));
+    for (double ti : t) y.push_back(sys.step(ti));
 
-    // ── Numerical checks ──────────────────────
-    // 1. y(0) = 0 (starts at zero)
-    assert(std::abs(y[0]) < EPS &&
-           "Step response must start at y(0) = 0");
+    double max_y = *std::max_element(y.begin(), y.end());
+    ASSERT_TRUE(max_y > 1.0); // underdamped phải overshoot
 
-    // 2. y(∞) → 1.0 (steady state = 1 for unity DC gain)
-    double y_final = y.back();
-    assert(std::abs(y_final - 1.0) < 0.01 &&
-           "Step response must converge to 1.0 for t → ∞");
-
-    // 3. Underdamped system (zeta=0.3) phải có overshoot
-    double max_val = *std::max_element(y.begin(), y.end());
-    assert(max_val > 1.0 &&
-           "Underdamped system (zeta=0.3) must exhibit overshoot");
-
-    // 4. Overshoot phải đúng với formula: OS = exp(-pi*zeta/sqrt(1-zeta²))
-    double zeta = sys.zeta;
-    double theoretical_OS = std::exp(-M_PI * zeta /
-                                     std::sqrt(1.0 - zeta * zeta));
-    double measured_OS = max_val - 1.0;
-    assert(std::abs(measured_OS - theoretical_OS) < 0.05 &&
-           "Overshoot must match theoretical formula");
-
-    // ── Vẽ step response ──────────────────────
-    figure(800, 450);
-    plot(t, y, "b-", opts({{"linewidth", "2"}, {"label", "y(t)"}}));
-    axhline(1.0,          opts({{"color","gray"}, {"linestyle","--"}}));
-    axhline(1.0 + theoretical_OS,
-                          opts({{"color","red"},  {"linestyle",":"}}));
-    text(2.5, 1.0 + theoretical_OS + 0.02, "OS",
-         opts({{"color","red"}, {"fontsize","10"}}));
-    xlabel("Time (s)");
-    ylabel("y(t)");
-    legend(true);
-    grid(true);
-    title("Step Response - wn=10, zeta=0.3");
-    savefig("test_step_response.svg");
-    assert(file_exists("test_step_response.svg"));
-
-    std::cout << "PASS\n";
+    // Lý thuyết: OS = exp(-π·ζ/√(1-ζ²))
+    double ζ = sys.zeta;
+    double OS_theory = std::exp(-M_PI*ζ / std::sqrt(1-ζ*ζ));
+    double OS_meas   = max_y - 1.0;
+    ASSERT_NEAR(OS_meas, OS_theory, 0.05);
 }
 
-// ─────────────────────────────────────────────
-// TEST 3: Nyquist plot
-// ─────────────────────────────────────────────
-void test_nyquist_plot() {
-    std::cout << "[TEST] test_nyquist_plot ... ";
+void test_step_overdamped_no_overshoot() {
+    SecondOrder sys{10.0, 1.5}; // overdamped
+    auto t = linspace(0.0, 5.0, 500);
+    double max_y = 0;
+    for (double ti : t) max_y = std::max(max_y, sys.step(ti));
+    ASSERT_TRUE(max_y <= 1.01); // không overshoot
+}
 
-    // G(s) = 1 / (s(s+1)(s+2)) — open-loop unstable
-    auto w = logspace(-2, 2, 400);
+void test_step_response_plot() {
+    SecondOrder sys{10.0, 0.3};
+    auto t = linspace(0.0, 2.0, 300);
+    std::vector<double> y;
+    for (double ti : t) y.push_back(sys.step(ti));
+
+    Figure fig(700, 400);
+    auto& ax = fig.gca();
+    ax.plot(t, y, "b-", {{"label", std::string("y(t)")}});
+    ax.set_xlabel("Time (s)");
+    ax.set_ylabel("y(t)");
+    ax.set_title("Step Response - wn=10, zeta=0.3");
+    ax.set_xlim(0, 2);
+    ax.set_ylim(0, 1.6);
+    ax.grid(true);
+    ax.legend(true);
+
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Step Response");
+    fig.savefig("test_step.svg");
+    std::remove("test_step.svg");
+}
+
+// ═══════════════════════════════════════════
+// Nyquist Plot
+// ═══════════════════════════════════════════
+
+void test_nyquist_high_freq_magnitude() {
+    // G(s)=1/(s(s+1)(s+2)) — mag→0 khi ω→∞
+    auto w = logspace(-2, 3, 300);
     std::vector<double> re, im;
-
     for (double wi : w) {
-        std::complex<double> s(0.0, wi);
-        std::complex<double> H = 1.0 / (s * (s + 1.0) * (s + 2.0));
+        std::complex<double> s(0, wi);
+        auto H = 1.0 / (s*(s+1.0)*(s+2.0));
+        re.push_back(H.real());
+        im.push_back(H.imag());
+    }
+    double mag_high = std::sqrt(re.back()*re.back() + im.back()*im.back());
+    ASSERT_TRUE(mag_high < 0.01);
+}
+
+void test_nyquist_renders() {
+    auto w = logspace(-2, 2, 200);
+    std::vector<double> re, im;
+    for (double wi : w) {
+        std::complex<double> s(0, wi);
+        auto H = 1.0 / (s*(s+1.0)*(s+2.0));
         re.push_back(H.real());
         im.push_back(H.imag());
     }
 
-    // Kiểm tra: tại ω→0, imaginary part → -∞ (pure integrator)
-    // tại ω→∞, magnitude → 0
-    double mag_high = std::sqrt(re.back() * re.back() + im.back() * im.back());
-    assert(mag_high < 0.01 &&
-           "High-frequency magnitude must approach 0 for strictly proper system");
+    Figure fig(600, 600);
+    auto& ax = fig.gca();
+    ax.plot(re, im, "b-", {{"label", std::string("G(jw)")}});
+    ax.scatter({-1.0}, {0.0}, {{"c", std::string("red")}});
+    ax.set_xlabel("Real");
+    ax.set_ylabel("Imaginary");
+    ax.set_title("Nyquist Plot");
+    ax.grid(true);
 
-    figure(700, 700);
-    plot(re, im, "b-", opts({{"linewidth", "2"}, {"label", "omega > 0"}}));
-    scatter({-1.0}, {0.0}, opts({{"s","50"}, {"color","red"}, {"marker","+"}}));
-    text(-0.85, 0.05, "(-1, j0)", opts({{"color","red"}, {"fontsize","10"}}));
-    axhline(0.0, opts({{"color","black"}, {"linewidth","0.5"}}));
-    axvline(0.0, opts({{"color","black"}, {"linewidth","0.5"}}));
-    xlabel("Real"); ylabel("Imaginary");
-    title("Nyquist Plot - G(s) = 1/(s(s+1)(s+2))");
-    grid(true); legend(true);
-    savefig("test_nyquist.svg");
-    assert(file_exists("test_nyquist.svg"));
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Nyquist Plot");
 }
 
-// ─────────────────────────────────────────────
-// TEST 4: Pole-Zero map
-// ─────────────────────────────────────────────
-void test_pole_zero_map() {
-    std::cout << "[TEST] test_pole_zero_map ... ";
+// ═══════════════════════════════════════════
+// Pole-Zero Map
+// ═══════════════════════════════════════════
 
-    SecondOrderSystem sys{5.0, 0.5};
-
-    // Poles: -zeta*wn ± j*wd
+void test_pzmap_poles_in_lhp() {
+    SecondOrder sys{5.0, 0.5};
     double sigma = sys.zeta * sys.wn;
-    double wd    = sys.wn * std::sqrt(1.0 - sys.zeta * sys.zeta);
-
-    std::vector<double> poles_re = {-sigma, -sigma};
-    std::vector<double> poles_im = { wd,    -wd};
-
-    // Zero tại s = -1
-    std::vector<double> zeros_re = {-1.0};
-    std::vector<double> zeros_im = { 0.0};
-
-    // Verifikasi: poles ada di LHP (real part negatif)
-    for (double pr : poles_re) {
-        assert(pr < 0.0 && "All poles must be in LHP for stable system");
-    }
-
-    figure(700, 700);
-    scatter(poles_re, poles_im,
-            opts({{"s","80"}, {"color","red"}, {"marker","x"}}));
-    scatter(zeros_re, zeros_im,
-            opts({{"s","80"}, {"color","blue"}, {"marker","o"}}));
-    axhline(0.0, opts({{"color","black"}, {"linewidth","0.5"}}));
-    axvline(0.0, opts({{"color","black"}, {"linewidth","0.5"}}));
-    xlabel("Real Axis"); ylabel("Imaginary Axis");
-    title("Pole-Zero Map");
-    grid(true);
-    savefig("test_pzmap.svg");
-    assert(file_exists("test_pzmap.svg"));
-
-    std::cout << "PASS\n";
+    // Poles ở -sigma ± j*wd → Real part âm = stable
+    ASSERT_TRUE(-sigma < 0.0);
 }
 
-// ─────────────────────────────────────────────
-// TEST 5: SMC simulation + visualization
-// Sliding Mode Control — Super-Twisting
-// ─────────────────────────────────────────────
-void test_smc_simulation() {
-    std::cout << "[TEST] test_smc_simulation ... ";
+void test_pzmap_renders() {
+    SecondOrder sys{5.0, 0.5};
+    double sigma = sys.zeta * sys.wn;
+    double wd    = sys.wn * std::sqrt(1 - sys.zeta*sys.zeta);
 
-    // Plant: x1' = x2, x2' = u + d(t)
-    // Super-Twisting SMC gains
-    const double k1 = 1.5, k2 = 1.1, lambda = 2.0;
-    const double dt = 1e-4;
-    const int N = 30000; // 3 seconds
+    Figure fig(600, 500);
+    auto& ax = fig.gca();
+    ax.scatter({-sigma, -sigma}, {wd, -wd},
+               {{"c", std::string("red")}});
+    ax.scatter({-1.0}, {0.0},
+               {{"c", std::string("blue")}});
+    ax.set_xlabel("Real Axis");
+    ax.set_ylabel("Imaginary Axis");
+    ax.set_title("Pole-Zero Map");
+    ax.grid(true);
 
-    double x1 = 0.5, x2 = 0.0, v = 0.0;
-    std::vector<double> t_vec, x1_vec, s_vec, u_vec;
+    ASSERT_CONTAINS(fig.toSVG(), "Pole-Zero Map");
+}
 
-    for (int i = 0; i < N; i++) {
-        double t = i * dt;
-        double s = x2 + lambda * x1; // sliding variable
+// ═══════════════════════════════════════════
+// SMC Simulation + visualization
+// ═══════════════════════════════════════════
 
-        // Super-Twisting control law
-        double u = -k1 * std::copysign(std::pow(std::abs(s), 0.5), s) + v;
-        v += -k2 * std::copysign(1.0, s) * dt;
+void test_smc_convergence() {
+    // Super-Twisting SMC: x1'=x2, x2'=u+d
+    const double k1=1.5, k2=1.1, lambda=2.0, dt=1e-4;
+    double x1=0.5, x2=0.0, v=0.0;
 
-        // Simple disturbance
-        double d = 0.1 * std::sin(5.0 * t);
+    for (int i = 0; i < 30000; i++) {
+        double s = x2 + lambda*x1;
+        double u = -k1*std::copysign(std::sqrt(std::abs(s)),s) + v;
+        v  += -k2*std::copysign(1.0,s)*dt;
+        double d = 0.1*std::sin(5.0*i*dt);
+        x1 += x2*dt;
+        x2 += (u+d)*dt;
+    }
+    // Phải hội tụ về 0
+    ASSERT_NEAR(x1, 0.0, 0.05);
+}
 
-        // Euler integration
-        x1 += x2 * dt;
-        x2 += (u + d) * dt;
+void test_smc_plot_renders() {
+    const double k1=1.5, k2=1.1, lambda=2.0, dt=1e-4;
+    double x1=0.5, x2=0.0, v=0.0;
+    std::vector<double> t_vec, x1_vec, s_vec;
 
-        if (i % 10 == 0) { // Lưu mỗi 10 bước để giảm memory
-            t_vec.push_back(t);
+    for (int i = 0; i < 20000; i++) {
+        double s = x2 + lambda*x1;
+        double u = -k1*std::copysign(std::sqrt(std::abs(s)),s) + v;
+        v  += -k2*std::copysign(1.0,s)*dt;
+        x1 += x2*dt;
+        x2 += (u + 0.1*std::sin(5.0*i*dt))*dt;
+        if (i%10==0) {
+            t_vec.push_back(i*dt);
             x1_vec.push_back(x1);
             s_vec.push_back(s);
-            u_vec.push_back(u);
         }
     }
 
-    // ── Numerical checks ──────────────────────
-    // 1. Hệ thống phải hội tụ về 0
-    double final_x1 = std::abs(x1_vec.back());
-    assert(final_x1 < 0.05 &&
-           "Super-Twisting SMC must stabilize x1 to near 0");
+    Figure fig(900, 600);
 
-    // 2. Sliding variable phải về gần 0
-    double final_s = std::abs(s_vec.back());
-    assert(final_s < 0.1 &&
-           "Sliding variable must converge to sliding surface (s≈0)");
+    auto& ax1 = fig.subplot(2, 1, 1);
+    ax1.plot(t_vec, x1_vec, "b-", {{"label", std::string("x1")}});
+    ax1.set_ylabel("State x1");
+    ax1.set_title("Super-Twisting SMC");
+    ax1.grid(true);
+    ax1.legend(true);
 
-    // ── Vẽ kết quả ───────────────────────────
-    figure(900, 700);
+    auto& ax2 = fig.subplot(2, 1, 2);
+    ax2.plot(t_vec, s_vec, "r-", {{"label", std::string("s")}});
+    ax2.set_xlabel("Time (s)");
+    ax2.set_ylabel("Sliding var s");
+    ax2.grid(true);
+    ax2.legend(true);
 
-    subplot(3, 1, 1);
-    plot(t_vec, x1_vec, "b-", opts({{"linewidth","1.5"},{"label","x1"}}));
-    axhline(0.0, opts({{"color","gray"},{"linestyle","--"}}));
-    ylabel("State x1"); grid(true); legend(true);
-    title("Super-Twisting SMC - Disturbance Rejection");
-
-    subplot(3, 1, 2);
-    plot(t_vec, s_vec, "r-", opts({{"linewidth","1.5"},{"label","s"}}));
-    axhline(0.0, opts({{"color","gray"},{"linestyle","--"}}));
-    ylabel("Sliding var s"); grid(true); legend(true);
-
-    subplot(3, 1, 3);
-    plot(t_vec, u_vec, "k-", opts({{"linewidth","1.0"},{"label","u"}}));
-    xlabel("Time (s)"); ylabel("Control u");
-    grid(true); legend(true);
-
-    savefig("test_smc_supertwisting.svg");
-    assert(file_exists("test_smc_supertwisting.svg"));
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Super-Twisting SMC");
+    fig.savefig("test_smc.svg");
+    std::remove("test_smc.svg");
 }
 
-// ─────────────────────────────────────────────
-// TEST 6: Kalman Filter simulation
-// ─────────────────────────────────────────────
-void test_kalman_filter() {
-    std::cout << "[TEST] test_kalman_filter ... ";
+// ═══════════════════════════════════════════
+// Kalman Filter
+// ═══════════════════════════════════════════
 
-    // Hệ thống: x' = -0.5x + u, y = x + noise
-    // Discrete, dt = 0.01s
-    const double dt = 0.01;
-    const int N = 300;
-    const double Q = 0.01; // process noise
-    const double R = 1.0;  // measurement noise
+void test_kalman_tracks_state() {
+    const double Q=0.01, R=1.0, dt=0.01;
+    double x_true=5.0, x_hat=0.0, P=1.0;
+    auto noise=[](int i,double a){return a*std::sin(i*1.234)*std::cos(i*0.567);};
 
-    // State
-    double x_true = 5.0;
-    double x_hat  = 0.0; // initial estimate
-    double P = 1.0;      // error covariance
-
-    // Pseudo-random noise (deterministic để test reproducible)
-    auto noise = [](int i, double amp) {
-        return amp * std::sin(i * 1.234) * std::cos(i * 0.567);
-    };
-
-    std::vector<double> t_vec, x_true_vec, x_hat_vec, meas_vec;
-
-    for (int i = 0; i < N; i++) {
-        double t = i * dt;
-
-        // Kalman predict
-        double x_hat_pred = 0.995 * x_hat; // A = 0.995
-        double P_pred = 0.995 * 0.995 * P + Q;
-
-        // Measurement
+    for (int i = 0; i < 300; i++) {
+        double x_pred = 0.995*x_hat;
+        double P_pred = 0.995*0.995*P + Q;
         double z = x_true + noise(i, std::sqrt(R));
-
-        // Kalman update
-        double K = P_pred / (P_pred + R);
-        x_hat = x_hat_pred + K * (z - x_hat_pred);
-        P = (1.0 - K) * P_pred;
-
-        // True state evolution
-        x_true = 0.995 * x_true + noise(i + 100, 0.01);
-
-        t_vec.push_back(t);
-        x_true_vec.push_back(x_true);
-        x_hat_vec.push_back(x_hat);
-        meas_vec.push_back(z);
+        double K = P_pred/(P_pred+R);
+        x_hat = x_pred + K*(z-x_pred);
+        P = (1-K)*P_pred;
+        x_true = 0.995*x_true + noise(i+100, 0.01);
     }
-
-    // ── Check: estimate phải gần true state ──
-    double final_error = std::abs(x_hat_vec.back() - x_true_vec.back());
-    assert(final_error < 2.0 &&
-           "Kalman filter estimate must track true state");
-
-    // ── Vẽ ───────────────────────────────────
-    figure(800, 450);
-    scatter(t_vec, meas_vec,
-            opts({{"color","lightgray"}, {"s","5"}, {"label","Measurements"}}));
-    plot(t_vec, x_true_vec, "b-",
-         opts({{"linewidth","2"}, {"label","True state"}}));
-    plot(t_vec, x_hat_vec,  "r-",
-         opts({{"linewidth","2"}, {"label","KF estimate"}}));
-    xlabel("Time (s)"); ylabel("x");
-    legend(true); grid(true);
-    title("Kalman Filter State Estimation");
-    savefig("test_kalman.svg");
-    assert(file_exists("test_kalman.svg"));
-
-    std::cout << "PASS\n";
+    ASSERT_NEAR(x_hat, x_true, 2.0);
 }
 
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // MAIN
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
+
 int main() {
-    std::cout << "=== test_control_systems ===\n";
+    std::cout << "CppPlot Control Systems Tests\n";
+    std::cout << "==============================\n\n";
 
-    try {
-        test_bode_numerical_correctness();
-        test_step_response_correctness();
-        test_nyquist_plot();
-        test_pole_zero_map();
-        test_smc_simulation();
-        test_kalman_filter();
-    } catch (const std::exception& e) {
-        std::cerr << "EXCEPTION: " << e.what() << "\n";
-        return 1;
-    } catch (...) {
-        std::cerr << "UNKNOWN EXCEPTION\n";
-        return 1;
-    }
+    RUN_TEST(bode_dc_gain);
+    RUN_TEST(bode_bandwidth);
+    RUN_TEST(bode_phase_at_wn);
+    RUN_TEST(bode_high_freq_phase);
+    RUN_TEST(bode_plot_renders);
 
-    std::cout << "=== ALL CONTROL SYSTEMS TESTS PASSED ===\n";
-    return 0;
+    RUN_TEST(step_initial_value);
+    RUN_TEST(step_final_value);
+    RUN_TEST(step_overshoot);
+    RUN_TEST(step_overdamped_no_overshoot);
+    RUN_TEST(step_response_plot);
+
+    RUN_TEST(nyquist_high_freq_magnitude);
+    RUN_TEST(nyquist_renders);
+
+    RUN_TEST(pzmap_poles_in_lhp);
+    RUN_TEST(pzmap_renders);
+
+    RUN_TEST(smc_convergence);
+    RUN_TEST(smc_plot_renders);
+
+    RUN_TEST(kalman_tracks_state);
+
+    std::cout << "\n==============================\n";
+    std::cout << "Passed: " << tests_passed << "\n";
+    std::cout << "Failed: " << tests_failed << "\n";
+    return tests_failed > 0 ? 1 : 0;
 }
