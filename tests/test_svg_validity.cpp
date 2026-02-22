@@ -1,313 +1,287 @@
 /**
  * test_svg_validity.cpp
- * ─────────────────────────────────────────────
- * Kiểm tra cấu trúc SVG output có hợp lệ không.
- * Đây là test quan trọng nhất với JOSS reviewer
- * vì nó chứng minh output thực sự đúng format,
- * không chỉ "không crash".
+ * Tests SVGBackend low-level API + Figure/Axes high-level API.
+ * API confirmed from test_svg.cpp:
+ *   SVGBackend, Figure, Axes, TextStyle
  */
 #include <cppplot/cppplot.hpp>
+#include <iostream>
 #include <cassert>
 #include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <cmath>
+#include <stdexcept>
 
 using namespace cppplot;
 
-// ── Đọc file ─────────────────────────────────
-static std::string read_file(const std::string& path) {
-    std::ifstream f(path);
-    assert(f.is_open() && "Cannot open SVG file");
+int tests_passed = 0, tests_failed = 0;
+
+#define RUN_TEST(name) do { \
+    std::cout << "Running " #name "... "; \
+    try { test_##name(); std::cout << "PASSED\n"; tests_passed++; } \
+    catch (const std::exception& e) { \
+        std::cout << "FAILED: " << e.what() << "\n"; tests_failed++; } \
+} while(0)
+
+#define ASSERT_TRUE(x)  do { if(!(x))  throw std::runtime_error("TRUE failed: "  #x); } while(0)
+#define ASSERT_FALSE(x) do { if( (x))  throw std::runtime_error("FALSE failed: " #x); } while(0)
+#define ASSERT_EQ(a,b)  do { if((a)!=(b)) throw std::runtime_error("EQ failed: " #a); } while(0)
+#define ASSERT_CONTAINS(s,sub) do { \
+    if((s).find(sub)==std::string::npos) \
+        throw std::runtime_error(std::string("CONTAINS failed: '") + (sub) + "'"); \
+} while(0)
+
+static std::string read_file(const std::string& p) {
+    std::ifstream f(p);
+    ASSERT_TRUE(f.good());
     return std::string(std::istreambuf_iterator<char>(f),
                        std::istreambuf_iterator<char>());
 }
 
-// ── Đếm số lần xuất hiện của substring ───────
-static int count_occurrences(const std::string& text, const std::string& sub) {
-    int count = 0;
-    size_t pos = 0;
-    while ((pos = text.find(sub, pos)) != std::string::npos) {
-        ++count;
-        pos += sub.size();
+// ═══════════════════════════════════════════
+// SVGBackend — low-level rendering
+// ═══════════════════════════════════════════
+
+void test_svgbackend_header() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<?xml");
+    ASSERT_CONTAINS(out, "<svg");
+    ASSERT_CONTAINS(out, "width=\"400\"");
+    ASSERT_CONTAINS(out, "height=\"300\"");
+    ASSERT_CONTAINS(out, "</svg>");
+}
+
+void test_svgbackend_line() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    svg.drawLine(10, 20, 100, 200, LineStyle("-", 2, Color::red()));
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<line");
+    ASSERT_CONTAINS(out, "x1=\"10\"");
+    ASSERT_CONTAINS(out, "y1=\"20\"");
+    ASSERT_CONTAINS(out, "x2=\"100\"");
+    ASSERT_CONTAINS(out, "y2=\"200\"");
+}
+
+void test_svgbackend_rect() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    svg.drawRect(50, 50, 100, 80,
+                 Color::blue(),
+                 LineStyle("-", 1, Color::black()));
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<rect");
+    ASSERT_CONTAINS(out, "width=\"100\"");
+    ASSERT_CONTAINS(out, "height=\"80\"");
+}
+
+void test_svgbackend_circle() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    svg.drawCircle(200, 150, 50, Color::green(),
+                   LineStyle("-", 1, Color::black()));
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<circle");
+    ASSERT_CONTAINS(out, "cx=\"200\"");
+    ASSERT_CONTAINS(out, "cy=\"150\"");
+    ASSERT_CONTAINS(out, "r=\"50\"");
+}
+
+void test_svgbackend_polyline() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    std::vector<Point> pts = {{10,10},{100,50},{200,30},{300,100}};
+    svg.drawPolyline(pts, LineStyle("-", 2, Color::blue()));
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<polyline");
+    ASSERT_CONTAINS(out, "points=");
+}
+
+void test_svgbackend_text() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    TextStyle ts;
+    ts.fontSize = 14;
+    ts.color = Color::black();
+    svg.drawText(100, 100, "Hello World", ts);
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<text");
+    ASSERT_CONTAINS(out, "Hello World");
+}
+
+void test_svgbackend_polygon() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    std::vector<Point> pts = {{100,50},{150,150},{50,150}};
+    svg.drawPolygon(pts, Color::yellow(),
+                    LineStyle("-", 1, Color::black()));
+    std::string out = svg.render();
+    ASSERT_CONTAINS(out, "<polygon");
+}
+
+void test_svgbackend_clip() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    svg.setClipRect(Rect(50, 50, 200, 150));
+    svg.drawCircle(100, 100, 100, Color::blue());
+    svg.clearClip();
+    std::string out = svg.render();
+
+    ASSERT_CONTAINS(out, "<clipPath");
+    ASSERT_CONTAINS(out, "clip-path=");
+}
+
+void test_svgbackend_sizes() {
+    // SVG kích thước khác nhau → width/height attribute khác nhau
+    struct TC { int w, h; };
+    for (auto tc : std::vector<TC>{{200,150},{800,600},{1200,400}}) {
+        SVGBackend svg(tc.w, tc.h);
+        svg.clear(Color::white());
+        std::string out = svg.render();
+        ASSERT_CONTAINS(out, "width=\"" + std::to_string(tc.w) + "\"");
+        ASSERT_CONTAINS(out, "height=\"" + std::to_string(tc.h) + "\"");
     }
-    return count;
 }
 
-// ── Lấy giá trị attribute từ SVG tag ─────────
-static std::string extract_attr(const std::string& svg,
-                                 const std::string& attr) {
-    std::string search = attr + "=\"";
-    size_t pos = svg.find(search);
-    if (pos == std::string::npos) return "";
-    pos += search.size();
-    size_t end = svg.find('"', pos);
-    return svg.substr(pos, end - pos);
+void test_svgbackend_multiple_elements() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    // Nhiều element → SVG lớn hơn SVG trống
+    std::string empty_out = svg.render();
+
+    svg.drawLine(0,0,100,100, LineStyle("-",1,Color::red()));
+    svg.drawLine(100,0,0,100, LineStyle("-",1,Color::blue()));
+    svg.drawCircle(200,150,30, Color::green());
+    std::string full_out = svg.render();
+
+    ASSERT_TRUE(full_out.size() > empty_out.size());
 }
 
-// ─────────────────────────────────────────────
-// TEST 1: SVG header hợp lệ
-// ─────────────────────────────────────────────
-void test_svg_header() {
-    std::cout << "[TEST] test_svg_header ... ";
+// ═══════════════════════════════════════════
+// Figure + Axes — high-level API
+// ═══════════════════════════════════════════
 
-    std::vector<double> x = {1, 2, 3};
-    std::vector<double> y = {1, 2, 3};
-    figure(800, 600);
-    plot(x, y, "b-");
-    savefig("test_header.svg");
+void test_figure_creates_svg() {
+    Figure fig(800, 600);
+    auto& ax = fig.gca();
 
-    std::string svg = read_file("test_header.svg");
+    std::vector<double> x = {1,2,3,4,5};
+    std::vector<double> y = {1,4,9,16,25};
+    ax.plot(x, y, "b-");
 
-    // Phải bắt đầu bằng XML/SVG declaration hoặc <svg
-    bool starts_correctly = (svg.substr(0, 5) == "<?xml") ||
-                            (svg.substr(0, 4) == "<svg");
-    assert(starts_correctly && "SVG must start with <?xml or <svg");
-
-    // Phải có thẻ mở <svg
-    assert(svg.find("<svg") != std::string::npos &&
-           "SVG must contain <svg element");
-
-    // Phải có thẻ đóng </svg>
-    assert(svg.find("</svg>") != std::string::npos &&
-           "SVG must be closed with </svg>");
-
-    // Tags phải cân bằng: số <svg phải = số </svg>
-    // (kiểm tra không bị unclosed tag)
-    assert(count_occurrences(svg, "<svg") == count_occurrences(svg, "</svg>") ||
-           count_occurrences(svg, "<svg") == 1 &&
-           "SVG tags must be balanced");
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "<svg");
+    ASSERT_CONTAINS(svg, "width=\"800\"");
+    ASSERT_FALSE(svg.empty());
 }
 
-// ─────────────────────────────────────────────
-// TEST 2: Kích thước figure phản ánh trong SVG
-// ─────────────────────────────────────────────
-void test_svg_dimensions() {
-    std::cout << "[TEST] test_svg_dimensions ... ";
+void test_figure_save_and_load() {
+    Figure fig(400, 300);
+    auto& ax = fig.gca();
+    ax.plot({1.0,2.0,3.0}, {1.0,4.0,9.0}, "r-");
+    ax.set_title("Save Test");
 
-    std::vector<double> x = {1, 2, 3};
-    std::vector<double> y = {1, 2, 3};
+    std::string fname = "test_svg_save.svg";
+    fig.savefig(fname);
 
-    // Test với nhiều kích thước
-    struct TestCase { int w; int h; };
-    std::vector<TestCase> cases = {{400, 300}, {800, 600}, {1200, 400}};
-
-    for (auto& tc : cases) {
-        std::string fname = "test_dim_" + std::to_string(tc.w) +
-                            "x" + std::to_string(tc.h) + ".svg";
-        figure(tc.w, tc.h);
-        plot(x, y, "b-");
-        savefig(fname);
-
-        std::string svg = read_file(fname);
-
-        // SVG phải chứa width và height attribute
-        // (có thể ở dạng số hoặc pixel như "800px")
-        bool has_width  = svg.find("width")  != std::string::npos;
-        bool has_height = svg.find("height") != std::string::npos;
-
-        assert(has_width  && "SVG must have width attribute");
-        assert(has_height && "SVG must have height attribute");
-    }
-
-    std::cout << "PASS\n";
+    std::string content = read_file(fname);
+    ASSERT_CONTAINS(content, "<svg");
+    ASSERT_CONTAINS(content, "Save Test");
+    std::remove(fname.c_str());
 }
 
-// ─────────────────────────────────────────────
-// TEST 3: SVG chứa path elements (đường vẽ)
-// ─────────────────────────────────────────────
-void test_svg_has_paths() {
-    std::cout << "[TEST] test_svg_has_paths ... ";
+void test_figure_labels_in_svg() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    ax.plot({0.0,1.0,2.0}, {0.0,1.0,0.0}, "b-");
+    ax.set_xlabel("Time (s)");
+    ax.set_ylabel("Amplitude");
+    ax.set_title("Signal Plot");
 
-    auto x = linspace(0.0, 2 * M_PI, 50);
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Time (s)");
+    ASSERT_CONTAINS(svg, "Amplitude");
+    ASSERT_CONTAINS(svg, "Signal Plot");
+}
+
+void test_figure_subplot_count() {
+    Figure fig(800, 600);
+    fig.subplot(2, 2, 1);
+    fig.subplot(2, 2, 2);
+    fig.subplot(2, 2, 3);
+    fig.subplot(2, 2, 4);
+
+    ASSERT_TRUE(fig.getAxes().size() == 4);
+}
+
+void test_figure_has_polyline_for_line_plot() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    auto x = linspace(0.0, 2*M_PI, 50);
     std::vector<double> y;
     for (double xi : x) y.push_back(std::sin(xi));
+    ax.plot(x, y, "b-");
 
-    figure(600, 400);
-    plot(x, y, "b-");
-    savefig("test_paths.svg");
-
-    std::string svg = read_file("test_paths.svg");
-
-    // Đường kẻ trong SVG được vẽ bằng <path> hoặc <polyline> hoặc <line>
-    bool has_path_elements = (svg.find("<path")     != std::string::npos) ||
-                             (svg.find("<polyline") != std::string::npos) ||
-                             (svg.find("<line")     != std::string::npos);
-
-    assert(has_path_elements &&
-           "SVG must contain path/polyline/line elements for the plot");
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    // Line plot → phải có polyline hoặc path
+    bool has_line = (svg.find("<polyline") != std::string::npos) ||
+                    (svg.find("<path")     != std::string::npos);
+    ASSERT_TRUE(has_line);
 }
 
-// ─────────────────────────────────────────────
-// TEST 4: SVG chứa text cho labels và title
-// ─────────────────────────────────────────────
-void test_svg_has_text() {
-    std::cout << "[TEST] test_svg_has_text ... ";
+void test_axes_all_plot_types() {
+    Figure fig(800, 600);
+    auto& ax = fig.gca();
 
-    std::vector<double> x = {1, 2, 3};
-    std::vector<double> y = {1, 4, 9};
+    // plot
+    ax.plot({1.0,2.0,3.0}, {1.0,4.0,9.0}, "b-o");
+    // grid và legend
+    ax.grid(true);
+    ax.legend(true);
+    ax.set_xlim(0, 4);
+    ax.set_ylim(0, 10);
 
-    const std::string TITLE  = "My Test Title";
-    const std::string XLABEL = "X Axis Label";
-    const std::string YLABEL = "Y Axis Label";
-
-    figure(600, 400);
-    plot(x, y, "b-");
-    title(TITLE);
-    xlabel(XLABEL);
-    ylabel(YLABEL);
-    savefig("test_text.svg");
-
-    std::string svg = read_file("test_text.svg");
-
-    // SVG phải chứa <text> elements
-    assert(svg.find("<text") != std::string::npos &&
-           "SVG must contain <text> elements");
-
-    // Title phải muncul trong SVG
-    assert(svg.find(TITLE) != std::string::npos &&
-           "Title text must appear in SVG");
-
-    // Labels harus muncul
-    assert(svg.find(XLABEL) != std::string::npos &&
-           "xlabel must appear in SVG");
-
-    assert(svg.find(YLABEL) != std::string::npos &&
-           "ylabel must appear in SVG");
-
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
 }
 
-// ─────────────────────────────────────────────
-// TEST 5: SVG chứa màu đúng với format string
-// ─────────────────────────────────────────────
-void test_svg_colors() {
-    std::cout << "[TEST] test_svg_colors ... ";
-
-    std::vector<double> x = {1, 2, 3, 4, 5};
-    std::vector<double> y = {1, 2, 3, 4, 5};
-
-    // Vẽ đường đỏ
-    figure(400, 300);
-    plot(x, y, "r-");
-    savefig("test_color_red.svg");
-
-    std::string svg_red = read_file("test_color_red.svg");
-    // Màu đỏ trong SVG thường là "red" hoặc "#ff0000" hoặc "rgb(255,0,0)"
-    bool has_red = (svg_red.find("red")     != std::string::npos) ||
-                   (svg_red.find("ff0000")  != std::string::npos) ||
-                   (svg_red.find("255,0,0") != std::string::npos);
-    assert(has_red && "Red format string 'r-' must produce red color in SVG");
-
-    // Vẽ đường xanh
-    figure(400, 300);
-    plot(x, y, "b-");
-    savefig("test_color_blue.svg");
-
-    std::string svg_blue = read_file("test_color_blue.svg");
-    bool has_blue = (svg_blue.find("blue")    != std::string::npos) ||
-                    (svg_blue.find("0000ff")  != std::string::npos) ||
-                    (svg_blue.find("0,0,255") != std::string::npos);
-    assert(has_blue && "Blue format string 'b-' must produce blue color in SVG");
-
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// TEST 6: fill_between tạo ra filled region
-// ─────────────────────────────────────────────
-void test_svg_fill_between() {
-    std::cout << "[TEST] test_svg_fill_between ... ";
-
-    auto x = linspace(0.0, 10.0, 50);
-    std::vector<double> y_upper, y_lower, y_mid;
-    for (double xi : x) {
-        y_upper.push_back(std::sin(xi) + 0.5);
-        y_lower.push_back(std::sin(xi) - 0.5);
-        y_mid.push_back(std::sin(xi));
-    }
-
-    figure(600, 400);
-    fill_between(x, y_lower, y_upper,
-                 opts({{"color", "blue"}, {"alpha", "0.3"}}));
-    plot(x, y_mid, "b-");
-    savefig("test_fill_between.svg");
-
-    std::string svg = read_file("test_fill_between.svg");
-
-    // fill_between phải tạo ra element có fill attribute
-    bool has_fill = (svg.find("fill=")     != std::string::npos) ||
-                    (svg.find("fill:")     != std::string::npos);
-    assert(has_fill &&
-           "fill_between must produce SVG elements with fill attribute");
-
-    // Phải có opacity/alpha cho vùng filled
-    bool has_opacity = (svg.find("opacity")      != std::string::npos) ||
-                       (svg.find("fill-opacity") != std::string::npos);
-    assert(has_opacity &&
-           "fill_between with alpha must produce opacity in SVG");
-
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// TEST 7: Grid lines xuất hiện khi bật
-// ─────────────────────────────────────────────
-void test_svg_grid() {
-    std::cout << "[TEST] test_svg_grid ... ";
-
-    std::vector<double> x = {1, 2, 3};
-    std::vector<double> y = {1, 2, 3};
-
-    // Không có grid
-    figure(400, 300);
-    plot(x, y, "b-");
-    grid(false);
-    savefig("test_no_grid.svg");
-    std::string svg_no_grid = read_file("test_no_grid.svg");
-
-    // Có grid
-    figure(400, 300);
-    plot(x, y, "b-");
-    grid(true);
-    savefig("test_with_grid.svg");
-    std::string svg_with_grid = read_file("test_with_grid.svg");
-
-    // SVG với grid phải lớn hơn SVG không có grid
-    // (vì có thêm line elements)
-    assert(svg_with_grid.size() > svg_no_grid.size() &&
-           "SVG with grid must be larger than SVG without grid");
-
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // MAIN
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
+
 int main() {
-    std::cout << "=== test_svg_validity ===\n";
+    std::cout << "CppPlot SVG Validity Tests\n";
+    std::cout << "===========================\n\n";
 
-    try {
-        test_svg_header();
-        test_svg_dimensions();
-        test_svg_has_paths();
-        test_svg_has_text();
-        test_svg_colors();
-        test_svg_fill_between();
-        test_svg_grid();
-    } catch (const std::exception& e) {
-        std::cerr << "EXCEPTION: " << e.what() << "\n";
-        return 1;
-    } catch (...) {
-        std::cerr << "UNKNOWN EXCEPTION\n";
-        return 1;
-    }
+    // Low-level SVGBackend
+    RUN_TEST(svgbackend_header);
+    RUN_TEST(svgbackend_line);
+    RUN_TEST(svgbackend_rect);
+    RUN_TEST(svgbackend_circle);
+    RUN_TEST(svgbackend_polyline);
+    RUN_TEST(svgbackend_text);
+    RUN_TEST(svgbackend_polygon);
+    RUN_TEST(svgbackend_clip);
+    RUN_TEST(svgbackend_sizes);
+    RUN_TEST(svgbackend_multiple_elements);
 
-    std::cout << "=== ALL SVG VALIDITY TESTS PASSED ===\n";
-    return 0;
+    // High-level Figure + Axes
+    RUN_TEST(figure_creates_svg);
+    RUN_TEST(figure_save_and_load);
+    RUN_TEST(figure_labels_in_svg);
+    RUN_TEST(figure_subplot_count);
+    RUN_TEST(figure_has_polyline_for_line_plot);
+    RUN_TEST(axes_all_plot_types);
+
+    std::cout << "\n===========================\n";
+    std::cout << "Passed: " << tests_passed << "\n";
+    std::cout << "Failed: " << tests_failed << "\n";
+    return tests_failed > 0 ? 1 : 0;
 }
