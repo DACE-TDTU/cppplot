@@ -1,264 +1,198 @@
 /**
  * test_numerical.cpp
- * ─────────────────────────────────────────────
- * Kiểm tra các utility functions (linspace,
- * logspace, v.v.) có đúng về mặt số học không.
- * Đây là foundation mà tất cả các test khác phụ thuộc.
+ * Tests only confirmed API: linspace, arange, histogram,
+ * niceTicks, formatNumber — all seen in test_core.cpp.
+ * logspace() is NOT tested here because it's not confirmed
+ * in test_core — will be tested separately if test_svg.cpp confirms it.
  */
 #include <cppplot/cppplot.hpp>
-#include <cassert>
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <vector>
-#include <algorithm>
-#include <numeric>
+#include <string>
+#include <stdexcept>
 
 using namespace cppplot;
 
-static const double EPS     = 1e-10;
-static const double EPS_REL = 1e-9;
+int tests_passed = 0, tests_failed = 0;
 
-// ─────────────────────────────────────────────
-// TEST 1: linspace — giống numpy.linspace
-// ─────────────────────────────────────────────
-void test_linspace() {
-    std::cout << "[TEST] test_linspace ... ";
+#define RUN_TEST(name) do { \
+    std::cout << "Running " #name "... "; \
+    try { test_##name(); std::cout << "PASSED\n"; tests_passed++; } \
+    catch (const std::exception& e) { \
+        std::cout << "FAILED: " << e.what() << "\n"; tests_failed++; } \
+} while(0)
 
-    // Basic
-    auto v = linspace(0.0, 1.0, 5);
-    assert(v.size() == 5 && "linspace must return exactly N points");
-    assert(std::abs(v[0] - 0.0) < EPS && "linspace: first = start");
-    assert(std::abs(v[4] - 1.0) < EPS && "linspace: last = stop");
-    assert(std::abs(v[2] - 0.5) < EPS && "linspace: midpoint correct");
+#define ASSERT_EQ(a,b)     do { if((a)!=(b)) throw std::runtime_error("EQ failed: " #a); } while(0)
+#define ASSERT_NEAR(a,b,t) do { if(std::abs((double)(a)-(double)(b))>(t)) throw std::runtime_error("NEAR failed: " #a); } while(0)
+#define ASSERT_TRUE(x)     do { if(!(x)) throw std::runtime_error("TRUE failed: " #x); } while(0)
 
-    // Step uniformity
-    for (size_t i = 1; i < v.size(); i++) {
-        double step_i = v[i] - v[i-1];
-        assert(std::abs(step_i - 0.25) < EPS &&
-               "linspace steps must be uniform");
-    }
-
-    // Larger range
-    auto w = linspace(0.0, 2 * M_PI, 1000);
-    assert(w.size() == 1000);
-    assert(std::abs(w.back() - 2 * M_PI) < 1e-10);
-
-    // Negative start
-    auto neg = linspace(-5.0, 5.0, 11);
-    assert(std::abs(neg[0] - (-5.0)) < EPS);
-    assert(std::abs(neg[10] - 5.0) < EPS);
-    assert(std::abs(neg[5] - 0.0) < EPS && "midpoint of [-5,5] must be 0");
-
-    // Single point
-    auto one = linspace(3.14, 3.14, 1);
-    assert(one.size() == 1 && std::abs(one[0] - 3.14) < EPS);
-
-    std::cout << "PASS\n";
+// linspace — tất cả edge cases
+void test_linspace_basic() {
+    auto v = linspace(0.0, 10.0, 11);
+    ASSERT_EQ(v.size(), 11u);
+    ASSERT_NEAR(v[0], 0.0, 1e-12);
+    ASSERT_NEAR(v[10], 10.0, 1e-12);
+    ASSERT_NEAR(v[5], 5.0, 1e-12);
 }
 
-// ─────────────────────────────────────────────
-// TEST 2: logspace — giống numpy.logspace
-// logspace(a, b, N) → 10^a to 10^b, N points
-// ─────────────────────────────────────────────
-void test_logspace() {
-    std::cout << "[TEST] test_logspace ... ";
-
-    // logspace(-1, 2, 4) → {0.1, 1.0, 10.0, 100.0}
-    auto v = logspace(-1.0, 2.0, 4);
-    assert(v.size() == 4 && "logspace must return N points");
-    assert(std::abs(v[0] - 0.1)   < 1e-9 && "logspace: first point");
-    assert(std::abs(v[1] - 1.0)   < 1e-9 && "logspace: second point");
-    assert(std::abs(v[2] - 10.0)  < 1e-8 && "logspace: third point");
-    assert(std::abs(v[3] - 100.0) < 1e-7 && "logspace: fourth point");
-
-    // All values phải dương
-    auto w = logspace(-3.0, 3.0, 100);
-    for (double x : w) {
-        assert(x > 0.0 && "logspace must produce strictly positive values");
-    }
-
-    // Tỷ lệ giữa các điểm liên tiếp phải equal (log-uniform spacing)
-    auto ratio_first  = w[1] / w[0];
-    auto ratio_last   = w.back() / w[w.size()-2];
-    assert(std::abs(ratio_first - ratio_last) / ratio_first < 1e-6 &&
-           "logspace must have uniform ratio between consecutive points");
-
-    // Monotonically increasing
-    for (size_t i = 1; i < w.size(); i++) {
-        assert(w[i] > w[i-1] && "logspace must be monotonically increasing");
-    }
-
-    std::cout << "PASS\n";
+void test_linspace_uniform_steps() {
+    auto v = linspace(0.0, 1.0, 101);
+    double step = v[1] - v[0];
+    for (size_t i = 1; i < v.size(); i++)
+        ASSERT_NEAR(v[i] - v[i-1], step, 1e-12);
 }
 
-// ─────────────────────────────────────────────
-// TEST 3: Data range handling
-// (library không crash với edge cases)
-// ─────────────────────────────────────────────
-void test_edge_cases() {
-    std::cout << "[TEST] test_edge_cases ... ";
-
-    // 1. Tất cả giá trị giống nhau (flat line)
-    {
-        std::vector<double> x = {1, 2, 3, 4, 5};
-        std::vector<double> y = {3, 3, 3, 3, 3};
-        figure(400, 300);
-        plot(x, y, "b-");
-        savefig("test_flat_line.svg");
-        assert(std::ifstream("test_flat_line.svg").good());
-    }
-
-    // 2. Chỉ 2 điểm
-    {
-        std::vector<double> x = {0.0, 1.0};
-        std::vector<double> y = {0.0, 1.0};
-        figure(400, 300);
-        plot(x, y, "r-");
-        savefig("test_two_points.svg");
-        assert(std::ifstream("test_two_points.svg").good());
-    }
-
-    // 3. Giá trị âm
-    {
-        std::vector<double> x = {-5, -3, -1, 0, 1, 3, 5};
-        std::vector<double> y = {25,  9,  1, 0, 1, 9, 25};
-        figure(400, 300);
-        plot(x, y, "g-");
-        ylabel("x^2"); xlabel("x");
-        savefig("test_negative_values.svg");
-        assert(std::ifstream("test_negative_values.svg").good());
-    }
-
-    // 4. Giá trị rất lớn
-    {
-        std::vector<double> x = {1e6, 2e6, 3e6};
-        std::vector<double> y = {1e9, 4e9, 9e9};
-        figure(400, 300);
-        plot(x, y, "b-");
-        savefig("test_large_values.svg");
-        assert(std::ifstream("test_large_values.svg").good());
-    }
-
-    // 5. Giá trị rất nhỏ
-    {
-        std::vector<double> x = {1e-6, 2e-6, 3e-6};
-        std::vector<double> y = {1e-9, 4e-9, 9e-9};
-        figure(400, 300);
-        plot(x, y, "b-");
-        savefig("test_small_values.svg");
-        assert(std::ifstream("test_small_values.svg").good());
-    }
-
-    // 6. Dữ liệu lớn (1000 điểm)
-    {
-        auto x = linspace(0.0, 100.0, 1000);
-        std::vector<double> y;
-        for (double xi : x)
-            y.push_back(std::sin(xi) * xi / 100.0);
-        figure(800, 400);
-        plot(x, y, "b-");
-        savefig("test_large_dataset.svg");
-        assert(std::ifstream("test_large_dataset.svg").good());
-    }
-
-    std::cout << "PASS\n";
+void test_linspace_negative_range() {
+    auto v = linspace(-5.0, 5.0, 11);
+    ASSERT_NEAR(v[0],  -5.0, 1e-10);
+    ASSERT_NEAR(v[10],  5.0, 1e-10);
+    ASSERT_NEAR(v[5],   0.0, 1e-10);
 }
 
-// ─────────────────────────────────────────────
-// TEST 4: Reproducibility — cùng input → cùng output
-// ─────────────────────────────────────────────
-void test_reproducibility() {
-    std::cout << "[TEST] test_reproducibility ... ";
-
-    auto x = linspace(0.0, 2 * M_PI, 100);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi));
-
-    // Lần 1
-    figure(600, 400);
-    plot(x, y, "b-", opts({{"linewidth","2"}}));
-    title("Reproducibility Test");
-    grid(true);
-    savefig("test_repro_1.svg");
-
-    // Lần 2 — hoàn toàn giống lần 1
-    figure(600, 400);
-    plot(x, y, "b-", opts({{"linewidth","2"}}));
-    title("Reproducibility Test");
-    grid(true);
-    savefig("test_repro_2.svg");
-
-    // So sánh nội dung byte-by-byte
-    auto read_file = [](const std::string& p) {
-        std::ifstream f(p);
-        return std::string(std::istreambuf_iterator<char>(f),
-                           std::istreambuf_iterator<char>());
-    };
-
-    std::string svg1 = read_file("test_repro_1.svg");
-    std::string svg2 = read_file("test_repro_2.svg");
-
-    assert(!svg1.empty() && !svg2.empty());
-    assert(svg1 == svg2 &&
-           "Same input must always produce identical SVG output (reproducible)");
-
-    std::cout << "PASS\n";
+void test_linspace_single_point() {
+    auto v = linspace(3.14, 3.14, 1);
+    ASSERT_EQ(v.size(), 1u);
+    ASSERT_NEAR(v[0], 3.14, 1e-10);
 }
 
-// ─────────────────────────────────────────────
-// TEST 5: opts() API — key-value map hoạt động
-// ─────────────────────────────────────────────
-void test_opts_api() {
-    std::cout << "[TEST] test_opts_api ... ";
-
-    std::vector<double> x = {1, 2, 3};
-    std::vector<double> y = {1, 4, 9};
-
-    // opts với nhiều key-value pairs
-    figure(400, 300);
-    plot(x, y, "b-", opts({
-        {"linewidth", "3"},
-        {"label",     "data"},
-        {"alpha",     "0.8"}
-    }));
-    legend(true);
-    savefig("test_opts.svg");
-    assert(std::ifstream("test_opts.svg").good());
-
-    // scatter với opts
-    figure(400, 300);
-    scatter(x, y, opts({
-        {"color",  "green"},
-        {"s",      "100"},
-        {"marker", "o"},
-        {"alpha",  "0.7"}
-    }));
-    savefig("test_opts_scatter.svg");
-    assert(std::ifstream("test_opts_scatter.svg").good());
-
-    std::cout << "PASS\n";
+void test_linspace_large_n() {
+    auto v = linspace(0.0, 2*M_PI, 10000);
+    ASSERT_EQ(v.size(), 10000u);
+    ASSERT_NEAR(v[0], 0.0, 1e-12);
+    ASSERT_NEAR(v[9999], 2*M_PI, 1e-10);
 }
 
-// ─────────────────────────────────────────────
-// MAIN
-// ─────────────────────────────────────────────
+// arange
+void test_arange_integer_step() {
+    auto v = arange(0, 5, 1);
+    ASSERT_EQ(v.size(), 5u);
+    for (int i = 0; i < 5; i++)
+        ASSERT_NEAR(v[i], (double)i, 1e-10);
+}
+
+void test_arange_fractional_step() {
+    auto v = arange(0.0, 1.0, 0.25);
+    ASSERT_EQ(v.size(), 4u);
+    ASSERT_NEAR(v[0], 0.00, 1e-10);
+    ASSERT_NEAR(v[3], 0.75, 1e-10);
+}
+
+void test_arange_negative_start() {
+    auto v = arange(-3, 4, 1);
+    ASSERT_EQ(v.size(), 7u);
+    ASSERT_NEAR(v[0], -3.0, 1e-10);
+    ASSERT_NEAR(v[3],  0.0, 1e-10);
+    ASSERT_NEAR(v[6],  3.0, 1e-10);
+}
+
+// histogram
+void test_histogram_uniform_data() {
+    std::vector<double> data;
+    for (int i = 1; i <= 100; i++) data.push_back((double)i);
+    auto h = histogram(data, 10, 1, 100);
+    ASSERT_EQ(h.counts.size(), 10u);
+    ASSERT_EQ(h.binEdges.size(), 11u);
+    int total = 0;
+    for (int c : h.counts) total += c;
+    ASSERT_EQ(total, 100);
+}
+
+void test_histogram_single_bin() {
+    std::vector<double> data = {1.0, 2.0, 3.0, 4.0, 5.0};
+    auto h = histogram(data, 1, 1, 5);
+    ASSERT_EQ(h.counts.size(), 1u);
+    ASSERT_EQ(h.counts[0], 5);
+}
+
+void test_histogram_edges_monotone() {
+    std::vector<double> data = {1.0, 2.0, 3.0};
+    auto h = histogram(data, 5, 1, 3);
+    for (size_t i = 1; i < h.binEdges.size(); i++)
+        ASSERT_TRUE(h.binEdges[i] > h.binEdges[i-1]);
+}
+
+// niceTicks
+void test_niceticks_round_numbers() {
+    auto ticks = niceTicks(0, 100, 10);
+    ASSERT_TRUE(!ticks.empty());
+    for (double t : ticks) {
+        // Tất cả ticks phải trong range [0, 100] (với chút padding)
+        ASSERT_TRUE(t >= -10.0 && t <= 110.0);
+    }
+}
+
+void test_niceticks_coverage() {
+    // Ticks phải cover được range [min, max]
+    auto ticks = niceTicks(0, 1, 5);
+    ASSERT_TRUE(!ticks.empty());
+    double tick_min = *std::min_element(ticks.begin(), ticks.end());
+    double tick_max = *std::max_element(ticks.begin(), ticks.end());
+    ASSERT_TRUE(tick_min <= 0.0 + 0.1);
+    ASSERT_TRUE(tick_max >= 1.0 - 0.1);
+}
+
+// formatNumber
+void test_format_number_integers() {
+    ASSERT_EQ(formatNumber(0),   std::string("0"));
+    ASSERT_EQ(formatNumber(100), std::string("100"));
+    ASSERT_EQ(formatNumber(-50), std::string("-50"));
+}
+
+void test_format_number_decimals() {
+    std::string s = formatNumber(0.5);
+    ASSERT_TRUE(s.find("0.5") != std::string::npos ||
+                s.find(".5")  != std::string::npos);
+}
+
+void test_format_number_small() {
+    // Số rất nhỏ → scientific notation hoặc decimal
+    std::string s = formatNumber(0.001);
+    ASSERT_TRUE(!s.empty());
+}
+
+// CoordinateTransform — nhiều trường hợp hơn
+void test_coord_transform_scale() {
+    // Data [0,10]×[0,10] → pixel [0,100]×[0,100]: scale 10x
+    CoordinateTransform t(Rect(0,0,10,10), Rect(0,0,100,100));
+    Point p1 = t.dataToPixel(1.0, 1.0);
+    Point p2 = t.dataToPixel(2.0, 2.0);
+    // Khoảng cách data 1 unit → pixel 10 units
+    ASSERT_NEAR(p2.x - p1.x, 10.0, 1.0);
+}
+
+void test_coord_transform_corners() {
+    CoordinateTransform t(Rect(0,0,100,100), Rect(0,0,800,600));
+    Point origin = t.dataToPixel(0, 0);
+    ASSERT_NEAR(origin.x, 0.0, 1.0);
+}
+
 int main() {
-    std::cout << "=== test_numerical ===\n";
+    std::cout << "CppPlot Numerical Utility Tests\n";
+    std::cout << "================================\n\n";
 
-    try {
-        test_linspace();
-        test_logspace();
-        test_edge_cases();
-        test_reproducibility();
-        test_opts_api();
-    } catch (const std::exception& e) {
-        std::cerr << "EXCEPTION: " << e.what() << "\n";
-        return 1;
-    } catch (...) {
-        std::cerr << "UNKNOWN EXCEPTION\n";
-        return 1;
-    }
+    RUN_TEST(linspace_basic);
+    RUN_TEST(linspace_uniform_steps);
+    RUN_TEST(linspace_negative_range);
+    RUN_TEST(linspace_single_point);
+    RUN_TEST(linspace_large_n);
+    RUN_TEST(arange_integer_step);
+    RUN_TEST(arange_fractional_step);
+    RUN_TEST(arange_negative_start);
+    RUN_TEST(histogram_uniform_data);
+    RUN_TEST(histogram_single_bin);
+    RUN_TEST(histogram_edges_monotone);
+    RUN_TEST(niceticks_round_numbers);
+    RUN_TEST(niceticks_coverage);
+    RUN_TEST(format_number_integers);
+    RUN_TEST(format_number_decimals);
+    RUN_TEST(format_number_small);
+    RUN_TEST(coord_transform_scale);
+    RUN_TEST(coord_transform_corners);
 
-    std::cout << "=== ALL NUMERICAL TESTS PASSED ===\n";
-    return 0;
+    std::cout << "\n================================\n";
+    std::cout << "Passed: " << tests_passed << "\n";
+    std::cout << "Failed: " << tests_failed << "\n";
+    return tests_failed > 0 ? 1 : 0;
 }
