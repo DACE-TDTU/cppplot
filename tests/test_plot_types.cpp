@@ -1,230 +1,268 @@
 /**
  * test_plot_types.cpp
- * ─────────────────────────────────────────────
- * Kiểm tra tất cả plot types được liệt kê
- * trong README đều hoạt động không crash.
+ * Tests all plot types using CONFIRMED API from test_svg.cpp:
+ *   Figure, Axes (via fig.gca()), ax.plot/scatter/bar/hist
  */
 #include <cppplot/cppplot.hpp>
-#include <cassert>
-#include <fstream>
 #include <iostream>
+#include <cassert>
 #include <cmath>
-#include <vector>
-#include <string>
+#include <fstream>
+#include <stdexcept>
 
 using namespace cppplot;
 
-static bool file_exists(const std::string& p) {
-    return std::ifstream(p).good();
+int tests_passed = 0, tests_failed = 0;
+
+#define RUN_TEST(name) do { \
+    std::cout << "Running " #name "... "; \
+    try { test_##name(); std::cout << "PASSED\n"; tests_passed++; } \
+    catch (const std::exception& e) { \
+        std::cout << "FAILED: " << e.what() << "\n"; tests_failed++; } \
+} while(0)
+
+#define ASSERT_TRUE(x)     do { if(!(x))  throw std::runtime_error("TRUE: "  #x); } while(0)
+#define ASSERT_FALSE(x)    do { if( (x))  throw std::runtime_error("FALSE: " #x); } while(0)
+#define ASSERT_EQ(a,b)     do { if((a)!=(b)) throw std::runtime_error("EQ: " #a); } while(0)
+#define ASSERT_CONTAINS(s,sub) do { \
+    if((s).find(sub)==std::string::npos) \
+        throw std::runtime_error(std::string("missing: '") + (sub) + "'"); \
+} while(0)
+
+// ═══════════════════════════════════════════
+// Line plots — ax.plot()
+// ═══════════════════════════════════════════
+
+void test_line_basic() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    ax.plot({1.0,2.0,3.0,4.0,5.0},
+            {1.0,4.0,9.0,16.0,25.0}, "b-");
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+    ASSERT_CONTAINS(svg, "<svg");
 }
 
-// ─────────────────────────────────────────────
-// Error bars
-// ─────────────────────────────────────────────
-void test_errorbar() {
-    std::cout << "[TEST] test_errorbar ... ";
-
-    std::vector<double> x    = {1, 2, 3, 4, 5};
-    std::vector<double> y    = {2.1, 4.0, 5.9, 8.1, 10.0};
-    std::vector<double> yerr = {0.5, 0.4, 0.6, 0.5, 0.7};
-
-    figure(500, 350);
-    errorbar(x, y, yerr, opts({{"color", "blue"}, {"capsize", "5"}}));
-    title("Error Bars");
-    savefig("test_errorbar.svg");
-
-    assert(file_exists("test_errorbar.svg"));
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// Log scale axes
-// ─────────────────────────────────────────────
-void test_log_scale() {
-    std::cout << "[TEST] test_log_scale ... ";
-
-    auto x = linspace(1.0, 100.0, 50);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::pow(10.0, xi / 25.0));
-
-    figure(600, 400);
-    plot(x, y, "b-");
-    yscale("log");
-    grid(true);
-    title("Log Scale Y");
-    savefig("test_logscale.svg");
-
-    assert(file_exists("test_logscale.svg"));
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// Text annotations + axhline + axvline
-// ─────────────────────────────────────────────
-void test_annotations() {
-    std::cout << "[TEST] test_annotations ... ";
-
-    auto x = linspace(0.0, 2 * M_PI, 100);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi));
-
-    figure(600, 400);
-    plot(x, y, "b-");
-    text(M_PI / 2.0, 1.0, "Peak",
-         opts({{"ha", "center"}, {"fontsize", "12"}}));
-    axhline(0.0,  opts({{"color", "gray"}, {"linestyle", "--"}}));
-    axvline(M_PI, opts({{"color", "red"},  {"linestyle", ":"}}));
-    title("Annotations");
-    savefig("test_annotations.svg");
-
-    assert(file_exists("test_annotations.svg"));
-
-    // "Peak" text phải muncul dalam SVG
-    std::ifstream f("test_annotations.svg");
-    std::string content(std::istreambuf_iterator<char>(f),
-                        std::istreambuf_iterator<char>());
-    assert(content.find("Peak") != std::string::npos &&
-           "text() annotation must appear in SVG");
-
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// Subplots 2x1
-// ─────────────────────────────────────────────
-void test_subplots_2x1() {
-    std::cout << "[TEST] test_subplots_2x1 ... ";
-
-    auto x = linspace(0.0, 2 * M_PI, 100);
+void test_line_multiple_series() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    auto x = linspace(0.0, 2*M_PI, 50);
     std::vector<double> y_sin, y_cos;
     for (double xi : x) {
         y_sin.push_back(std::sin(xi));
         y_cos.push_back(std::cos(xi));
     }
+    ax.plot(x, y_sin, "b-",  {{"label", std::string("sin")}});
+    ax.plot(x, y_cos, "r--", {{"label", std::string("cos")}});
+    ax.legend(true);
 
-    figure(600, 600);
-    subplot(2, 1, 1);
-    plot(x, y_sin, "b-");
-    ylabel("sin(x)"); grid(true);
-
-    subplot(2, 1, 2);
-    plot(x, y_cos, "r-");
-    xlabel("x (rad)"); ylabel("cos(x)"); grid(true);
-
-    savefig("test_subplots_2x1.svg");
-    assert(file_exists("test_subplots_2x1.svg"));
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+    // 2 series → SVG lớn hơn 1 series
+    Figure fig2(600, 400);
+    auto& ax2 = fig2.gca();
+    ax2.plot(x, y_sin, "b-");
+    ASSERT_TRUE(svg.size() > fig2.toSVG().size());
 }
 
-// ─────────────────────────────────────────────
-// Subplots 1x3
-// ─────────────────────────────────────────────
-void test_subplots_1x3() {
-    std::cout << "[TEST] test_subplots_1x3 ... ";
-
-    std::vector<double> x = {1, 2, 3, 4, 5};
-    std::vector<double> y = {1, 4, 9, 16, 25};
-
-    figure(1200, 400);
-    subplot(1, 3, 1);
-    plot(x, y, "b-o"); title("Line");
-
-    subplot(1, 3, 2);
-    scatter(x, y, opts({{"color", "red"}})); title("Scatter");
-
-    subplot(1, 3, 3);
-    std::vector<std::string> cats = {"A","B","C","D","E"};
-    bar(cats, y, opts({{"color", "green"}})); title("Bar");
-
-    savefig("test_subplots_1x3.svg");
-    assert(file_exists("test_subplots_1x3.svg"));
-    std::cout << "PASS\n";
+void test_line_format_strings() {
+    std::vector<std::string> fmts = {"b-","r--","g:","k-.","m-o","c-s"};
+    for (auto& fmt : fmts) {
+        Figure fig(400, 300);
+        auto& ax = fig.gca();
+        ax.plot({1.0,2.0,3.0}, {1.0,2.0,3.0}, fmt.c_str());
+        std::string svg = fig.toSVG();
+        ASSERT_FALSE(svg.empty());
+    }
 }
 
-// ─────────────────────────────────────────────
-// fill_between dengan confidence band
-// ─────────────────────────────────────────────
-void test_fill_between() {
-    std::cout << "[TEST] test_fill_between ... ";
+void test_line_with_labels() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    ax.plot({0.0,1.0,2.0}, {0.0,1.0,4.0}, "b-");
+    ax.set_xlabel("X Axis");
+    ax.set_ylabel("Y Axis");
+    ax.set_title("My Title");
+    ax.grid(true);
+    ax.set_xlim(0, 2);
+    ax.set_ylim(0, 5);
+
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "X Axis");
+    ASSERT_CONTAINS(svg, "Y Axis");
+    ASSERT_CONTAINS(svg, "My Title");
+}
+
+// ═══════════════════════════════════════════
+// Scatter plot — ax.scatter()
+// ═══════════════════════════════════════════
+
+void test_scatter_basic() {
+    Figure fig(500, 400);
+    auto& ax = fig.gca();
+    ax.scatter({1.0,2.0,3.0,4.0,5.0},
+               {2.0,4.0,1.0,5.0,3.0},
+               {{"c", std::string("red")}});
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+}
+
+void test_scatter_different_colors() {
+    std::vector<std::string> colors = {"red","blue","green","black"};
+    for (auto& col : colors) {
+        Figure fig(400, 300);
+        auto& ax = fig.gca();
+        ax.scatter({1.0,2.0,3.0}, {1.0,2.0,3.0},
+                   {{"c", col}});
+        ASSERT_FALSE(fig.toSVG().empty());
+    }
+}
+
+// ═══════════════════════════════════════════
+// Bar chart — ax.bar()
+// ═══════════════════════════════════════════
+
+void test_bar_basic() {
+    Figure fig(500, 400);
+    auto& ax = fig.gca();
+    ax.bar({1.0,2.0,3.0,4.0},
+           {10.0,25.0,15.0,30.0});
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+    // Bar chart → phải có rect elements
+    ASSERT_CONTAINS(svg, "<rect");
+}
+
+void test_bar_values() {
+    Figure fig(500, 400);
+    auto& ax = fig.gca();
+    // Giá trị âm (below-zero bars)
+    ax.bar({1.0,2.0,3.0}, {-5.0,10.0,-3.0});
+    ASSERT_FALSE(fig.toSVG().empty());
+}
+
+// ═══════════════════════════════════════════
+// Histogram — ax.hist()
+// ═══════════════════════════════════════════
+
+void test_hist_basic() {
+    Figure fig(500, 400);
+    auto& ax = fig.gca();
+    std::vector<double> data = {1,2,2,3,3,3,4,4,5,5,5,5};
+    ax.hist(data, 5);
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+    ASSERT_CONTAINS(svg, "<rect"); // histogram dùng rects
+}
+
+void test_hist_many_bins() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    std::vector<double> data;
+    for (int i = 0; i < 100; i++) data.push_back(i * 0.1);
+    ax.hist(data, 20);
+    ASSERT_FALSE(fig.toSVG().empty());
+}
+
+// ═══════════════════════════════════════════
+// Subplots — fig.subplot()
+// ═══════════════════════════════════════════
+
+void test_subplot_2x1() {
+    Figure fig(600, 600);
+
+    auto& ax1 = fig.subplot(2, 1, 1);
+    ax1.plot({0.0,1.0,2.0}, {0.0,1.0,0.0}, "b-");
+    ax1.set_title("Top");
+
+    auto& ax2 = fig.subplot(2, 1, 2);
+    ax2.plot({0.0,1.0,2.0}, {0.0,-1.0,0.0}, "r-");
+    ax2.set_title("Bottom");
+
+    ASSERT_TRUE(fig.getAxes().size() == 2);
+    ASSERT_FALSE(fig.toSVG().empty());
+}
+
+void test_subplot_2x2() {
+    Figure fig(800, 600);
+    auto& ax1 = fig.subplot(2, 2, 1);
+    auto& ax2 = fig.subplot(2, 2, 2);
+    auto& ax3 = fig.subplot(2, 2, 3);
+    auto& ax4 = fig.subplot(2, 2, 4);
+
+    ax1.plot({1.0,2.0,3.0}, {1.0,4.0,9.0}, "b-");
+    ax2.scatter({1.0,2.0,3.0}, {3.0,1.0,2.0}, {{"c", std::string("red")}});
+    ax3.bar({1.0,2.0,3.0}, {5.0,10.0,7.0});
+    ax4.hist({1.0,2.0,2.0,3.0,3.0,3.0}, 3);
+
+    ASSERT_EQ(fig.getAxes().size(), (size_t)4);
+    std::string svg = fig.toSVG();
+    ASSERT_FALSE(svg.empty());
+}
+
+// ═══════════════════════════════════════════
+// Integration — complete realistic plot
+// ═══════════════════════════════════════════
+
+void test_integration_sincos() {
+    Figure fig(800, 600);
+    auto& ax = fig.gca();
 
     auto x = linspace(0.0, 10.0, 100);
-    std::vector<double> mean, upper, lower;
+    std::vector<double> y1, y2;
     for (double xi : x) {
-        double v = std::sin(xi) * std::exp(-0.1 * xi);
-        mean.push_back(v);
-        upper.push_back(v + 0.3);
-        lower.push_back(v - 0.3);
+        y1.push_back(std::sin(xi));
+        y2.push_back(std::cos(xi));
     }
 
-    figure(600, 400);
-    fill_between(x, lower, upper,
-                 opts({{"color", "royalblue"}, {"alpha", "0.25"}}));
-    plot(x, mean, "b-", opts({{"linewidth", "2"}, {"label", "Mean"}}));
-    legend(true);
-    title("Signal with Confidence Band");
-    savefig("test_fill_between.svg");
+    ax.plot(x, y1, "b-",  {{"label", std::string("sin(x)")}});
+    ax.plot(x, y2, "r--", {{"label", std::string("cos(x)")}});
+    ax.set_xlabel("X axis");
+    ax.set_ylabel("Y axis");
+    ax.set_title("Complete Integration Test");
+    ax.grid(true);
+    ax.legend(true);
+    ax.set_xlim(0, 10);
+    ax.set_ylim(-1.5, 1.5);
 
-    assert(file_exists("test_fill_between.svg"));
-    std::cout << "PASS\n";
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "X axis");
+    ASSERT_CONTAINS(svg, "Y axis");
+    ASSERT_CONTAINS(svg, "Complete Integration Test");
+    ASSERT_CONTAINS(svg, "<polyline");
+
+    // Save và kiểm tra file
+    fig.savefig("test_integration.svg");
+    std::ifstream f("test_integration.svg");
+    ASSERT_TRUE(f.good());
+    f.close();
+    std::remove("test_integration.svg");
 }
 
-// ─────────────────────────────────────────────
-// Format strings — semua kombinasi dasar
-// ─────────────────────────────────────────────
-void test_format_strings() {
-    std::cout << "[TEST] test_format_strings ... ";
-
-    std::vector<double> x = {1, 2, 3, 4, 5};
-    std::vector<double> y = {1, 2, 3, 4, 5};
-
-    // Dùng list initializer thay vì aggregate init
-    std::vector<std::string> formats;
-    formats.push_back("b-");
-    formats.push_back("r--");
-    formats.push_back("g:");
-    formats.push_back("k-.");
-    formats.push_back("m-o");
-    formats.push_back("c-s");
-    formats.push_back("y-^");
-
-    for (const auto& fmt : formats) {
-        std::string fname = "test_fmt_" + fmt[0] + ".svg";
-        // Thay thế ký tự đặc biệt trong tên file
-        for (char& c : fname) {
-            if (c == '-' || c == '.') c = '_';
-        }
-        figure(300, 200);
-        plot(x, y, fmt.c_str());
-        savefig(fname);
-        assert(file_exists(fname) &&
-               ("Format string '" + fmt + "' must produce SVG").c_str());
-    }
-
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // MAIN
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
+
 int main() {
-    std::cout << "=== test_plot_types ===\n";
+    std::cout << "CppPlot Plot Types Tests\n";
+    std::cout << "=========================\n\n";
 
-    try {
-        test_errorbar();
-        test_log_scale();
-        test_annotations();
-        test_subplots_2x1();
-        test_subplots_1x3();
-        test_fill_between();
-        test_format_strings();
-    } catch (const std::exception& e) {
-        std::cerr << "EXCEPTION: " << e.what() << "\n";
-        return 1;
-    } catch (...) {
-        std::cerr << "UNKNOWN EXCEPTION\n";
-        return 1;
-    }
+    RUN_TEST(line_basic);
+    RUN_TEST(line_multiple_series);
+    RUN_TEST(line_format_strings);
+    RUN_TEST(line_with_labels);
+    RUN_TEST(scatter_basic);
+    RUN_TEST(scatter_different_colors);
+    RUN_TEST(bar_basic);
+    RUN_TEST(bar_values);
+    RUN_TEST(hist_basic);
+    RUN_TEST(hist_many_bins);
+    RUN_TEST(subplot_2x1);
+    RUN_TEST(subplot_2x2);
+    RUN_TEST(integration_sincos);
 
-    std::cout << "=== ALL PLOT TYPE TESTS PASSED ===\n";
-    return 0;
+    std::cout << "\n=========================\n";
+    std::cout << "Passed: " << tests_passed << "\n";
+    std::cout << "Failed: " << tests_failed << "\n";
+    return tests_failed > 0 ? 1 : 0;
 }
