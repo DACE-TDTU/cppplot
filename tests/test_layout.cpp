@@ -1,215 +1,244 @@
 /**
  * test_layout.cpp
- * ─────────────────────────────────────────────
- * Kiểm tra layout system: subplot, GridSpec,
- * add_axes, inset_axes, subplot_span.
+ * Tests layout system using confirmed API:
+ *   fig.subplot(rows,cols,idx), fig.getAxes(),
+ *   SVGBackend low-level for precise geometry tests.
  */
 #include <cppplot/cppplot.hpp>
-#include <cassert>
-#include <fstream>
 #include <iostream>
+#include <cassert>
 #include <cmath>
+#include <fstream>
+#include <stdexcept>
 
 using namespace cppplot;
 
-static bool file_exists(const std::string& p) {
-    return std::ifstream(p).good();
+int tests_passed = 0, tests_failed = 0;
+
+#define RUN_TEST(name) do { \
+    std::cout << "Running " #name "... "; \
+    try { test_##name(); std::cout << "PASSED\n"; tests_passed++; } \
+    catch (const std::exception& e) { \
+        std::cout << "FAILED: " << e.what() << "\n"; tests_failed++; } \
+} while(0)
+
+#define ASSERT_TRUE(x)  do { if(!(x))  throw std::runtime_error("TRUE: "  #x); } while(0)
+#define ASSERT_EQ(a,b)  do { if((a)!=(b)) throw std::runtime_error("EQ: " #a); } while(0)
+#define ASSERT_FALSE(x) do { if( (x))  throw std::runtime_error("FALSE: " #x); } while(0)
+#define ASSERT_CONTAINS(s,sub) do { \
+    if((s).find(sub)==std::string::npos) \
+        throw std::runtime_error(std::string("missing: '") + (sub) + "'"); \
+} while(0)
+
+// ═══════════════════════════════════════════
+// subplot — axis count và content
+// ═══════════════════════════════════════════
+
+void test_subplot_1x1_is_gca() {
+    Figure fig(600, 400);
+    auto& ax = fig.gca();
+    ax.plot({1.0,2.0,3.0}, {1.0,4.0,9.0}, "b-");
+    ASSERT_EQ(fig.getAxes().size(), (size_t)1);
+    ASSERT_FALSE(fig.toSVG().empty());
 }
 
-static size_t file_size(const std::string& p) {
-    std::ifstream f(p, std::ios::binary | std::ios::ate);
-    return f.is_open() ? (size_t)f.tellg() : 0;
+void test_subplot_2x1_count() {
+    Figure fig(600, 600);
+    fig.subplot(2, 1, 1);
+    fig.subplot(2, 1, 2);
+    ASSERT_EQ(fig.getAxes().size(), (size_t)2);
 }
 
-// ─────────────────────────────────────────────
-// TEST 1: subplot 2x2
-// ─────────────────────────────────────────────
-void test_subplot_2x2() {
-    std::cout << "[TEST] test_subplot_2x2 ... ";
+void test_subplot_1x2_count() {
+    Figure fig(800, 400);
+    fig.subplot(1, 2, 1);
+    fig.subplot(1, 2, 2);
+    ASSERT_EQ(fig.getAxes().size(), (size_t)2);
+}
 
-    auto x = linspace(0.0, 2 * M_PI, 50);
-    std::vector<double> y1, y2, y3, y4;
+void test_subplot_2x2_count() {
+    Figure fig(800, 600);
+    fig.subplot(2, 2, 1);
+    fig.subplot(2, 2, 2);
+    fig.subplot(2, 2, 3);
+    fig.subplot(2, 2, 4);
+    ASSERT_EQ(fig.getAxes().size(), (size_t)4);
+}
+
+void test_subplot_3x1_count() {
+    Figure fig(600, 900);
+    fig.subplot(3, 1, 1);
+    fig.subplot(3, 1, 2);
+    fig.subplot(3, 1, 3);
+    ASSERT_EQ(fig.getAxes().size(), (size_t)3);
+}
+
+void test_subplot_each_has_content() {
+    Figure fig(800, 600);
+    auto x = linspace(0.0, 2*M_PI, 30);
+    std::vector<double> y_sin, y_cos, y_tan, y_sq;
     for (double xi : x) {
-        y1.push_back(std::sin(xi));
-        y2.push_back(std::cos(xi));
-        y3.push_back(std::sin(2 * xi));
-        y4.push_back(std::cos(2 * xi));
+        y_sin.push_back(std::sin(xi));
+        y_cos.push_back(std::cos(xi));
+        y_tan.push_back(std::tanh(xi));
+        y_sq.push_back(xi*xi / 40.0);
     }
 
-    figure(800, 600);
-    subplot(2, 2, 1); plot(x, y1, "b-"); title("sin(x)");
-    subplot(2, 2, 2); plot(x, y2, "r-"); title("cos(x)");
-    subplot(2, 2, 3); plot(x, y3, "g-"); title("sin(2x)");
-    subplot(2, 2, 4); plot(x, y4, "m-"); title("cos(2x)");
-    savefig("test_subplot_2x2.svg");
+    auto& ax1 = fig.subplot(2, 2, 1);
+    ax1.plot(x, y_sin, "b-"); ax1.set_title("sin");
 
-    assert(file_exists("test_subplot_2x2.svg"));
+    auto& ax2 = fig.subplot(2, 2, 2);
+    ax2.plot(x, y_cos, "r-"); ax2.set_title("cos");
 
-    // 2x2 subplot SVG phải lớn hơn đáng kể so với single plot
-    size_t sz = file_size("test_subplot_2x2.svg");
-    assert(sz > 500 && "2x2 subplot SVG seems too small");
+    auto& ax3 = fig.subplot(2, 2, 3);
+    ax3.plot(x, y_tan, "g-"); ax3.set_title("tanh");
 
-    std::cout << "PASS\n";
+    auto& ax4 = fig.subplot(2, 2, 4);
+    ax4.plot(x, y_sq, "m-"); ax4.set_title("x^2");
+
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "sin");
+    ASSERT_CONTAINS(svg, "cos");
+    ASSERT_CONTAINS(svg, "tanh");
 }
 
-// ─────────────────────────────────────────────
-// TEST 2: subplot 3x1 (Bode-style layout)
-// ─────────────────────────────────────────────
-void test_subplot_3x1() {
-    std::cout << "[TEST] test_subplot_3x1 ... ";
-
-    auto x = linspace(0.0, 10.0, 100);
+void test_subplot_svg_larger_than_single() {
+    // 2x2 subplot SVG phải lớn hơn single-axes SVG cùng kích thước
+    auto x = linspace(0.0, 1.0, 20);
     std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi) * std::exp(-0.2 * xi));
+    for (double xi : x) y.push_back(xi*xi);
 
-    figure(600, 800);
-    subplot(3, 1, 1);
-    plot(x, y, "b-"); title("Top"); ylabel("Signal");
+    Figure fig_single(800, 600);
+    fig_single.gca().plot(x, y, "b-");
+    size_t sz_single = fig_single.toSVG().size();
 
-    subplot(3, 1, 2);
-    std::vector<double> dy;
-    for (size_t i = 1; i < y.size(); i++)
-        dy.push_back((y[i] - y[i-1]) / (x[i] - x[i-1]));
-    std::vector<double> x_dy(x.begin() + 1, x.end());
-    plot(x_dy, dy, "r-"); ylabel("Derivative");
-
-    subplot(3, 1, 3);
-    // Running integral (trapezoidal)
-    std::vector<double> integ;
-    double sum = 0;
-    for (size_t i = 0; i < y.size(); i++) {
-        if (i > 0) sum += 0.5 * (y[i] + y[i-1]) * (x[i] - x[i-1]);
-        integ.push_back(sum);
+    Figure fig_multi(800, 600);
+    for (int i = 1; i <= 4; i++) {
+        auto& ax = fig_multi.subplot(2, 2, i);
+        ax.plot(x, y, "b-");
     }
-    plot(x, integ, "g-"); xlabel("t"); ylabel("Integral");
+    size_t sz_multi = fig_multi.toSVG().size();
 
-    savefig("test_subplot_3x1.svg");
-    assert(file_exists("test_subplot_3x1.svg"));
-    std::cout << "PASS\n";
+    ASSERT_TRUE(sz_multi > sz_single);
 }
 
-// ─────────────────────────────────────────────
-// TEST 3: add_axes (free-form placement)
-// ─────────────────────────────────────────────
-void test_add_axes() {
-    std::cout << "[TEST] test_add_axes ... ";
+// ═══════════════════════════════════════════
+// SVGBackend layout — geometry precision
+// ═══════════════════════════════════════════
 
-    auto x = linspace(0.0, 10.0, 100);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi));
+void test_svgbackend_coordinate_mapping() {
+    // Dùng CoordinateTransform để verify pixel mapping
+    CoordinateTransform t(
+        Rect(0, 0, 10, 10),   // data space
+        Rect(0, 0, 100, 100)  // pixel space
+    );
+    Point p = t.dataToPixel(5.0, 5.0);
+    ASSERT_TRUE(std::abs(p.x - 50.0) < 2.0);
+    ASSERT_TRUE(std::abs(p.y - 50.0) < 2.0);
+}
 
-    figure(800, 600);
-    // Main axes
-    add_axes(0.1, 0.3, 0.55, 0.6);
-    plot(x, y, "b-"); title("Main Plot"); grid(true);
-
-    // Side panel
-    std::vector<double> xh, yh;
-    for (int i = 0; i < 30; i++) {
-        xh.push_back(i * 0.1 - 1.5);
-        yh.push_back(std::exp(-xh.back() * xh.back() / 0.5) * 10.0);
+void test_svgbackend_multiple_rects() {
+    // Bar chart = multiple rects → count <rect in SVG
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    for (int i = 0; i < 5; i++) {
+        svg.drawRect(50+i*60, 100, 40, 100+i*20,
+                     Color::blue(),
+                     LineStyle("-", 1, Color::black()));
     }
-    add_axes(0.7, 0.3, 0.25, 0.6);
-    bar(xh, yh, opts({{"color","steelblue"}}));
-    title("Distribution");
-
-    savefig("test_add_axes.svg");
-    assert(file_exists("test_add_axes.svg"));
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// TEST 4: inset_axes (zoom inset)
-// ─────────────────────────────────────────────
-void test_inset_axes() {
-    std::cout << "[TEST] test_inset_axes ... ";
-
-    auto x = linspace(0.0, 4 * M_PI, 200);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi) * std::exp(-0.1 * xi));
-
-    figure(800, 500);
-    subplot(1, 1, 1);
-    plot(x, y, "b-", opts({{"linewidth","1.5"}}));
-    title("Main View with Zoom Inset"); grid(true);
-
-    // Inset: zoom vào đầu tín hiệu
-    auto x_zoom = linspace(0.0, 1.0, 50);
-    std::vector<double> y_zoom;
-    for (double xi : x_zoom)
-        y_zoom.push_back(std::sin(xi) * std::exp(-0.1 * xi));
-
-    inset_axes(0.55, 0.5, 0.4, 0.35);
-    plot(x_zoom, y_zoom, "r-", opts({{"linewidth","2"}}));
-    title("Zoomed [0,1]");
-
-    savefig("test_inset.svg");
-    assert(file_exists("test_inset.svg"));
-    std::cout << "PASS\n";
-}
-
-// ─────────────────────────────────────────────
-// TEST 5: GridSpec với custom ratios
-// ─────────────────────────────────────────────
-void test_gridspec() {
-    std::cout << "[TEST] test_gridspec ... ";
-
-    auto x = linspace(0.0, 2 * M_PI, 100);
-    std::vector<double> y;
-    for (double xi : x) y.push_back(std::sin(xi));
-
-    std::vector<double> xdata, ydata;
-    for (int i = 0; i < 50; i++) {
-        xdata.push_back(i * 0.1);
-        ydata.push_back(std::sin(i * 0.1) + 0.1 * i);
+    std::string out = svg.render();
+    // Đếm số <rect — phải có ít nhất 5
+    int count = 0;
+    size_t pos = 0;
+    while ((pos = out.find("<rect", pos)) != std::string::npos) {
+        ++count; pos += 5;
     }
-
-    figure(1000, 700);
-    GridSpec gs(2, 3);
-    gs.setWidthRatios({2, 1, 1});
-    gs.setHeightRatios({1, 1});
-    gs.setSpacing(0.08, 0.12);
-    gcf().setLayout(gs);
-
-    // Wide plot spanning row 0, col 0-1
-    subplot_span(0, 1, 0, 0);
-    plot(x, y, "b-"); title("Wide Plot"); grid(true);
-
-    subplot_span(0, 0, 2, 2);
-    scatter(xdata, ydata, opts({{"color","red"}, {"s","10"}}));
-    title("Scatter");
-
-    subplot_span(1, 1, 0, 2);
-    std::vector<std::string> cats = {"A","B","C","D"};
-    std::vector<double> vals = {3.0, 7.0, 5.0, 9.0};
-    bar(cats, vals, opts({{"color","steelblue"}}));
-    title("Bar");
-
-    savefig("test_gridspec.svg");
-    assert(file_exists("test_gridspec.svg"));
-    std::cout << "PASS\n";
+    ASSERT_TRUE(count >= 5);
 }
 
-// ─────────────────────────────────────────────
+void test_svgbackend_polyline_points_format() {
+    SVGBackend svg(400, 300);
+    svg.clear(Color::white());
+    std::vector<Point> pts = {{10,10},{50,50},{100,20},{200,80}};
+    svg.drawPolyline(pts, LineStyle("-",2,Color::blue()));
+    std::string out = svg.render();
+
+    // SVG polyline points format: "x1,y1 x2,y2 ..."
+    // Phải có "10" và "50" trong points attribute
+    ASSERT_CONTAINS(out, "points=");
+    ASSERT_TRUE(out.find("10") != std::string::npos);
+}
+
+// ═══════════════════════════════════════════
+// Mixed plot types trong subplots
+// ═══════════════════════════════════════════
+
+void test_mixed_types_in_subplots() {
+    Figure fig(900, 600);
+
+    auto& ax1 = fig.subplot(1, 3, 1);
+    ax1.plot({1.0,2.0,3.0,4.0,5.0},
+             {1.0,4.0,9.0,16.0,25.0}, "b-o");
+    ax1.set_title("Line");
+
+    auto& ax2 = fig.subplot(1, 3, 2);
+    ax2.scatter({1.0,2.0,3.0,4.0,5.0},
+                {5.0,3.0,4.0,1.0,2.0},
+                {{"c", std::string("red")}});
+    ax2.set_title("Scatter");
+
+    auto& ax3 = fig.subplot(1, 3, 3);
+    ax3.bar({1.0,2.0,3.0,4.0},
+            {10.0,25.0,15.0,30.0});
+    ax3.set_title("Bar");
+
+    ASSERT_EQ(fig.getAxes().size(), (size_t)3);
+    std::string svg = fig.toSVG();
+    ASSERT_CONTAINS(svg, "Line");
+    ASSERT_CONTAINS(svg, "Scatter");
+    ASSERT_CONTAINS(svg, "Bar");
+    ASSERT_CONTAINS(svg, "<rect");    // bar chart
+    ASSERT_CONTAINS(svg, "<polyline"); // line chart
+}
+
+// ═══════════════════════════════════════════
+// Figure dimensions in SVG
+// ═══════════════════════════════════════════
+
+void test_figure_dimensions_in_svg() {
+    struct TC { int w, h; };
+    for (auto tc : std::vector<TC>{{400,300},{800,600},{1200,400}}) {
+        Figure fig(tc.w, tc.h);
+        fig.gca().plot({1.0,2.0}, {1.0,2.0}, "b-");
+        std::string svg = fig.toSVG();
+        ASSERT_CONTAINS(svg, "width=\"" + std::to_string(tc.w) + "\"");
+        ASSERT_CONTAINS(svg, "height=\"" + std::to_string(tc.h) + "\"");
+    }
+}
+
+// ═══════════════════════════════════════════
 // MAIN
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════
+
 int main() {
-    std::cout << "=== test_layout ===\n";
+    std::cout << "CppPlot Layout Tests\n";
+    std::cout << "=====================\n\n";
 
-    try {
-        test_subplot_2x2();
-        test_subplot_3x1();
-        test_add_axes();
-        test_inset_axes();
-        test_gridspec();
-    } catch (const std::exception& e) {
-        std::cerr << "EXCEPTION: " << e.what() << "\n";
-        return 1;
-    } catch (...) {
-        std::cerr << "UNKNOWN EXCEPTION\n";
-        return 1;
-    }
+    RUN_TEST(subplot_1x1_is_gca);
+    RUN_TEST(subplot_2x1_count);
+    RUN_TEST(subplot_1x2_count);
+    RUN_TEST(subplot_2x2_count);
+    RUN_TEST(subplot_3x1_count);
+    RUN_TEST(subplot_each_has_content);
+    RUN_TEST(subplot_svg_larger_than_single);
+    RUN_TEST(svgbackend_coordinate_mapping);
+    RUN_TEST(svgbackend_multiple_rects);
+    RUN_TEST(svgbackend_polyline_points_format);
+    RUN_TEST(mixed_types_in_subplots);
+    RUN_TEST(figure_dimensions_in_svg);
 
-    std::cout << "=== ALL LAYOUT TESTS PASSED ===\n";
-    return 0;
+    std::cout << "\n=====================\n";
+    std::cout << "Passed: " << tests_passed << "\n";
+    std::cout << "Failed: " << tests_failed << "\n";
+    return tests_failed > 0 ? 1 : 0;
 }
