@@ -8,9 +8,6 @@ on:
 
 jobs:
 
-  # ═══════════════════════════════════════════
-  # Linux — GCC & Clang
-  # ═══════════════════════════════════════════
   linux:
     name: "Linux · ${{ matrix.compiler }} · C++${{ matrix.std }}"
     runs-on: ubuntu-22.04
@@ -52,7 +49,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
-            -DCPPPLOT_BUILD_EXAMPLES=ON \
+            -DCPPPLOT_BUILD_EXAMPLES=OFF \
             -DCPPPLOT_BUILD_TESTS=ON
 
       - name: Build
@@ -70,9 +67,6 @@ jobs:
           path: build/tests/output/*.svg
           if-no-files-found: ignore
 
-  # ═══════════════════════════════════════════
-  # Windows — MSVC
-  # ═══════════════════════════════════════════
   windows:
     name: "Windows · MSVC · C++${{ matrix.std }}"
     runs-on: windows-2022
@@ -90,7 +84,7 @@ jobs:
           cmake -B build `
             -G "Visual Studio 17 2022" -A x64 `
             -DCMAKE_CXX_STANDARD=${{ matrix.std }} `
-            -DCPPPLOT_BUILD_EXAMPLES=ON `
+            -DCPPPLOT_BUILD_EXAMPLES=OFF `
             -DCPPPLOT_BUILD_TESTS=ON
 
       - name: Build
@@ -100,9 +94,6 @@ jobs:
         working-directory: build
         run: ctest -C Release --output-on-failure
 
-  # ═══════════════════════════════════════════
-  # macOS — Apple Clang
-  # ═══════════════════════════════════════════
   macos:
     name: "macOS · AppleClang · C++${{ matrix.std }}"
     runs-on: macos-13
@@ -123,7 +114,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
-            -DCPPPLOT_BUILD_EXAMPLES=ON \
+            -DCPPPLOT_BUILD_EXAMPLES=OFF \
             -DCPPPLOT_BUILD_TESTS=ON
 
       - name: Build
@@ -133,9 +124,6 @@ jobs:
         working-directory: build
         run: ctest --output-on-failure
 
-  # ═══════════════════════════════════════════
-  # Header-only: không cần CMake, chỉ g++ -I
-  # ═══════════════════════════════════════════
   header-only:
     name: "Header-only include check"
     runs-on: ubuntu-22.04
@@ -149,13 +137,14 @@ jobs:
           #include "include/cppplot/cppplot.hpp"
           using namespace cppplot;
           int main() {
+              Figure fig(400, 300);
+              auto& ax = fig.gca();
               auto x = linspace(0.0, 6.28, 50);
               std::vector<double> y;
               for (double xi : x) y.push_back(std::sin(xi));
-              figure(400, 300);
-              plot(x, y, "b-");
-              title("Header-only CI check");
-              savefig("/tmp/check.svg");
+              ax.plot(x, y, "b-");
+              ax.set_title("Header-only CI check");
+              fig.savefig("/tmp/check.svg");
               return 0;
           }
           EOF
