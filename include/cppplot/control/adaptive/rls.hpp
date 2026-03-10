@@ -27,8 +27,8 @@
 #ifndef CPPPLOT_CONTROL_ADAPTIVE_RLS_HPP
 #define CPPPLOT_CONTROL_ADAPTIVE_RLS_HPP
 
-#include "../../core/matrix.hpp"
-#include "../../pyplot.hpp"
+#include "cppplot/core/matrix.hpp"
+#include "cppplot/pyplot.hpp"
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -37,7 +37,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
 
 namespace cppplot {
 namespace control {

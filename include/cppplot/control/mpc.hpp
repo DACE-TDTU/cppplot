@@ -133,6 +133,66 @@ struct MPCSolution {
   }
 };
 
+// ============================================================
+//  Dynamic Cholesky — mirrors qp::cholesky / qp::chol_solve
+//  but operates on cppplot::Matrix (dynamic size).
+//  Used by MPCController::solveConstrainedADMM() to avoid
+//  the O(N^3) dense inverse H_admm.inv() (P1 fix).
+// ============================================================
+
+/**
+ * @brief In-place Cholesky: A = L*L', stores L in lower triangle.
+ * @return true if A is positive definite, false otherwise.
+ */
+inline bool cholesky_dynamic(Matrix &L, const Matrix &A) {
+  size_t n = A.rows;
+  L = A;
+  for (size_t j = 0; j < n; ++j) {
+    double s = L(j, j);
+    for (size_t k = 0; k < j; ++k)
+      s -= L(j, k) * L(j, k);
+    if (s < 1e-14)
+      return false;
+    L(j, j) = std::sqrt(s);
+    for (size_t i = j + 1; i < n; ++i) {
+      double t = L(i, j);
+      for (size_t k = 0; k < j; ++k)
+        t -= L(i, k) * L(j, k);
+      L(i, j) = t / L(j, j);
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Solve L*L'*x = b using pre-computed lower-triangular L.
+ * Two triangular solves: forward then backward. O(N^2).
+ */
+inline Matrix chol_solve_dynamic(const Matrix &L, const Matrix &b) {
+  size_t n = L.rows;
+  Matrix y = Matrix::zeros(n, 1);
+  Matrix x = Matrix::zeros(n, 1);
+
+  // Forward substitution: L*y = b
+  for (size_t i = 0; i < n; ++i) {
+    double s = b(i, 0);
+    for (size_t k = 0; k < i; ++k)
+      s -= L(i, k) * y(k, 0);
+    y(i, 0) = s / L(i, i);
+  }
+
+  // Backward substitution: L'*x = y
+  for (int i = static_cast<int>(n) - 1; i >= 0; --i) {
+    double s = y(i, 0);
+    for (size_t k = static_cast<size_t>(i) + 1; k < n; ++k)
+      s -= L(k, static_cast<size_t>(i)) * x(k, 0);
+    x(static_cast<size_t>(i), 0) = s / L(static_cast<size_t>(i),
+                                          static_cast<size_t>(i));
+  }
+
+  return x;
+}
+
 /**
  * @brief Model Predictive Controller
  *
@@ -147,13 +207,17 @@ private:
   MPCConfig config_;
 
   // Pre-computed matrices for unconstrained MPC
-  Matrix Phi_;        // Prediction matrix for states from x0
-  Matrix Gamma_;      // Prediction matrix for states from U
-  Matrix H_;          // Hessian for QP: H = Gamma'*Q_bar*Gamma + R_bar
-  Matrix H_inv_admm_; // Precomputed inverse for ADMM: (H + rho*I)^-1
-  Matrix F_;          // Linear term: F = Gamma'*Q_bar*Phi
+  Matrix Phi_;     // Prediction matrix for states from x0
+  Matrix Gamma_;   // Prediction matrix for states from U
+  Matrix H_;       // Hessian for QP: H = Gamma'*Q_bar*Gamma + R_bar
+  Matrix L_admm_;  // Cholesky factor of (H + rho*I) — replaces dense inverse
+  Matrix F_;       // Linear term: F = Gamma'*Q_bar*Phi
 
   bool matrices_computed_ = false;
+
+  // ADMM warm-start state (persists across solve() calls)
+  Matrix admm_x_, admm_z_, admm_u_;
+  bool admm_initialized_ = false;
 
 public:
   /**
@@ -218,6 +282,7 @@ public:
   void setConfig(const MPCConfig &config) {
     config_ = config;
     matrices_computed_ = false;
+    admm_initialized_ = false; // invalidate warm-start on config change
     computePredictionMatrices();
   }
 
@@ -230,6 +295,15 @@ public:
       config_.u_ref = u_ref;
     }
   }
+
+  /**
+   * @brief Reset ADMM warm-start state to zero.
+   *
+   * Call this when there is a large change in operating point,
+   * reference step, or after a fault — to avoid stale warm-start
+   * degrading convergence.
+   */
+  void resetADMM() { admm_initialized_ = false; }
 
 private:
   /**
@@ -314,12 +388,20 @@ private:
     Matrix GtQ = Gamma_.T() * Q_bar;
     H_ = GtQ * Gamma_ + R_bar;
 
-    // Cache precomputed inverse for ADMM: (H + rho*I)^-1
+    // Cholesky-factorize (H + rho*I) once — reused every solve() call.
+    // Replaces the O(N^3) dense inverse with O(N^2) triangular solves (P1 fix).
     Matrix H_admm = H_;
-    for (size_t i = 0; i < m_ * config_.horizon; ++i) {
+    for (size_t i = 0; i < m_ * config_.horizon; ++i)
       H_admm(i, i) += config_.rho;
+    bool chol_ok = cholesky_dynamic(L_admm_, H_admm);
+    if (!chol_ok) {
+      // Fallback: increase regularization and retry once
+      for (size_t i = 0; i < m_ * config_.horizon; ++i)
+        H_admm(i, i) += 1e-6;
+      cholesky_dynamic(L_admm_, H_admm);
     }
-    H_inv_admm_ = H_admm.inv();
+    // Reset warm-start state whenever matrices are recomputed
+    admm_initialized_ = false;
 
     // Compute F: F = Gamma'*Q_bar*Phi
     F_ = GtQ * Phi_;
@@ -535,54 +617,65 @@ private:
     // Linear term: g = F * x0
     Matrix g = F_ * x0;
 
-    // ADMM State Variables
-    Matrix x = Matrix::zeros(U_size, 1);
-    Matrix z = Matrix::zeros(U_size, 1);
-    Matrix u = Matrix::zeros(U_size, 1);
-
     double rho = config_.rho;
+
+    // ── P3 fix: warm-start ───────────────────────────────────
+    // admm_x_, admm_z_, admm_u_ persist across solve() calls.
+    // On first call (or after setConfig/reset), initialize to zero.
+    if (!config_.warm_start || !admm_initialized_) {
+      admm_x_ = Matrix::zeros(U_size, 1);
+      admm_z_ = Matrix::zeros(U_size, 1);
+      admm_u_ = Matrix::zeros(U_size, 1);
+      admm_initialized_ = true;
+    }
+
     bool converged = false;
     size_t iters = 0;
 
     for (size_t k = 0; k < config_.admm_max_iter; ++k) {
-      // 1. x-update: x = H_inv_admm_ * (rho * z - u - g)
+      // ── x-update ─────────────────────────────────────────
+      // x = (H + rho*I)^{-1} * (rho*z - u - g)
+      // P1 fix: use chol_solve_dynamic instead of H_inv_admm_ * rhs
       Matrix rhs = Matrix::zeros(U_size, 1);
-      for (size_t i = 0; i < U_size; ++i) {
-        rhs(i, 0) = rho * z(i, 0) - u(i, 0) - g(i, 0);
-      }
-      x = H_inv_admm_ * rhs;
+      for (size_t i = 0; i < U_size; ++i)
+        rhs(i, 0) = rho * admm_z_(i, 0) - admm_u_(i, 0) - g(i, 0);
+      admm_x_ = chol_solve_dynamic(L_admm_, rhs);
 
-      // 2. z-update: z = clip(x + u/rho, bounds)
-      Matrix z_prev = z;
-      Matrix x_plus_u_rho = Matrix::zeros(U_size, 1);
+      // ── z-update ─────────────────────────────────────────
+      // z = clip(x + u/rho, lb, ub)
+      Matrix z_prev = admm_z_;
       for (size_t i = 0; i < U_size; ++i) {
-        x_plus_u_rho(i, 0) = x(i, 0) + u(i, 0) / rho;
+        admm_z_(i, 0) = admm_x_(i, 0) + admm_u_(i, 0) / rho;
       }
-      z = x_plus_u_rho;
-      projectOntoConstraints(z);
+      projectOntoConstraints(admm_z_);
 
-      // 3. u-update: u = u + rho * (x - z)
-      for (size_t i = 0; i < U_size; ++i) {
-        u(i, 0) += rho * (x(i, 0) - z(i, 0));
-      }
+      // ── u-update ─────────────────────────────────────────
+      // u += rho * (x - z)
+      for (size_t i = 0; i < U_size; ++i)
+        admm_u_(i, 0) += rho * (admm_x_(i, 0) - admm_z_(i, 0));
 
-      // 4. Convergence Check
+      // ── Convergence check ─────────────────────────────────
       if ((k + 1) % config_.check_every == 0) {
-        double r_norm = 0.0;
-        double s_norm = 0.0;
+        double r_norm = 0.0, s_norm = 0.0;
+        double x_norm = 0.0, z_norm = 0.0, u_norm = 0.0;
         for (size_t i = 0; i < U_size; ++i) {
-          double r_i = x(i, 0) - z(i, 0);
-          double s_i = rho * (z(i, 0) - z_prev(i, 0));
+          double r_i = admm_x_(i, 0) - admm_z_(i, 0);
+          double s_i = rho * (admm_z_(i, 0) - z_prev(i, 0));
           r_norm += r_i * r_i;
           s_norm += s_i * s_i;
+          x_norm += admm_x_(i, 0) * admm_x_(i, 0);
+          z_norm += admm_z_(i, 0) * admm_z_(i, 0);
+          u_norm += admm_u_(i, 0) * admm_u_(i, 0);
         }
         r_norm = std::sqrt(r_norm);
         s_norm = std::sqrt(s_norm);
 
-        double eps_prim = config_.eps_abs * std::sqrt(U_size) +
-                          config_.eps_rel * std::max(x.norm(), z.norm());
-        double eps_dual =
-            config_.eps_abs * std::sqrt(U_size) + config_.eps_rel * u.norm();
+        double eps_prim = config_.eps_abs * std::sqrt(static_cast<double>(U_size))
+                        + config_.eps_rel * std::max(std::sqrt(x_norm),
+                                                     std::sqrt(z_norm));
+        // W2 fix: eps_dual must include rho factor (OSQP convention)
+        double eps_dual = config_.eps_abs * std::sqrt(static_cast<double>(U_size))
+                        + config_.eps_rel * rho * std::sqrt(u_norm);
 
         if (r_norm < eps_prim && s_norm < eps_dual) {
           converged = true;
@@ -595,24 +688,21 @@ private:
     if (!converged)
       iters = config_.admm_max_iter;
 
-    sol.u_opt = z;
+    sol.u_opt = admm_z_;
     sol.iterations = static_cast<int>(iters);
     sol.converged = converged;
 
     // Compute predicted states
     sol.x_pred = Matrix::zeros(n_ * (N + 1), 1);
-    for (size_t i = 0; i < n_; ++i) {
+    for (size_t i = 0; i < n_; ++i)
       sol.x_pred(i, 0) = x0(i, 0);
-    }
 
     Matrix Phi_x0 = Phi_ * x0;
     Matrix Gamma_U = Gamma_ * sol.u_opt;
-    for (size_t k = 0; k < N; ++k) {
-      for (size_t i = 0; i < n_; ++i) {
+    for (size_t k = 0; k < N; ++k)
+      for (size_t i = 0; i < n_; ++i)
         sol.x_pred((k + 1) * n_ + i, 0) =
             Phi_x0(k * n_ + i, 0) + Gamma_U(k * n_ + i, 0);
-      }
-    }
 
     sol.cost = computeCost(x0, sol.u_opt);
     return sol;
