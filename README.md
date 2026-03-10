@@ -12,12 +12,12 @@
 
 - 📊 **Multiple Plot Types**: Line plots, scatter plots, bar charts, histograms
 - 📈 **Scientific Features**: Error bars, fill between, log scale, annotations
-- 🎛️ **Control Systems**: Bode, Nyquist, Nichols, Pole-Zero, Root Locus, Step/Impulse Response
-- 🔧 **Controller Design**: PID, Lead/Lag, LQR, LQG, MPC, Pole Placement
+- 🎛️ **Control Systems**: Frequency responses (Bode, Nyquist, Nichols) bounded perfectly for Integrator margins, Pole-Zero, Root Locus, Step/Impulse Response
+- 🔧 **Controller Design**: PID, LQR, LQG, Pole Placement, and **Constrained MPC** powered by ADMM and PGD Solvers
 - 📡 **State Estimation**: Kalman Filter, Extended KF, Unscented KF
 - ⚡ **EE/Telecom Applications**: PLL, Power Converters, Motor Drives, Channel Equalization
 - 🎨 **Rich Styling**: Colors, line styles, markers, legends, grids
-- 🚀 **Advanced Nonlinear**: Sliding Mode Control (SMC), Barrier Functions, Event-Triggered Control
+- 🚀 **Advanced Nonlinear / Robust**: Sliding Mode Control (SMC), Barrier Functions, Event-Triggered Control, $H_\infty$ Synthesis, $\mu$-Analysis
 - 📐 **Subplots**: Create complex multi-plot figures with GridSpec
 - ✍️ **LaTeX Support**: Mathematical expressions with LaTeX rendering
 - 💾 **SVG Backend**: Clean, scalable vector graphics output
@@ -3346,6 +3346,8 @@ struct NyquistOptions {
 void nyquist(const TransferFunction& G, const NyquistOptions& opts = {});
 void nyquist(const std::vector<TransferFunction>& systems, const NyquistOptions& opts = {});
 ```
+
+*Note: The `nyquist` and `bode` functions feature built-in robustness guards against unbounded coordinates (e.g. Integrator subsystems $1/s^n$). The bounding-box is automatically clamped to ensure the critical $(-1, 0)$ crossover coordinate reliably remains isolated and cleanly visible.*
 
 **Nyquist Plot Examples:**
 
