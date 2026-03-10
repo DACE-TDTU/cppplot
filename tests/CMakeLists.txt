@@ -3,6 +3,35 @@ cmake_minimum_required(VERSION 3.14)
 # ─────────────────────────────────────────────────────────────
 # Helper: đăng ký một test executable
 # ─────────────────────────────────────────────────────────────
+# ── Catch2 via FetchContent ──────────────────────────────────
+include(FetchContent)
+
+FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.5.4
+    GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(Catch2)
+
+# Fix MinGW: gmtime_s không tồn tại trong MinGW runtime → patch thành gmtime_r
+if(MINGW)
+    set(_junit "${catch2_SOURCE_DIR}/src/catch2/reporters/catch_reporter_junit.cpp")
+    if(EXISTS "${_junit}")
+        file(READ "${_junit}" _src)
+        string(FIND "${_src}" "gmtime_s(&timeInfo, &rawtime)" _pos)
+        if(NOT _pos EQUAL -1)
+            string(REPLACE
+                "gmtime_s(&timeInfo, &rawtime)"
+                "gmtime_r(&rawtime, &timeInfo)"
+                _src "${_src}")
+            file(WRITE "${_junit}" "${_src}")
+            message(STATUS "Catch2: patched gmtime_s -> gmtime_r (MinGW)")
+        endif()
+    endif()
+endif()
+
+
 function(cppplot_add_test target_name source_file)
     add_executable(${target_name} ${source_file})
     target_link_libraries(${target_name} PRIVATE cppplot)
@@ -77,11 +106,31 @@ cppplot_add_test(test_plot_types       test_plot_types.cpp)
 cppplot_add_test(test_control_systems  test_control_systems.cpp)
 cppplot_add_test(test_layout           test_layout.cpp)
 cppplot_add_test(test_numerical        test_numerical.cpp)
+cppplot_add_test(test_fixes            test_fixes.cpp)
 
 set_tests_properties(
     test_basic_plot test_svg_validity test_plot_types
-    test_control_systems test_layout test_numerical
+    test_control_systems test_layout test_numerical test_fixes
     PROPERTIES LABELS "extended"
+)
+
+# ── QP Solver test suite — M1 milestone ─────────────────────
+add_executable(test_qp_solver test_qp_solver.cpp)
+
+target_include_directories(test_qp_solver PRIVATE
+    "${CMAKE_SOURCE_DIR}/include"   # → include/cppplot/control/qp_solver.hpp
+)
+
+target_link_libraries(test_qp_solver PRIVATE
+    cppplot          # provides qp_solver.hpp include path
+    Catch2::Catch2WithMain
+)
+
+target_compile_features(test_qp_solver PRIVATE cxx_std_17)
+target_compile_definitions(test_qp_solver PRIVATE _USE_MATH_DEFINES)
+
+set_target_properties(test_qp_solver PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/output"
 )
 
 # ─────────────────────────────────────────────────────────────

@@ -2,8 +2,7 @@
 
 ## 🎯 Vision
 
-**CppPlot** - Thư viện C++ plotting chuyên nghiệp, header-only, không phụ thuộc, 
-tối ưu cho hệ thống embedded, real-time, và scientific computing.
+**CppPlot** - Thư viện C++ plotting chuyên nghiệp, header-only, không phụ thuộc, tối ưu cho hệ thống embedded, real-time, và scientific computing.
 
 ---
 

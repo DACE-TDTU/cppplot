@@ -1,0 +1,1838 @@
+[ 10%] Building CXX object examples/CMakeFiles/basic_plot.dir/basic_plot.cpp.obj
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:57:24: error: expected template-name before '<' token
+     : integral_constant<intmax_t, (_Pn < 0) ? -1 : 1>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:57:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:62:24: error: expected template-name before '<' token
+     : integral_constant<intmax_t, _Pn * __static_sign<_Pn>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:62:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:72:24: error: expected template-name before '<' token
+     : integral_constant<intmax_t, __static_abs<_Pn>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:72:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:77:24: error: expected template-name before '<' token
+     : integral_constant<intmax_t, __static_abs<_Qn>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:77:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:115:24: error: expected template-name before '<' token
+     : integral_constant<bool, (__hi1 < __hi2
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:115:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:341:24: error: expected template-name before '<' token
+     : integral_constant<bool, _R1::num == _R2::num && _R1::den == _R2::den>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:341:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:347:24: error: expected template-name before '<' token
+     : integral_constant<bool, !ratio_equal<_R1, _R2>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:347:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:355:24: error: expected template-name before '<' token
+     : integral_constant<bool, __big_less<_Left::__hi, _Left::__lo,
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:355:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:371:24: error: expected template-name before '<' token
+     : integral_constant<bool, _R1::num < _R2::num>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:371:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:389:24: error: expected template-name before '<' token
+     : integral_constant<bool, !ratio_less<_R2, _R1>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:389:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:395:24: error: expected template-name before '<' token
+     : integral_constant<bool, ratio_less<_R2, _R1>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:395:24: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:401:24: error: expected template-name before '<' token
+     : integral_constant<bool, !ratio_less<_R1, _R2>::value>
+                        ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:401:24: error: expected '{' before '<' token
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:42:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:51:50: error: expected template-name before '<' token
+     struct _Digit<_Base, '0'> : integral_constant<unsigned, 0>
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:51:50: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:57:50: error: expected template-name before '<' token
+     struct _Digit<_Base, '1'> : integral_constant<unsigned, 1>
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:57:50: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:63:43: error: expected template-name before '<' token
+     struct _Digit_impl : integral_constant<unsigned, _Val>
+                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:63:43: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:151:51: error: expected template-name before '<' token
+     struct _Digit<_Base, '\''> : integral_constant<unsigned, 0>
+                                                   ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:151:51: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:159:28: error: 'integral_constant' does not name a type
+     using __ull_constant = integral_constant<unsigned long long, _Val>;
+                            ^~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:167:4: error: '__ull_constant' does not name a type
+  = __ull_constant<__next::value * (__valid_digit{} ? _Base : 1ULL)>;
+    ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:167:52: error: expected unqualified-id before '?' token
+  = __ull_constant<__next::value * (__valid_digit{} ? _Base : 1ULL)>;
+                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:174:20: error: '__ull_constant' does not name a type
+       using type = __ull_constant<__valid_digit::value>;
+                    ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:182:42: error: expected template-name before '<' token
+     struct _Power<_Base> : __ull_constant<0>
+                                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:182:42: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:195:20: error: '__ull_constant' does not name a type
+       using type = __ull_constant<_Pow * __digit::value + __next::type::value>;
+                    ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:196:22: error: 'type' has not been declared
+       static_assert((type::value / _Pow) == __digit::value,
+                      ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:204:20: error: '__ull_constant' does not name a type
+       using type = __ull_constant<_Digit<_Base, _Dig>::value>;
+                    ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:214:21: error: expected template-name before '<' token
+     : __ull_constant<0>
+                     ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:214:21: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:262:20: error: expected template-name before '<' token
+     : conditional_t<(_Val <= std::numeric_limits<_IntType>::max()),
+                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\parse_numbers.h:262:20: error: expected '{' before '<' token
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:86:15: error: '__success_type' does not name a type
+       typedef __success_type<chrono::duration<__cr, __r>> type;
+               ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:90:43: error: '__failure_type' was not declared in this scope
+     struct __duration_common_type_wrapper<__failure_type, _Period1, _Period2>
+                                           ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:90:43: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:57:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\type_traits:193:10: note:   'std::__failure_type'
+   struct __failure_type
+          ^~~~~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:90:77: error: template argument 1 is invalid
+     struct __duration_common_type_wrapper<__failure_type, _Period1, _Period2>
+                                                                             ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:94:12: error: 'common_type' is not a class template
+     struct common_type<chrono::duration<_Rep1, _Period1>,
+            ^~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:97:66: error: wrong number of template arguments (1, should be 3)
+              common_type<_Rep1, _Rep2>>::type, _Period1, _Period2>::type
+                                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:77:12: note: provided for 'template<class _CT, class _Period1, class _Period2> struct cppplot::std::__duration_common_type_wrapper'
+     struct __duration_common_type_wrapper
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:97:67: error: expected '{' before '::' token
+              common_type<_Rep1, _Rep2>>::type, _Period1, _Period2>::type
+                                                                   ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:105:15: error: '__success_type' does not name a type
+       typedef __success_type<chrono::time_point<_Clock, typename _CT::type>>
+               ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:110:44: error: '__failure_type' was not declared in this scope
+     struct __timepoint_common_type_wrapper<__failure_type, _Clock>
+                                            ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:110:44: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:57:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\type_traits:193:10: note:   'std::__failure_type'
+   struct __failure_type
+          ^~~~~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:110:66: error: template argument 1 is invalid
+     struct __timepoint_common_type_wrapper<__failure_type, _Clock>
+                                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:115:51: error: wrong number of template arguments (2, should be 4)
+              chrono::time_point<_Clock, _Duration2>>
+                                                   ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:117:64: error: wrong number of template arguments (1, should be 2)
+              common_type<_Duration1, _Duration2>>::type, _Clock>::type
+                                                                ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:103:12: note: provided for 'template<class _CT, class _Clock> struct cppplot::std::__timepoint_common_type_wrapper'
+     struct __timepoint_common_type_wrapper
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:183:7: error: expected class-name before '{' token
+       { };
+       ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:188:7: error: expected class-name before '{' token
+       { };
+       ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:192:26: error: expected nested-name-specifier before 'enable_if'
+       constexpr typename enable_if<__is_duration<_ToDur>::value,
+                          ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:192:35: error: expected initializer before '<' token
+       constexpr typename enable_if<__is_duration<_ToDur>::value,
+                                   ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:209:26: error: expected template-name before '<' token
+       : is_floating_point<_Rep>
+                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:209:26: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In static member function 'static constexpr _Rep cppplot::std::chrono::duration_values<_Rep>::max()':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:222:11: error: 'numeric_limits' was not declared in this scope
+  { return numeric_limits<_Rep>::max(); }
+           ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:222:11: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\uniform_int_dist.h:35:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:66,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\limits:315:12: note:   'std::numeric_limits'
+     struct numeric_limits : public __numeric_limits_base
+            ^~~~~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:222:30: error: expected primary-expression before '>' token
+  { return numeric_limits<_Rep>::max(); }
+                              ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:222:31: error: '::max' has not been declared
+  { return numeric_limits<_Rep>::max(); }
+                               ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:222:31: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:3465:5: note:   'std::max'
+     max(initializer_list<_Tp> __l, _Compare __comp)
+     ^~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In static member function 'static constexpr _Rep cppplot::std::chrono::duration_values<_Rep>::min()':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:226:11: error: 'numeric_limits' was not declared in this scope
+  { return numeric_limits<_Rep>::lowest(); }
+           ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:226:11: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\uniform_int_dist.h:35:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:66,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\limits:315:12: note:   'std::numeric_limits'
+     struct numeric_limits : public __numeric_limits_base
+            ^~~~~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:226:30: error: expected primary-expression before '>' token
+  { return numeric_limits<_Rep>::lowest(); }
+                              ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:226:31: error: '::lowest' has not been declared
+  { return numeric_limits<_Rep>::lowest(); }
+                               ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:232:7: error: expected class-name before '{' token
+       { };
+       ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:237:7: error: expected class-name before '{' token
+       { };
+       ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:260:9: error: expected nested-name-specifier before 'enable_if'
+         enable_if<is_convertible<_Rep2, rep>::value
+         ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:260:9: error: expected '>' before 'enable_if'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:267:9: error: expected nested-name-specifier before 'enable_if'
+         enable_if<treat_as_floating_point<rep>::value
+         ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:267:9: error: expected '>' before 'enable_if'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:342:13: error: expected nested-name-specifier before 'enable_if'
+    typename enable_if<!treat_as_floating_point<_Rep2>::value,
+             ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:342:22: error: expected initializer before '<' token
+    typename enable_if<!treat_as_floating_point<_Rep2>::value,
+                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:351:13: error: expected nested-name-specifier before 'enable_if'
+    typename enable_if<!treat_as_floating_point<_Rep2>::value,
+             ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:351:22: error: expected initializer before '<' token
+    typename enable_if<!treat_as_floating_point<_Rep2>::value,
+                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In constructor 'constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:271:10: error: 'duration_cast' was not declared in this scope
+    : __r(duration_cast<duration>(__d).count()) { }
+          ^~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:271:32: error: expected primary-expression before '>' token
+    : __r(duration_cast<duration>(__d).count()) { }
+                                ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:379:34: error: wrong number of template arguments (2, should be 4)
+          duration<_Rep2, _Period2>>::type
+                                  ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator+(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:385:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __cd;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:386:26: error: request for member 'count' in '(__cd)(__lhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() + __cd(__rhs).count());
+                          ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:386:48: error: request for member 'count' in '(__cd)(__rhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() + __cd(__rhs).count());
+                                                ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:392:34: error: wrong number of template arguments (2, should be 4)
+          duration<_Rep2, _Period2>>::type
+                                  ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator-(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:398:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __cd;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:399:26: error: request for member 'count' in '(__cd)(__lhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() - __cd(__rhs).count());
+                          ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:399:48: error: request for member 'count' in '(__cd)(__rhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() - __cd(__rhs).count());
+                                                ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:403:7: error: 'is_convertible' was not declared in this scope
+       is_convertible<_Rep2,
+       ^~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:403:7: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:57:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\type_traits:1558:12: note:   'std::is_convertible'
+     struct is_convertible
+            ^~~~~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:403:27: error: expected primary-expression before ',' token
+       is_convertible<_Rep2,
+                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:404:41: error: wrong number of template arguments (2, should be 4)
+        typename common_type<_Rep1, _Rep2>::type>::value>
+                                         ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:404:51: error: 'value' in namespace '::' does not name a type
+        typename common_type<_Rep1, _Rep2>::type>::value>
+                                                   ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:408:14: error: '__common_rep_type' is not a class template
+       struct __common_rep_type<_Rep1, _Rep2, true>
+              ^~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:409:50: error: wrong number of template arguments (2, should be 4)
+       { typedef typename common_type<_Rep1, _Rep2>::type type; };
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<typename cppplot::std::chrono::__common_rep_type<_Rep1, _Rep2>::type, _Period> cppplot::std::chrono::operator*(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const _Rep2&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:416:52: error: wrong number of template arguments (2, should be 4)
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:416:68: error: template argument 1 is invalid
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:418:24: error: request for member 'count' in '(__cd)(__d)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__d).count() * __s);
+                        ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:429:54: error: template argument 2 is invalid
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:429:61: error: expected '(' before ',' token
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                             ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:429:70: error: template argument 1 is invalid
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator/(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const _Rep2&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:432:52: error: wrong number of template arguments (2, should be 4)
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:432:68: error: template argument 1 is invalid
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:434:24: error: request for member 'count' in '(__cd)(__d)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__d).count() / __s);
+                        ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:439:50: error: wrong number of template arguments (2, should be 4)
+       constexpr typename common_type<_Rep1, _Rep2>::type
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator/(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:445:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __cd;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:446:21: error: request for member 'count' in '(__cd)(__lhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__lhs).count() / __cd(__rhs).count();
+                     ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:446:43: error: request for member 'count' in '(__cd)(__rhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__lhs).count() / __cd(__rhs).count();
+                                           ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:452:54: error: template argument 2 is invalid
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:452:61: error: expected '(' before ',' token
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                             ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:452:70: error: template argument 1 is invalid
+  enable_if<!__is_duration<_Rep2>::value, _Rep2>::type>::type, _Period>
+                                                                      ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator%(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const _Rep2&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:455:52: error: wrong number of template arguments (2, should be 4)
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:455:68: error: template argument 1 is invalid
+  typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+                                                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:457:24: error: request for member 'count' in '(__cd)(__d)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__d).count() % __s);
+                        ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:463:34: error: wrong number of template arguments (2, should be 4)
+          duration<_Rep2, _Period2>>::type
+                                  ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator%(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:469:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __cd;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:470:26: error: request for member 'count' in '(__cd)(__lhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() % __cd(__rhs).count());
+                          ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:470:48: error: request for member 'count' in '(__cd)(__rhs)', which is of non-class type '__cd {aka int}'
+  return __cd(__cd(__lhs).count() % __cd(__rhs).count());
+                                                ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr bool cppplot::std::chrono::operator==(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:482:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __ct;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:483:21: error: request for member 'count' in '(__ct)(__lhs)', which is of non-class type '__ct {aka int}'
+  return __ct(__lhs).count() == __ct(__rhs).count();
+                     ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:483:44: error: request for member 'count' in '(__ct)(__rhs)', which is of non-class type '__ct {aka int}'
+  return __ct(__lhs).count() == __ct(__rhs).count();
+                                            ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr bool cppplot::std::chrono::operator<(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:494:44: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,__dur2>::type __ct;
+                                            ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:495:21: error: request for member 'count' in '(__ct)(__lhs)', which is of non-class type '__ct {aka int}'
+  return __ct(__lhs).count() < __ct(__rhs).count();
+                     ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:495:43: error: request for member 'count' in '(__ct)(__rhs)', which is of non-class type '__ct {aka int}'
+  return __ct(__lhs).count() < __ct(__rhs).count();
+                                           ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:601:26: error: expected nested-name-specifier before 'enable_if'
+       constexpr typename enable_if<__is_duration<_ToDur>::value,
+                          ^~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:601:35: error: expected initializer before '<' token
+       constexpr typename enable_if<__is_duration<_ToDur>::value,
+                                   ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:612:54: error: wrong number of template arguments (2, should be 4)
+  typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+                                                      ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:612:62: error: template argument 2 is invalid
+  typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+                                                              ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator+(const cppplot::std::chrono::time_point<_Clock, _Duration1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:617:43: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<_Dur1,__dur2>::type __ct;
+                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:625:55: error: wrong number of template arguments (2, should be 4)
+  typename common_type<duration<_Rep1, _Period1>, _Dur2>::type>
+                                                       ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:625:62: error: template argument 2 is invalid
+  typename common_type<duration<_Rep1, _Period1>, _Dur2>::type>
+                                                              ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator+(const cppplot::std::chrono::duration<_Rep1, _Period1>&, const cppplot::std::chrono::time_point<_Clock, _Dur2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:630:43: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<__dur1,_Dur2>::type __ct;
+                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:638:54: error: wrong number of template arguments (2, should be 4)
+  typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+                                                      ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:638:62: error: template argument 2 is invalid
+  typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+                                                              ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr int cppplot::std::chrono::operator-(const cppplot::std::chrono::time_point<_Clock, _Duration1>&, const cppplot::std::chrono::duration<_Rep2, _Period2>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:643:43: error: wrong number of template arguments (2, should be 4)
+  typedef typename common_type<_Dur1,__dur2>::type __ct;
+                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:649:50: error: wrong number of template arguments (2, should be 4)
+       constexpr typename common_type<_Dur1, _Dur2>::type
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:95:46: note: provided for 'template<class _Rep1, class _Period1, class _Rep2, class _Period2> struct cppplot::std::common_type'
+              chrono::duration<_Rep2, _Period2>>
+                                              ^~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:719:23:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000000000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:719:23:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1000000000ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<1000000000ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12:   required from 'struct cppplot::std::__static_gcd<1ll, 1000000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000000ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:719:23:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:719:23:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000000000ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000000ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:719:23:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1000000000ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000000000ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'static constexpr cppplot::std::chrono::duration<_Rep, _Period> cppplot::std::chrono::duration<_Rep, _Period>::min() [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:723:45:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:366:11: error: no matching function for call to 'cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >::duration(long long int)'
+  { return duration(duration_values<rep>::min()); }
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:366:11: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long long int'
+  { return duration(duration_values<rep>::min()); }
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long long int' to 'const cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'static constexpr cppplot::std::chrono::duration<_Rep, _Period> cppplot::std::chrono::duration<_Rep, _Period>::zero() [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:724:33:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:362:11: error: no matching function for call to 'cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >::duration(long long int)'
+  { return duration(duration_values<rep>::zero()); }
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:362:11: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long long int'
+  { return duration(duration_values<rep>::zero()); }
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long long int' to 'const cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000000ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long long int; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:723:7: error: non-constant condition for static assertion
+       static_assert(system_clock::duration::min()
+       ^~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:723:49:   in constexpr expansion of 'cppplot::std::chrono::duration<_Rep, _Period>::min<long long int, cppplot::std::ratio<1ll, 1000000000ll> >()'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:723:7: error: constexpr call flows off the end of the function
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:733:19: error: 'time_t' in namespace 'cppplot::std' does not name a type
+       static std::time_t
+                   ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:741:24: error: 'cppplot::std::time_t' has not been declared
+       from_time_t(std::time_t __t) noexcept
+                        ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In static member function 'static cppplot::std::chrono::_V2::system_clock::time_point cppplot::std::chrono::_V2::system_clock::from_time_t(int)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:744:9: error: 'time_point_cast' was not declared in this scope
+  return time_point_cast<system_clock::duration>
+         ^~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:744:47: error: expected primary-expression before '>' token
+  return time_point_cast<system_clock::duration>
+                                               ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<1ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<1ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long long int>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36: error: no matching function for call to 'cppplot::std::chrono::duration<long long int>::duration(int&)'
+         (__from(chrono::seconds(__t)));
+                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:745:36: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'int'
+         (__from(chrono::seconds(__t)));
+                                    ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long long int; _Period = cppplot::std::ratio<1ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'int' to 'const cppplot::std::chrono::duration<long long int>&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long long int; _Period = cppplot::std::ratio<1ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:795:26: error: expected template-name before '<' token
+       : integral_constant<_Rep, static_cast<_Rep>(_Val)>
+                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:795:26: error: expected '{' before '<' token
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:814:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<3600ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<3600ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<3600ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:814:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<3600ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<3600ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<3600ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:814:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<3600ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<3600ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:814:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<3600ll, 1ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<3600ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<3600ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:814:36:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<3600ll, 1ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> > cppplot::std::literals::chrono_literals::operator""h(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:815:66: error: no matching function for call to 'cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double, ratio<3600,1>>{__hours}; }
+                                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:815:66: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double, ratio<3600,1>>{__hours}; }
+                                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<3600ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double, cppplot::std::ratio<3600ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<3600ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<3600ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:819:19:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<3600ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:823:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<60ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<60ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<60ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:823:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<60ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<60ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<60ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:823:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<60ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<60ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:823:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<60ll, 1ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<60ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<60ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:823:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<60ll, 1ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> > cppplot::std::literals::chrono_literals::operator""min(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:824:63: error: no matching function for call to 'cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double, ratio<60,1>>{__mins}; }
+                                                               ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:824:63: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double, ratio<60,1>>{__mins}; }
+                                                               ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<60ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double, cppplot::std::ratio<60ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<60ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<60ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:828:21:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<60ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:832:35:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double> cppplot::std::literals::chrono_literals::operator""s(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:833:50: error: no matching function for call to 'cppplot::std::chrono::duration<long double>::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double>{__secs}; }
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:833:50: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double>{__secs}; }
+                                                  ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<1ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double>&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<1ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:841:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:841:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1000ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<1000ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12:   required from 'struct cppplot::std::__static_gcd<1ll, 1000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:841:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:841:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:841:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1000ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> > cppplot::std::literals::chrono_literals::operator""ms(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:842:58: error: no matching function for call to 'cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double, milli>{__msecs}; }
+                                                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:842:58: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double, milli>{__msecs}; }
+                                                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:846:20:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:850:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:850:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:14: error: incomplete type 'cppplot::std::__static_sign<1000000ll>' used in nested name specifier
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~^~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'struct cppplot::std::__static_gcd<1000000ll, 1ll>':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12:   required from 'struct cppplot::std::__static_gcd<1ll, 1000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43:   required from 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000ll>::num'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:850:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: error: invalid use of incomplete type 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+     struct __static_gcd
+            ^~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:66:12: note: declaration of 'struct cppplot::std::__static_gcd<1ll, 0ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000ll>::num':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:850:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:271:43: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000000ll>'
+         _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio: In instantiation of 'constexpr const intmax_t cppplot::std::ratio<1ll, 1000000ll>::den':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:276:31:   required from 'struct cppplot::std::ratio<1ll, 1000000ll>'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:249:29:   required from 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:850:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: incomplete type 'cppplot::std::__static_abs<1000000ll>' used in nested name specifier
+         __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ratio:274:35: error: 'value' is not a member of 'cppplot::std::__static_gcd<1ll, 1000000ll>'
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:39:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> > cppplot::std::literals::chrono_literals::operator""us(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:851:58: error: no matching function for call to 'cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double, micro>{__usecs}; }
+                                                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:851:58: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double, micro>{__usecs}; }
+                                                          ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000000ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000000ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long long int, cppplot::std::ratio<1ll, 1000000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:855:20:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long long int>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In instantiation of 'struct cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000000ll> >':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:859:37:   required from here
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:246:16: error: 'value' is not a member of 'cppplot::std::chrono::__is_duration<long double>'
+  static_assert(!__is_duration<_Rep>::value, "rep cannot be a duration");
+                ^~~~~~~~~~~~~~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:244:23: error: 'value' is not a member of 'cppplot::std::chrono::__is_ratio<cppplot::std::ratio<1ll, 1000000000ll> >'
+  typedef _Period      period;
+                       ^~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono: In function 'constexpr cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000000ll> > cppplot::std::literals::chrono_literals::operator""ns(long double)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:860:57: error: no matching function for call to 'cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000000ll> >::duration(<brace-enclosed initializer list>)'
+     { return chrono::duration<long double, nano>{__nsecs}; }
+                                                         ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note: candidate: template<class _Rep2, class _Period2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&)
+    constexpr duration(const duration<_Rep2, _Period2>& __d)
+              ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:270:14: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:860:57: note:   mismatched types 'const cppplot::std::chrono::duration<_Rep1, _Period1>' and 'long double'
+     { return chrono::duration<long double, nano>{__nsecs}; }
+                                                         ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note: candidate: template<class _Rep2, class> constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration(const _Rep2&)
+    constexpr explicit duration(const _Rep2& __rep)
+                       ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:263:23: note:   template argument deduction/substitution failed:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note: candidate: cppplot::std::chrono::duration<_Rep, _Period>::duration(const cppplot::std::chrono::duration<_Rep, _Period>&) [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  duration(const duration&) = default;
+  ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:257:2: note:   no known conversion for argument 1 from 'long double' to 'const cppplot::std::chrono::duration<long double, cppplot::std::ratio<1ll, 1000000000ll> >&'
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note: candidate: constexpr cppplot::std::chrono::duration<_Rep, _Period>::duration() [with _Rep = long double; _Period = cppplot::std::ratio<1ll, 1000000000ll>]
+  constexpr duration() = default;
+            ^~~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\chrono:252:12: note:   candidate expects 0 arguments, 1 provided
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:195:19: error: '__addressof' is not a member of 'cppplot::std'
+       : _M_device(std::__addressof(__m)), _M_owns(false)
+                   ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:195:19: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&, cppplot::std::defer_lock_t)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:202:19: error: '__addressof' is not a member of 'cppplot::std'
+       : _M_device(std::__addressof(__m)), _M_owns(false)
+                   ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:202:19: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&, cppplot::std::try_to_lock_t)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:206:19: error: '__addressof' is not a member of 'cppplot::std'
+       : _M_device(std::__addressof(__m)), _M_owns(_M_device->try_lock())
+                   ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:206:19: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&, cppplot::std::adopt_lock_t)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:210:19: error: '__addressof' is not a member of 'cppplot::std'
+       : _M_device(std::__addressof(__m)), _M_owns(true)
+                   ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:210:19: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&, const cppplot::std::chrono::time_point<_Clock, _Duration>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:218:14: error: '__addressof' is not a member of 'cppplot::std'
+  : _M_device(std::__addressof(__m)),
+              ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:218:14: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In constructor 'cppplot::std::unique_lock<_Mutex>::unique_lock(cppplot::std::unique_lock<_Mutex>::mutex_type&, const cppplot::std::chrono::duration<_Rep, _Period>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:225:14: error: '__addressof' is not a member of 'cppplot::std'
+  : _M_device(std::__addressof(__m)),
+              ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:225:14: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:47:5: note:   'std::__addressof'
+     __addressof(_Tp& __r) _GLIBCXX_NOEXCEPT
+     ^~~~~~~~~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'cppplot::std::unique_lock<_Mutex>& cppplot::std::unique_lock<_Mutex>::operator=(cppplot::std::unique_lock<_Mutex>&&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:250:14: error: 'move' is not a member of 'cppplot::std'
+  unique_lock(std::move(__u)).swap(*this);
+              ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:250:14: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:61:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algobase.h:479:5: note:   'std::move'
+     move(_II __first, _II __last, _OI __result)
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'void cppplot::std::unique_lock<_Mutex>::lock()':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:262:29: error: 'errc' was not declared in this scope
+    __throw_system_error(int(errc::operation_not_permitted));
+                             ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:262:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:262:59: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+    __throw_system_error(int(errc::operation_not_permitted));
+                                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:262:59: note: (if you use '-fpermissive', G++ will accept your code, but allowing the use of an undeclared name is deprecated)
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:264:29: error: 'errc' was not declared in this scope
+    __throw_system_error(int(errc::resource_deadlock_would_occur));
+                             ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:264:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:264:65: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+    __throw_system_error(int(errc::resource_deadlock_would_occur));
+                                                                 ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'bool cppplot::std::unique_lock<_Mutex>::try_lock()':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:276:29: error: 'errc' was not declared in this scope
+    __throw_system_error(int(errc::operation_not_permitted));
+                             ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:276:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:276:59: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+    __throw_system_error(int(errc::operation_not_permitted));
+                                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:278:29: error: 'errc' was not declared in this scope
+    __throw_system_error(int(errc::resource_deadlock_would_occur));
+                             ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:278:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:278:65: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+    __throw_system_error(int(errc::resource_deadlock_would_occur));
+                                                                 ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'bool cppplot::std::unique_lock<_Mutex>::try_lock_until(const cppplot::std::chrono::time_point<_Clock, _Duration>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:291:31: error: 'errc' was not declared in this scope
+      __throw_system_error(int(errc::operation_not_permitted));
+                               ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:291:31: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:291:61: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+      __throw_system_error(int(errc::operation_not_permitted));
+                                                             ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:293:31: error: 'errc' was not declared in this scope
+      __throw_system_error(int(errc::resource_deadlock_would_occur));
+                               ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:293:31: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:293:67: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+      __throw_system_error(int(errc::resource_deadlock_would_occur));
+                                                                   ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'bool cppplot::std::unique_lock<_Mutex>::try_lock_for(const cppplot::std::chrono::duration<_Rep, _Period>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:306:31: error: 'errc' was not declared in this scope
+      __throw_system_error(int(errc::operation_not_permitted));
+                               ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:306:31: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:306:61: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+      __throw_system_error(int(errc::operation_not_permitted));
+                                                             ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:308:31: error: 'errc' was not declared in this scope
+      __throw_system_error(int(errc::resource_deadlock_would_occur));
+                               ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:308:31: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:308:67: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+      __throw_system_error(int(errc::resource_deadlock_would_occur));
+                                                                   ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'void cppplot::std::unique_lock<_Mutex>::unlock()':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:320:29: error: 'errc' was not declared in this scope
+    __throw_system_error(int(errc::operation_not_permitted));
+                             ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:320:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\system_error:39:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:46,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\error_constants.h:42:14: note:   'std::errc'
+   enum class errc
+              ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:320:59: error: there are no arguments to '__throw_system_error' that depend on a template parameter, so a declaration of '__throw_system_error' must be available [-fpermissive]
+    __throw_system_error(int(errc::operation_not_permitted));
+                                                           ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h: In member function 'void cppplot::std::unique_lock<_Mutex>::swap(cppplot::std::unique_lock<_Mutex>&)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:331:2: error: 'swap' is not a member of 'cppplot::std'
+  std::swap(_M_device, __u._M_device);
+  ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:331:2: note: suggested alternatives:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\quoted_string.h:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:45,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\sstream:783:5: note:   'std::__cxx11::swap'
+     swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\sstream:804:5: note:   'std::__cxx11::swap'
+     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:179:5: note:   'std::swap'
+     swap(_Tp& __a, _Tp& __b)
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\exception:170:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\new:40,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_construct.h:59,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_tempbuf.h:60,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:62,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\exception_ptr.h:162:5: note:   'std::__exception_ptr::swap'
+     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:44:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:332:2: error: 'swap' is not a member of 'cppplot::std'
+  std::swap(_M_owns, __u._M_owns);
+  ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\std_mutex.h:332:2: note: suggested alternatives:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\quoted_string.h:38:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:45,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\sstream:783:5: note:   'std::__cxx11::swap'
+     swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\sstream:804:5: note:   'std::__cxx11::swap'
+     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_pair.h:59:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\utility:70,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:60,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\move.h:179:5: note:   'std::swap'
+     swap(_Tp& __a, _Tp& __b)
+     ^~~~
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\exception:170:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\new:40,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_construct.h:59,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_tempbuf.h:60,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:62,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\exception_ptr.h:162:5: note:   'std::__exception_ptr::swap'
+     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+     ^~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:475:16: error: 'tuple' has not been declared
+  __do_try_lock(tuple<_Lock&...>& __locks, int& __idx)
+                ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:475:21: error: expected ',' or '...' before '<' token
+  __do_try_lock(tuple<_Lock&...>& __locks, int& __idx)
+                     ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: In static member function 'static void cppplot::std::__try_lock_impl<_Idx, _Continue>::__do_try_lock(int)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:477:11: error: '__idx' was not declared in this scope
+           __idx = _Idx;
+           ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:478:44: error: 'get' is not a member of 'cppplot::std'
+           auto __lock = std::__try_to_lock(std::get<_Idx>(__locks));
+                                            ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:478:44: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unique_ptr.h:37:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_conv.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\locale:43,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:43,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\tuple:1301:5: note:   'std::get'
+     get(const tuple<_Types...>& __t) noexcept
+     ^~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:478:59: error: '__locks' was not declared in this scope
+           auto __lock = std::__try_to_lock(std::get<_Idx>(__locks));
+                                                           ^~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: At global scope:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:495:16: error: 'tuple' has not been declared
+  __do_try_lock(tuple<_Lock&...>& __locks, int& __idx)
+                ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:495:21: error: expected ',' or '...' before '<' token
+  __do_try_lock(tuple<_Lock&...>& __locks, int& __idx)
+                     ^
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: In static member function 'static void cppplot::std::__try_lock_impl<_Idx, false>::__do_try_lock(int)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:497:11: error: '__idx' was not declared in this scope
+           __idx = _Idx;
+           ^~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:498:44: error: 'get' is not a member of 'cppplot::std'
+           auto __lock = std::__try_to_lock(std::get<_Idx>(__locks));
+                                            ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:498:44: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unique_ptr.h:37:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_conv.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\locale:43,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:43,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\tuple:1301:5: note:   'std::get'
+     get(const tuple<_Types...>& __t) noexcept
+     ^~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:498:59: error: '__locks' was not declared in this scope
+           auto __lock = std::__try_to_lock(std::get<_Idx>(__locks));
+                                                           ^~~~~~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: In function 'int cppplot::std::try_lock(_Lock1&, _Lock2&, _Lock3& ...)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:522:22: error: 'tie' is not a member of 'cppplot::std'
+       auto __locks = std::tie(__l1, __l2, __l3...);
+                      ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:522:22: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unique_ptr.h:37:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_conv.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\locale:43,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:43,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\tuple:1540:5: note:   'std::tie'
+     tie(_Elements&... __args) noexcept
+     ^~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:72:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex: In function 'void cppplot::std::lock(_L1&, _L2&, _L3& ...)':
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:547:26: error: 'tie' is not a member of 'cppplot::std'
+           auto __locks = std::tie(__l2, __l3...);
+                          ^~~
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mutex:547:26: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unique_ptr.h:37:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_conv.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\locale:43,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:43,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\tuple:1540:5: note:   'std::tie'
+     tie(_Elements&... __args) noexcept
+     ^~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp: At global scope:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:74:13: error: 'mt19937' in namespace 'cppplot::std' does not name a type
+ inline std::mt19937 &get_generator() {
+             ^~~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:81:13: error: 'mutex' in namespace 'cppplot::std' does not name a type
+ inline std::mutex &get_generator_mutex() {
+             ^~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:89:13: error: 'vector' in namespace 'cppplot::std' does not name a template type
+ inline std::vector<double> random(size_t n, double min = 0.0,
+             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:105:13: error: 'vector' in namespace 'cppplot::std' does not name a template type
+ inline std::vector<double> randn(size_t n, double mean = 0.0,
+             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:122:8: error: 'vector' in namespace 'cppplot::std' does not name a template type
+   std::vector<double> counts;
+        ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:123:8: error: 'vector' in namespace 'cppplot::std' does not name a template type
+   std::vector<double> binEdges;
+        ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:124:8: error: 'vector' in namespace 'cppplot::std' does not name a template type
+   std::vector<double> binCenters;
+        ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:127:45: error: 'vector' in namespace 'cppplot::std' does not name a template type
+ inline HistogramResult histogram(const std::vector<double> &data, int bins = 10,
+                                             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:127:51: error: expected ',' or '...' before '<' token
+ inline HistogramResult histogram(const std::vector<double> &data, int bins = 10,
+                                                   ^
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp: In function 'cppplot::HistogramResult cppplot::histogram(int)':
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:130:7: error: 'data' was not declared in this scope
+   if (data.empty() || bins <= 0)
+       ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:130:7: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\string:51:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_classes.h:40,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\range_access.h:314:5: note:   'std::data'
+     data(initializer_list<_Tp> __il) noexcept
+     ^~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:130:23: error: 'bins' was not declared in this scope
+   if (data.empty() || bins <= 0)
+                       ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:7: error: 'isnan' is not a member of 'cppplot::std'
+       std::isnan(minVal) ? *std::min_element(data.begin(), data.end()) : minVal;
+       ^~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:7: note: suggested alternative:
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:10:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\cmath:662:5: note:   'std::isnan'
+     isnan(_Tp __x)
+     ^~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:18: error: 'minVal' was not declared in this scope
+       std::isnan(minVal) ? *std::min_element(data.begin(), data.end()) : minVal;
+                  ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:29: error: 'min_element' is not a member of 'cppplot::std'
+       std::isnan(minVal) ? *std::min_element(data.begin(), data.end()) : minVal;
+                             ^~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:5500:5: note:   'std::min_element'
+     min_element(_ForwardIterator __first, _ForwardIterator __last,
+     ^~~~~~~~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:46: error: 'data' was not declared in this scope
+       std::isnan(minVal) ? *std::min_element(data.begin(), data.end()) : minVal;
+                                              ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:134:46: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\string:51:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_classes.h:40,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\range_access.h:314:5: note:   'std::data'
+     data(initializer_list<_Tp> __il) noexcept
+     ^~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:136:7: error: 'isnan' is not a member of 'cppplot::std'
+       std::isnan(maxVal) ? *std::max_element(data.begin(), data.end()) : maxVal;
+       ^~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:136:7: note: suggested alternative:
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:10:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\cmath:662:5: note:   'std::isnan'
+     isnan(_Tp __x)
+     ^~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:136:18: error: 'maxVal' was not declared in this scope
+       std::isnan(maxVal) ? *std::max_element(data.begin(), data.end()) : maxVal;
+                  ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:136:29: error: 'max_element' is not a member of 'cppplot::std'
+       std::isnan(maxVal) ? *std::max_element(data.begin(), data.end()) : maxVal;
+                             ^~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:136:29: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\algorithm:62:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:9,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_algo.h:5564:5: note:   'std::max_element'
+     max_element(_ForwardIterator __first, _ForwardIterator __last,
+     ^~~~~~~~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:34:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:143:43: error: 'bins' was not declared in this scope
+   double binWidth = (dataMax - dataMin) / bins;
+                                           ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:145:10: error: 'struct cppplot::HistogramResult' has no member named 'counts'
+   result.counts.resize(bins, 0);
+          ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:146:10: error: 'struct cppplot::HistogramResult' has no member named 'binEdges'
+   result.binEdges.resize(bins + 1);
+          ^~~~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:147:10: error: 'struct cppplot::HistogramResult' has no member named 'binCenters'
+   result.binCenters.resize(bins);
+          ^~~~~~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:150:12: error: 'struct cppplot::HistogramResult' has no member named 'binEdges'
+     result.binEdges[i] = dataMin + i * binWidth;
+            ^~~~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:154:12: error: 'struct cppplot::HistogramResult' has no member named 'binCenters'
+     result.binCenters[i] = dataMin + (i + 0.5) * binWidth;
+            ^~~~~~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:157:19: error: unable to deduce 'auto&&' from 'data'
+   for (double v : data) {
+                   ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:164:14: error: 'struct cppplot::HistogramResult' has no member named 'counts'
+       result.counts[idx]++;
+              ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp: At global scope:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:174:13: error: 'vector' in namespace 'cppplot::std' does not name a template type
+ inline std::vector<double> niceTicks(double min, double max,
+             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:215:13: error: 'vector' in namespace 'cppplot::std' does not name a template type
+ inline std::vector<double> niceLogTicks(double min, double max,
+             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:256:13: error: 'string' in namespace 'cppplot::std' does not name a type
+ inline std::string formatNumber(double value, int precision = -1) {
+             ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/utils.hpp:296:13: error: 'string' in namespace 'cppplot::std' does not name a type
+ inline std::string escapeXML(const std::string &str) {
+             ^~~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:35:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:60:8: error: 'vector' in namespace 'cppplot::std' does not name a template type
+   std::vector<std::vector<double>> data;
+        ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:73:31: error: expected ')' before '<' token
+   Matrix(std::initializer_list<std::initializer_list<double>> init) {
+                               ^
+C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:169:1: error: expected '}' at end of input
+ }
+ ^
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:35:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp: In constructor 'cppplot::Matrix::Matrix(size_t, size_t, double)':
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:70:5: error: 'data' was not declared in this scope
+     data.resize(r, std::vector<double>(c, val));
+     ^~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:70:5: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\string:51:0,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\locale_classes.h:40,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\ios_base.h:41,
+                 from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iomanip:40,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:11,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\range_access.h:314:5: note:   'std::data'
+     data(initializer_list<_Tp> __il) noexcept
+     ^~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:35:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:70:20: error: 'vector' is not a member of 'cppplot::std'
+     data.resize(r, std::vector<double>(c, val));
+                    ^~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:70:20: note: suggested alternative:
+In file included from c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\vector:64:0,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/types.hpp:18,
+                 from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:31,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_vector.h:214:11: note:   'std::vector'
+     class vector : protected _Vector_base<_Tp, _Alloc>
+           ^~~~~~
+In file included from C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/cppplot.hpp:35:0,
+                 from C:\Users\T14\Documents\GitHub\TextBooks\cppplot\examples\basic_plot.cpp:9:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:70:32: error: expected primary-expression before 'double'
+     data.resize(r, std::vector<double>(c, val));
+                                ^~~~~~
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp: At global scope:
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:71:3: error: expected unqualified-id at end of input
+   }
+   ^
+C:/Users/T14/Documents/GitHub/TextBooks/cppplot/include/cppplot/core/matrix.hpp:71:3: error: expected '}' at end of input
+examples\CMakeFiles\basic_plot.dir\build.make:78: recipe for target 'examples/CMakeFiles/basic_plot.dir/basic_plot.cpp.obj' failed
+mingw32-make.exe[2]: *** [examples/CMakeFiles/basic_plot.dir/basic_plot.cpp.obj] Error 1
+CMakeFiles\Makefile2:139: recipe for target 'examples/CMakeFiles/basic_plot.dir/all' failed
+mingw32-make.exe[1]: *** [examples/CMakeFiles/basic_plot.dir/all] Error 2
+Makefile:144: recipe for target 'all' failed
+mingw32-make.exe: *** [all] Error 2

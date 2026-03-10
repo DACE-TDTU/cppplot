@@ -1,0 +1,39 @@
+In file included from ../include/cppplot.hpp:34:0,
+                 from test_3d.cpp:1:
+../include/core/utils.hpp: In function 'std::vector<double> cppplot::niceLogTicks(double, double, int)':
+../include/core/utils.hpp:185:80: warning: unused parameter 'maxTicks' [-Wunused-parameter]
+ inline std::vector<double> niceLogTicks(double min, double max, int maxTicks = 10) {
+                                                                                ^~
+In file included from ../include/cppplot.hpp:35:0,
+                 from test_3d.cpp:1:
+../include/core/matrix.hpp: In member function 'cppplot::Matrix cppplot::Matrix::expm() const':
+../include/core/matrix.hpp:713:22: warning: unused variable 'c' [-Wunused-variable]
+         const double c[] = {
+                      ^
+In file included from ../include/figure.hpp:9:0,
+                 from ../include/cppplot.hpp:38,
+                 from test_3d.cpp:1:
+../include/axes.hpp: In member function 'cppplot::Axes& cppplot::Axes::annotate(const string&, double, double, double, double, const PlotOptions&)':
+../include/axes.hpp:1057:52: warning: unused parameter 'x' [-Wunused-parameter]
+     Axes& annotate(const std::string& text, double x, double y,
+                                                    ^
+../include/axes.hpp:1057:62: warning: unused parameter 'y' [-Wunused-parameter]
+     Axes& annotate(const std::string& text, double x, double y,
+                                                              ^
+test_3d.cpp: In function 'void test_surf()':
+test_3d.cpp:25:20: error: 'view_init' was not declared in this scope
+   view_init(30, -60);
+                    ^
+test_3d.cpp:26:56: error: 'surf' was not declared in this scope
+   surf(X, Y, Z, {{"cmap", "viridis"}, {"alpha", "0.8"}});
+                                                        ^
+test_3d.cpp:30:18: error: 'zlabel' was not declared in this scope
+   zlabel("Z-axis");
+                  ^
+test_3d.cpp: In function 'void test_plot3()':
+test_3d.cpp:47:20: error: 'view_init' was not declared in this scope
+   view_init(15, -45);
+                    ^
+test_3d.cpp:48:22: error: 'plot3' was not declared in this scope
+   plot3(x, y, z, "b-");
+                      ^

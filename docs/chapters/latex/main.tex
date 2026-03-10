@@ -1,0 +1,47 @@
+\documentclass[11pt,twoside,openright]{book}
+
+\input{preamble}
+
+\begin{document}
+	
+	% --------------------------------------------------
+	% FRONT MATTER
+	% --------------------------------------------------
+	
+	\frontmatter
+	
+	\title{\textbf{Modern Control Systems}\\[1ex]
+	\large Theory and C++ Implementation}
+	\author{Dr. Tri-Vien Vu}
+	\date{Feb-2026}
+	\maketitle
+	
+	\chapter*{Preface}
+	\addcontentsline{toc}{chapter}{Preface}
+	% \input{chapters/preface}
+	
+	\tableofcontents
+	
+	% --------------------------------------------------
+	% MAIN MATTER
+	% --------------------------------------------------
+	
+	\mainmatter
+	
+	\part{Foundations of Control}
+	
+	\input{chapters/ch01_introduction}
+	
+	% \part{State-Space and Modern Methods}
+	% \input{chapters/ch02_...}
+	
+	% --------------------------------------------------
+	% BACK MATTER
+	% --------------------------------------------------
+	
+	\backmatter
+	
+	\bibliographystyle{plainnat}
+	\bibliography{bibliography}
+	
+\end{document}

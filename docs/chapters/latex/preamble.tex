@@ -1,0 +1,91 @@
+% PAGE SIZE
+\usepackage[
+paperwidth=6in,
+paperheight=9in,
+margin=0.9in
+]{geometry}
+
+% TYPOGRAPHY
+\usepackage{amsmath}
+\usepackage{newtxtext,newtxmath}
+
+\let\openbox\relax
+\usepackage{amsthm}
+
+\usepackage{microtype}
+
+% MATH
+
+\usepackage{mathtools}
+
+% GRAPHICS
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+
+% LINKS
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+% TIKZ
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+% LISTINGS
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstset{
+	language=C++,
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\bfseries,
+	commentstyle=\itshape,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	frame=single
+}
+
+% THEOREM ENVIRONMENTS
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% CUSTOM COMMANDS
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+% --------------------------------------------------
+% RUNNING HEADERS (Professional Book Style)
+% --------------------------------------------------
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\fancyhf{} % clear default
+
+% For two-sided book layout
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Even page (left page)
+\fancyhead[LE]{\nouppercase{\leftmark}}
+\fancyfoot[LE]{\thepage}
+
+% Odd page (right page)
+\fancyhead[RO]{\nouppercase{\rightmark}}
+\fancyfoot[RO]{\thepage}
+
+% Remove header on chapter starting pages
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyfoot[C]{\thepage}
+	\renewcommand{\headrulewidth}{0pt}
+}

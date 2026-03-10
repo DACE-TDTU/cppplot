@@ -169,11 +169,20 @@ public:
   bool isMarginallyStable() const {
     auto p = poles();
     bool hasJwPole = false;
+    std::vector<std::complex<double>> jwPoles;
     for (const auto &pole : p) {
       if (pole.real() > 1e-10)
         return false; // Unstable
-      if (std::abs(pole.real()) < 1e-10)
+      if (std::abs(pole.real()) < 1e-10) {
         hasJwPole = true;
+        // Check for multiplicity on jw axis
+        for (const auto &existing : jwPoles) {
+          if (std::abs(pole.imag() - existing.imag()) < 1e-5) {
+            return false; // Repeated jw pole -> unstable
+          }
+        }
+        jwPoles.push_back(pole);
+      }
     }
     return hasJwPole;
   }
@@ -215,8 +224,9 @@ public:
       return K * (1.0 - std::exp(-t / tau));
     }
 
-    // Fast path for 2nd order (analytical solution)
-    if (n == 2) {
+    // Fast path for 2nd order (analytical solution) - ONLY for systems without
+    // zeros
+    if (n == 2 && num.degree() == 0) {
       double a2 = den.coeffs[0];
       double a1 = den.coeffs[1];
       double a0 = den.coeffs[2];

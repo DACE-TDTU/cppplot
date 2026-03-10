@@ -1,0 +1,19 @@
+examples/benchmark_qp_solvers_V1.cpp: In function 'void fig_timing(const std::vector<BenchRow>&, const string&)':
+examples/benchmark_qp_solvers_V1.cpp:830:8: error: 'class cppplot::Axes' has no member named 'yscale'; did you mean 'yscale_'?
+     ax.yscale("log");
+        ^~~~~~
+examples/benchmark_qp_solvers_V1.cpp: In function 'void fig_accuracy(const std::vector<BenchRow>&, const string&)':
+examples/benchmark_qp_solvers_V1.cpp:974:8: error: 'class cppplot::Axes' has no member named 'yscale'; did you mean 'yscale_'?
+     ax.yscale("log");
+        ^~~~~~
+examples/benchmark_qp_solvers_V1.cpp: In function 'void fig_tradeoff(const std::vector<BenchRow>&, const string&)':
+examples/benchmark_qp_solvers_V1.cpp:1053:8: error: 'class cppplot::Axes' has no member named 'xscale'; did you mean 'xscale_'?
+     ax.xscale("log");
+        ^~~~~~
+examples/benchmark_qp_solvers_V1.cpp:1054:8: error: 'class cppplot::Axes' has no member named 'yscale'; did you mean 'yscale_'?
+     ax.yscale("log");
+        ^~~~~~
+examples/benchmark_qp_solvers_V1.cpp: In function 'void fig_cdf(const std::vector<BenchRow>&, const string&)':
+examples/benchmark_qp_solvers_V1.cpp:1113:8: error: 'class cppplot::Axes' has no member named 'xscale'; did you mean 'xscale_'?
+     ax.xscale("log");
+        ^~~~~~

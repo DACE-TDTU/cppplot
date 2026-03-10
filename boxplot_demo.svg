@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+<defs>
+<clipPath id="clip1">
+  <rect x="140" y="100" width="560" height="390"/>
+</clipPath>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="80" y="60" width="640" height="480" fill="#ffffff" stroke="#1f77b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="165.45" y1="490" x2="165.45" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="216.36" y1="490" x2="216.36" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="267.27" y1="490" x2="267.27" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="318.18" y1="490" x2="318.18" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="369.09" y1="490" x2="369.09" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="420" y1="490" x2="420" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="470.91" y1="490" x2="470.91" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="521.82" y1="490" x2="521.82" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="572.73" y1="490" x2="572.73" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="623.64" y1="490" x2="623.64" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="674.55" y1="490" x2="674.55" y2="100" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="459.87" x2="700" y2="459.87" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="414.09" x2="700" y2="414.09" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="368.31" x2="700" y2="368.31" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="322.53" x2="700" y2="322.53" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="276.75" x2="700" y2="276.75" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="230.97" x2="700" y2="230.97" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="185.19" x2="700" y2="185.19" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="139.41" x2="700" y2="139.41" stroke="#c8c8c8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="490" x2="700" y2="490" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="140" y1="100" x2="140" y2="490" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="165.45" y1="490" x2="165.45" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="165.45" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">1</text>
+<line x1="216.36" y1="490" x2="216.36" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="216.36" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">1.2</text>
+<line x1="267.27" y1="490" x2="267.27" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="267.27" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">1.4</text>
+<line x1="318.18" y1="490" x2="318.18" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="318.18" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">1.6</text>
+<line x1="369.09" y1="490" x2="369.09" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="369.09" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">1.8</text>
+<line x1="420" y1="490" x2="420" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="420" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">2</text>
+<line x1="470.91" y1="490" x2="470.91" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470.91" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">2.2</text>
+<line x1="521.82" y1="490" x2="521.82" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="521.82" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">2.4</text>
+<line x1="572.73" y1="490" x2="572.73" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572.73" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">2.6</text>
+<line x1="623.64" y1="490" x2="623.64" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="623.64" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">2.8</text>
+<line x1="674.55" y1="490" x2="674.55" y2="495" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="674.55" y="499" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-before-edge">3</text>
+<line x1="135" y1="459.87" x2="140" y2="459.87" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="459.87" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">-2</text>
+<line x1="135" y1="414.09" x2="140" y2="414.09" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="414.09" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">-1</text>
+<line x1="135" y1="368.31" x2="140" y2="368.31" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="368.31" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">0</text>
+<line x1="135" y1="322.53" x2="140" y2="322.53" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="322.53" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">1</text>
+<line x1="135" y1="276.75" x2="140" y2="276.75" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="276.75" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">2</text>
+<line x1="135" y1="230.97" x2="140" y2="230.97" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="230.97" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">3</text>
+<line x1="135" y1="185.19" x2="140" y2="185.19" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="185.19" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">4</text>
+<line x1="135" y1="139.41" x2="140" y2="139.41" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="131" y="139.41" font-family="Arial, sans-serif" font-size="10" font-weight="normal" font-style="normal" fill="#000000" text-anchor="end" dominant-baseline="middle">5</text>
+<text x="420" y="525" font-family="Arial, sans-serif" font-size="12" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="alphabetic">Groups</text>
+<text x="95" y="295" font-family="Arial, sans-serif" font-size="12" font-weight="normal" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="alphabetic" transform="rotate(-90 95 295)">Values</text>
+<text x="420" y="90" font-family="Arial, sans-serif" font-size="20" font-weight="bold" font-style="normal" fill="#000000" text-anchor="middle" dominant-baseline="text-after-edge">Boxplot Demonstration</text>
+<g clip-path="url(#clip1)">
+<rect x="89.09" y="335.25" width="152.73" height="55.98" fill="#0000ff" fill-opacity="0.50" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="89.09" y1="362.61" x2="241.82" y2="362.61" stroke="#0000ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="165.45" y1="335.25" x2="165.45" y2="252.06" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="165.45" y1="391.23" x2="165.45" y2="460.07" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="127.27" y1="252.06" x2="203.64" y2="252.06" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="127.27" y1="460.07" x2="203.64" y2="460.07" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="343.64" y="232.65" width="152.73" height="96.81" fill="#0000ff" fill-opacity="0.50" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="343.64" y1="276.15" x2="496.36" y2="276.15" stroke="#0000ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="420" y1="232.65" x2="420" y2="117.73" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="420" y1="329.46" x2="420" y2="447.62" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="381.82" y1="117.73" x2="458.18" y2="117.73" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="381.82" y1="447.62" x2="458.18" y2="447.62" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="598.18" y="398.61" width="152.73" height="31.83" fill="#0000ff" fill-opacity="0.50" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="598.18" y1="415.99" x2="750.91" y2="415.99" stroke="#0000ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="674.55" y1="398.61" x2="674.55" y2="359.26" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="674.55" y1="430.44" x2="674.55" y2="472.27" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="636.36" y1="359.26" x2="712.73" y2="359.26" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="636.36" y1="472.27" x2="712.73" y2="472.27" stroke="#0000ff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="674.55" cy="346.77" r="3" fill="#1f77b4" stroke="#1f77b4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

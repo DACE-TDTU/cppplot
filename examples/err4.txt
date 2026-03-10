@@ -1,0 +1,46 @@
+In file included from ../include/cppplot/cppplot.hpp:34:0,
+                 from test_3d.cpp:1:
+../include/cppplot/core/utils.hpp: In function 'std::vector<double> cppplot::niceLogTicks(double, double, int)':
+../include/cppplot/core/utils.hpp:185:80: warning: unused parameter 'maxTicks' [-Wunused-parameter]
+ inline std::vector<double> niceLogTicks(double min, double max, int maxTicks = 10) {
+                                                                                ^~
+In file included from ../include/cppplot/cppplot.hpp:35:0,
+                 from test_3d.cpp:1:
+../include/cppplot/core/matrix.hpp: In member function 'cppplot::Matrix cppplot::Matrix::expm() const':
+../include/cppplot/core/matrix.hpp:744:18: warning: unused variable 'c' [-Wunused-variable]
+     const double c[] = {1.0,           1.0 / 2.0,
+                  ^
+In file included from ../include/cppplot/figure.hpp:9:0,
+                 from ../include/cppplot/cppplot.hpp:38,
+                 from test_3d.cpp:1:
+../include/cppplot/axes.hpp: In member function 'cppplot::Axes& cppplot::Axes::annotate(const string&, double, double, double, double, const PlotOptions&)':
+../include/cppplot/axes.hpp:1412:50: warning: unused parameter 'x' [-Wunused-parameter]
+   Axes &annotate(const std::string &text, double x, double y, double textX,
+                                                  ^
+../include/cppplot/axes.hpp:1412:60: warning: unused parameter 'y' [-Wunused-parameter]
+   Axes &annotate(const std::string &text, double x, double y, double textX,
+                                                            ^
+../include/cppplot/axes.hpp: In member function 'double cppplot::Axes::computeDepth(double, double, double) const':
+../include/cppplot/axes.hpp:1632:12: warning: unused variable 'rx' [-Wunused-variable]
+     double rx = nx * cos(az) - ny * sin(az);
+            ^~
+../include/cppplot/axes.hpp: In member function 'void cppplot::Axes::drawElements3D(cppplot::Backend&, const cppplot::Rect&)':
+../include/cppplot/axes.hpp:1700:17: error: 'viridis' is not a member of 'cppplot::Color'
+                 Color::viridis(zNorm).withAlpha(elem->style.marker.alpha * 255);
+                 ^~~~~
+In file included from ../include/cppplot/cppplot.hpp:46:0,
+                 from test_3d.cpp:1:
+../include/cppplot/pyplot.hpp: In function 'void cppplot::xlim(double, double)':
+../include/cppplot/pyplot.hpp:568:13: error: redefinition of 'void cppplot::xlim(double, double)'
+ inline void xlim(double min, double max) { gca().set_xlim(min, max); }
+             ^~~~
+../include/cppplot/pyplot.hpp:349:13: note: 'void cppplot::xlim(double, double)' previously defined here
+ inline void xlim(double min, double max) { gca().set_xlim(min, max); }
+             ^~~~
+../include/cppplot/pyplot.hpp: In function 'void cppplot::ylim(double, double)':
+../include/cppplot/pyplot.hpp:573:13: error: redefinition of 'void cppplot::ylim(double, double)'
+ inline void ylim(double min, double max) { gca().set_ylim(min, max); }
+             ^~~~
+../include/cppplot/pyplot.hpp:354:13: note: 'void cppplot::ylim(double, double)' previously defined here
+ inline void ylim(double min, double max) { gca().set_ylim(min, max); }
+             ^~~~

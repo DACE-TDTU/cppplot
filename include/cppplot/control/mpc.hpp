@@ -29,11 +29,17 @@
 #include "controller_design.hpp"
 #include "state_space.hpp"
 #include <algorithm>
+#include <cmath>
 #include <limits>
-
+#include <vector>
 
 namespace cppplot {
 namespace control {
+
+/**
+ * @brief MPC Solver Type
+ */
+enum class MPCSolver { PGD, ADMM };
 
 /**
  * @brief MPC Configuration structure
@@ -41,12 +47,12 @@ namespace control {
 struct MPCConfig {
   size_t horizon = 10; // Prediction horizon N
 
-  // Weights
+  // Standard Weights
   Matrix Q;          // State weight (n x n)
   Matrix R;          // Input weight (m x m)
-  Matrix P_terminal; // Terminal cost (n x n), optional
+  Matrix P_terminal; // Terminal state weight (n x n)
 
-  // Constraints (optional)
+  // Constraints
   std::vector<double> u_min; // Input lower bounds
   std::vector<double> u_max; // Input upper bounds
   std::vector<double> x_min; // State lower bounds
@@ -56,12 +62,25 @@ struct MPCConfig {
   Matrix x_ref; // State reference (n x 1)
   Matrix u_ref; // Input reference (m x 1)
 
-  // Solver options
-  size_t max_iter = 100;         // Max iterations for QP solver
-  double tolerance = 1e-8;       // Convergence tolerance
+  // Solver Setup
+  MPCSolver solver_type = MPCSolver::PGD;
   bool use_terminal_cost = true; // Use LQR terminal cost
 
-  MPCConfig() = default;
+  // PGD Parameters
+  size_t max_iter = 100;
+  double tolerance = 1e-4;
+
+  // ADMM Parameters
+  double rho = 1.0;           ///< ADMM step size (penalty parameter)
+  double eps_abs = 1e-4;      ///< ADMM absolute convergence tolerance
+  double eps_rel = 1e-3;      ///< ADMM relative convergence tolerance
+  size_t admm_max_iter = 100; ///< ADMM hard iteration cap
+  size_t check_every = 5;     ///< ADMM convergence check frequency
+
+  /**
+   * @brief Default constructor
+   */
+  MPCConfig() {}
 
   /**
    * @brief Create simple config with weights only
@@ -128,10 +147,11 @@ private:
   MPCConfig config_;
 
   // Pre-computed matrices for unconstrained MPC
-  Matrix Phi_;   // Prediction matrix for states from x0
-  Matrix Gamma_; // Prediction matrix for states from U
-  Matrix H_;     // Hessian for QP: H = Gamma'*Q_bar*Gamma + R_bar
-  Matrix F_;     // Linear term: F = Gamma'*Q_bar*Phi
+  Matrix Phi_;        // Prediction matrix for states from x0
+  Matrix Gamma_;      // Prediction matrix for states from U
+  Matrix H_;          // Hessian for QP: H = Gamma'*Q_bar*Gamma + R_bar
+  Matrix H_inv_admm_; // Precomputed inverse for ADMM: (H + rho*I)^-1
+  Matrix F_;          // Linear term: F = Gamma'*Q_bar*Phi
 
   bool matrices_computed_ = false;
 
@@ -176,9 +196,9 @@ public:
   MPCSolution solve(const Matrix &x0) {
     // Check for constraints
     bool has_input_constraints =
-        !config_.u_min.empty() && !config_.u_max.empty();
+        !config_.u_min.empty() || !config_.u_max.empty();
     bool has_state_constraints =
-        !config_.x_min.empty() && !config_.x_max.empty();
+        !config_.x_min.empty() || !config_.x_max.empty();
 
     if (has_input_constraints || has_state_constraints) {
       return solveConstrained(x0);
@@ -294,6 +314,13 @@ private:
     Matrix GtQ = Gamma_.T() * Q_bar;
     H_ = GtQ * Gamma_ + R_bar;
 
+    // Cache precomputed inverse for ADMM: (H + rho*I)^-1
+    Matrix H_admm = H_;
+    for (size_t i = 0; i < m_ * config_.horizon; ++i) {
+      H_admm(i, i) += config_.rho;
+    }
+    H_inv_admm_ = H_admm.inv();
+
     // Compute F: F = Gamma'*Q_bar*Phi
     F_ = GtQ * Phi_;
 
@@ -387,6 +414,23 @@ private:
    *   U(k+1) = project(U(k) - alpha * (H*U(k) + g))
    */
   MPCSolution solveConstrained(const Matrix &x0) {
+    if (config_.solver_type == MPCSolver::ADMM) {
+      return solveConstrainedADMM(x0);
+    }
+    return solveConstrainedPGD(x0);
+  }
+
+  /**
+   * @brief Solve constrained MPC using projected gradient descent
+   *
+   * Simple box-constrained QP solver:
+   *   min  0.5*U'*H*U + g'*U
+   *   s.t. u_min ≤ u ≤ u_max
+   *
+   * Algorithm: Projected gradient descent
+   *   U(k+1) = project(U(k) - alpha * (H*U(k) + g))
+   */
+  MPCSolution solveConstrainedPGD(const Matrix &x0) {
     MPCSolution sol;
     size_t N = config_.horizon;
 
@@ -468,6 +512,109 @@ private:
     // Compute cost
     sol.cost = computeCost(x0, U);
 
+    return sol;
+  }
+
+  /**
+   * @brief Solve constrained MPC using ADMM
+   *
+   * Solves box-constrained Quadratic Program:
+   *   min  0.5*U'*H*U + g'*U
+   *   s.t. u_min ≤ u ≤ u_max
+   *
+   * ADMM updates:
+   *   x-update: x^{k+1} = H_{inv} * (\rho z^k - u^k - g)
+   *   z-update: z^{k+1} = clip(x^{k+1} + u^k/\rho, lb, ub)
+   *   u-update: u^{k+1} = u^k + \rho(x^{k+1} - z^{k+1})
+   */
+  MPCSolution solveConstrainedADMM(const Matrix &x0) {
+    MPCSolution sol;
+    size_t N = config_.horizon;
+    size_t U_size = m_ * N;
+
+    // Linear term: g = F * x0
+    Matrix g = F_ * x0;
+
+    // ADMM State Variables
+    Matrix x = Matrix::zeros(U_size, 1);
+    Matrix z = Matrix::zeros(U_size, 1);
+    Matrix u = Matrix::zeros(U_size, 1);
+
+    double rho = config_.rho;
+    bool converged = false;
+    size_t iters = 0;
+
+    for (size_t k = 0; k < config_.admm_max_iter; ++k) {
+      // 1. x-update: x = H_inv_admm_ * (rho * z - u - g)
+      Matrix rhs = Matrix::zeros(U_size, 1);
+      for (size_t i = 0; i < U_size; ++i) {
+        rhs(i, 0) = rho * z(i, 0) - u(i, 0) - g(i, 0);
+      }
+      x = H_inv_admm_ * rhs;
+
+      // 2. z-update: z = clip(x + u/rho, bounds)
+      Matrix z_prev = z;
+      Matrix x_plus_u_rho = Matrix::zeros(U_size, 1);
+      for (size_t i = 0; i < U_size; ++i) {
+        x_plus_u_rho(i, 0) = x(i, 0) + u(i, 0) / rho;
+      }
+      z = x_plus_u_rho;
+      projectOntoConstraints(z);
+
+      // 3. u-update: u = u + rho * (x - z)
+      for (size_t i = 0; i < U_size; ++i) {
+        u(i, 0) += rho * (x(i, 0) - z(i, 0));
+      }
+
+      // 4. Convergence Check
+      if ((k + 1) % config_.check_every == 0) {
+        double r_norm = 0.0;
+        double s_norm = 0.0;
+        for (size_t i = 0; i < U_size; ++i) {
+          double r_i = x(i, 0) - z(i, 0);
+          double s_i = rho * (z(i, 0) - z_prev(i, 0));
+          r_norm += r_i * r_i;
+          s_norm += s_i * s_i;
+        }
+        r_norm = std::sqrt(r_norm);
+        s_norm = std::sqrt(s_norm);
+
+        double eps_prim = config_.eps_abs * std::sqrt(U_size) +
+                          config_.eps_rel * std::max(x.norm(), z.norm());
+        double eps_dual =
+            config_.eps_abs * std::sqrt(U_size) + config_.eps_rel * u.norm();
+
+        if (r_norm < eps_prim && s_norm < eps_dual) {
+          converged = true;
+          iters = k + 1;
+          break;
+        }
+      }
+    }
+
+    if (!converged)
+      iters = config_.admm_max_iter;
+
+    sol.u_opt = z;
+    sol.iterations = static_cast<int>(iters);
+    sol.converged = converged;
+
+    // Compute predicted states
+    sol.x_pred = Matrix::zeros(n_ * (N + 1), 1);
+    for (size_t i = 0; i < n_; ++i) {
+      sol.x_pred(i, 0) = x0(i, 0);
+    }
+
+    Matrix Phi_x0 = Phi_ * x0;
+    Matrix Gamma_U = Gamma_ * sol.u_opt;
+    for (size_t k = 0; k < N; ++k) {
+      for (size_t i = 0; i < n_; ++i) {
+        sol.x_pred((k + 1) * n_ + i, 0) =
+            Phi_x0(k * n_ + i, 0) + Gamma_U(k * n_ + i, 0);
+      }
+    }
+
+    sol.cost = computeCost(x0, sol.u_opt);
     return sol;
   }
 

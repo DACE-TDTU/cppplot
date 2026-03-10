@@ -23,7 +23,6 @@
 #include <stdexcept>
 #include <vector>
 
-
 namespace cppplot {
 namespace control {
 
@@ -59,6 +58,11 @@ using cppplot::ylabel;
 inline Matrix acker(const Matrix &A, const Matrix &B,
                     const std::vector<std::complex<double>> &poles) {
   size_t n = A.rows;
+
+  if (B.cols > 1) {
+    throw std::runtime_error("Ackermann's formula only supports SISO systems "
+                             "(B must have 1 column)");
+  }
 
   if (poles.size() != n) {
     throw std::runtime_error("Number of poles must equal system order");
@@ -675,10 +679,8 @@ inline Matrix care(const Matrix &A, const Matrix &B, const Matrix &Q,
 
   // Kleinman iteration for larger systems (n > 2)
   // Initialize with stabilizing gain from pole placement
-
-  Matrix K(1, n); // Gain matrix (1 x n for SISO)
-  for (size_t i = 0; i < n; ++i)
-    K(0, i) = 0.0;
+  size_t m = B.cols;
+  Matrix K(m, n, 0.0); // Gain matrix (m x n)
 
   // Check if A is already stable
   bool is_stable = true;
@@ -700,15 +702,25 @@ inline Matrix care(const Matrix &A, const Matrix &B, const Matrix &Q,
       desired_poles.push_back(std::complex<double>(-(1.0 + i), 0));
     }
 
-    try {
-      auto K_init = acker(A, B, desired_poles);
-      for (size_t i = 0; i < n; ++i) {
-        K(0, i) = K_init(0, i);
+    if (m == 1) { // Ackermann only supports SISO
+      try {
+        auto K_init = acker(A, B, desired_poles);
+        for (size_t i = 0; i < n; ++i) {
+          K(0, i) = K_init(0, i);
+        }
+      } catch (...) {
+        // If pole placement fails, use simple gain
+        for (size_t i = 0; i < n; ++i) {
+          K(0, i) = B(i, 0);
+        }
       }
-    } catch (...) {
-      // If pole placement fails, use simple gain
-      for (size_t i = 0; i < n; ++i) {
-        K(0, i) = B(i, 0);
+    } else {
+      // For MIMO systems, simple heuristic initialization
+      for (size_t i = 0; i < m; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+          // Heuristic mapping
+          K(i, j) = B(j, i);
+        }
       }
     }
   }
