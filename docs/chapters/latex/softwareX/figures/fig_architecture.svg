@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
+  <defs>
+    <style>
+      .box { fill: #f8f9fa; stroke: #0366d6; stroke-width: 2px; rx: 5px; }
+      .text { font-family: sans-serif; font-size: 14px; fill: #24292e; text-anchor: middle; alignment-baseline: middle; }
+      .title { font-weight: bold; font-size: 16px; }
+      .edge { stroke: #6a737d; stroke-width: 2px; fill: none; marker-end: url(#arrow); }
+      .edgetext { font-family: sans-serif; font-size: 12px; fill: #586069; text-anchor: middle; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6a737d"/>
+    </marker>
+  </defs>
+
+  <!-- Node: User Code -->
+  <rect x="20" y="100" width="160" height="80" class="box" />
+  <text x="100" y="140" class="text title">User C++ Code</text>
+
+  <!-- Node: State Machine -->
+  <rect x="260" y="100" width="160" height="80" class="box" />
+  <text x="340" y="130" class="text title">API &amp; State Machine</text>
+  <text x="340" y="150" class="text">(figure, axes, subplot)</text>
+
+  <!-- Node: Control Systems -->
+  <rect x="500" y="20" width="160" height="60" class="box" fill="#e1e4e8" />
+  <text x="580" y="50" class="text title">Control Module</text>
+
+  <!-- Node: SVG Renderer -->
+  <rect x="500" y="200" width="160" height="60" class="box" />
+  <text x="580" y="230" class="text title">SVG Renderer</text>
+
+  <!-- Edges -->
+  <path d="M 180 140 L 250 140" class="edge" />
+  <text x="215" y="130" class="edgetext">plot(), etc.</text>
+
+  <path d="M 420 120 L 490 60" class="edge" />
+  <text x="460" y="80" class="edgetext">bode(), nyquist()</text>
+
+  <path d="M 420 160 L 490 220" class="edge" />
+  <text x="440" y="205" class="edgetext">render</text>
+
+  <path d="M 580 80 L 580 190" class="edge" />
+  <text x="615" y="140" class="edgetext">topology guards</text>
+
+</svg>

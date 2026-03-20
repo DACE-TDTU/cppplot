@@ -76,6 +76,7 @@ struct MPCConfig {
   double eps_rel = 1e-3;      ///< ADMM relative convergence tolerance
   size_t admm_max_iter = 100; ///< ADMM hard iteration cap
   size_t check_every = 5;     ///< ADMM convergence check frequency
+  bool warm_start = true;     ///< Enable ADMM warm-starting
 
   /**
    * @brief Default constructor

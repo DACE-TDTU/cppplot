@@ -6,6 +6,7 @@
 #ifndef CPPPLOT_CORE_TYPES_HPP
 #define CPPPLOT_CORE_TYPES_HPP
 
+#include <cstddef>
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
@@ -197,12 +198,27 @@ public:
 using PlotOptions = std::map<std::string, std::string>;
 
 /**
+ * @brief Trim whitespace from a string
+ */
+inline std::string trim(const std::string &str) {
+  size_t first = str.find_first_not_of(" \t\n\r");
+  if (std::string::npos == first)
+    return "";
+  size_t last = str.find_last_not_of(" \t\n\r");
+  return str.substr(first, (last - first + 1));
+}
+
+/**
  * @brief Helper to create PlotOptions from initializer_list
  * Usage: opts({{"color", "red"}, {"linewidth", "2"}})
  */
 inline PlotOptions
 opts(std::initializer_list<std::pair<std::string, std::string>> init) {
-  return PlotOptions(init.begin(), init.end());
+  PlotOptions result;
+  for (const auto &kv : init) {
+    result[trim(kv.first)] = trim(kv.second);
+  }
+  return result;
 }
 
 /**

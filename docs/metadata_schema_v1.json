@@ -1,0 +1,34 @@
+{
+  "schema_version": "cppplot-meta-1.0",
+  "figure": {
+    "width": 800,
+    "height": 600,
+    "title": "My Plot"
+  },
+  "axes": [
+    {
+      "xlabel": "x",
+      "ylabel": "y",
+      "title": "",
+      "xlim": [0, 10],
+      "ylim": [-1, 1],
+      "xlimSet": false,
+      "ylimSet": false,
+      "legend": {
+        "show": false,
+        "position": "best"
+      },
+      "series": [
+        {
+          "type": "line",
+          "label": "sin(x)",
+          "color": "#3b82f6",
+          "linewidth": 2,
+          "linestyle": "-",
+          "marker": "none",
+          "markersize": 6
+        }
+      ]
+    }
+  ]
+}

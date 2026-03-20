@@ -559,6 +559,64 @@ inline void ssinfo(const StateSpace &sys) {
   }
   std::cout << "=========================================" << std::endl;
 }
+/**
+ * @brief Compute the Controllability Matrix (Wc)
+ * Wc = [B, AB, A^2B, ..., A^(n-1)B]
+ */
+inline Matrix ctrb(const Matrix &A, const Matrix &B) {
+    if (!A.isSquare()) throw std::runtime_error("ctrb: A must be square");
+    if (A.rows != B.rows) throw std::runtime_error("ctrb: A and B dimension mismatch");
+
+    size_t n = A.rows;
+    Matrix Wc = B;
+    Matrix AkB = B;
+
+    for (size_t i = 1; i < n; ++i) {
+        AkB = A * AkB;
+        Wc = horzcat(Wc, AkB);
+    }
+    return Wc;
+}
+
+/**
+ * @brief Compute the Observability Matrix (Wo)
+ * Wo = [C; CA; CA^2; ...; CA^(n-1)]
+ */
+inline Matrix obsv(const Matrix &A, const Matrix &C) {
+    if (!A.isSquare()) throw std::runtime_error("obsv: A must be square");
+    if (A.cols != C.cols) throw std::runtime_error("obsv: A and C dimension mismatch");
+
+    size_t n = A.rows;
+    Matrix Wo = C;
+    Matrix CAk = C;
+
+    for (size_t i = 1; i < n; ++i) {
+        CAk = CAk * A;
+        Wo = vertcat(Wo, CAk);
+    }
+    return Wo;
+}
+
+/**
+ * @brief Check if the system is controllable using SVD-based rank
+ * Returns true if rank(ctrb(A, B)) == n
+ */
+inline bool is_controllable(const Matrix &A, const Matrix &B, double tol = 1e-12) {
+    size_t n = A.rows;
+    Matrix Wc = ctrb(A, B);
+    // Sử dụng hàm rank() dựa trên SVD vừa triển khai ở Phase 6
+    return Wc.rank(tol) == n;
+}
+
+/**
+ * @brief Check if the system is observable using SVD-based rank
+ * Returns true if rank(obsv(A, C)) == n
+ */
+inline bool is_observable(const Matrix &A, const Matrix &C, double tol = 1e-12) {
+    size_t n = A.rows;
+    Matrix Wo = obsv(A, C);
+    return Wo.rank(tol) == n;
+}
 
 } // namespace control
 } // namespace cppplot

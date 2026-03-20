@@ -38,129 +38,128 @@ struct MarginInfo {
  * @param omega_max Maximum frequency for search
  * @return MarginInfo structure
  */
+/**
+ 
+/**
+ * @brief Calculate gain and phase margins (Robust Complex-Plane Algorithm)
+ * @param G Open-loop transfer function
+ * @return MarginInfo structure matching MATLAB Ground-truth
+ */
 inline MarginInfo margin(const TransferFunction &G, double omega_min = 0.001,
                          double omega_max = 1000.0) {
   MarginInfo info;
   info.Gm = std::numeric_limits<double>::infinity();
   info.Gm_dB = std::numeric_limits<double>::infinity();
-  info.Pm = 180.0;
+  info.Pm = std::numeric_limits<double>::infinity();
   info.Wgc = 0;
   info.Wpc = 0;
-  info.stable = true;
+  info.stable = false;
 
-  // Generate frequency points (logarithmic spacing)
-  std::vector<double> omega;
-  for (double w = omega_min; w <= omega_max; w *= 1.02) {
-    omega.push_back(w);
+  bool wgc_found = false;
+  bool wpc_found = false;
+
+  // ==========================================================
+  // 1. KIỂM TRA TẠI DC (w = 0) ĐỂ BẮT CÁC ĐIỂM CẮT BIÊN
+  // ==========================================================
+  std::complex<double> dc = G.eval(0.0);
+  double mag_dc = std::abs(dc);
+  
+  // Kiểm tra Gain Crossover tại w = 0 (Sửa lỗi Case 4.2.1: w_gc = 0.000)
+  if (std::abs(mag_dc - 1.0) < 1e-6) {
+      info.Wgc = 0.0;
+      info.Pm = 180.0 + std::arg(dc) * 180.0 / M_PI;
+      while (info.Pm <= -180.0) info.Pm += 360.0;
+      while (info.Pm > 180.0) info.Pm -= 360.0;
+      if (std::abs(info.Pm - 180.0) < 1e-4 || std::abs(info.Pm + 180.0) < 1e-4) info.Pm = -180.0;
+      wgc_found = true;
   }
 
-  // Calculate magnitude and phase
-  std::vector<double> mag_dB, phase_deg;
-  for (double w : omega) {
-    mag_dB.push_back(G.mag_dB(w));
-    phase_deg.push_back(G.phase_deg(w));
+  // Kiểm tra Phase Crossover tại w = 0 (Sửa lỗi Case 4.2.3)
+  if (dc.real() < 0 && std::abs(dc.imag()) < 1e-9) {
+      info.Wpc = 0.0;
+      if (mag_dc > 1e-12) {
+          info.Gm = 1.0 / mag_dc;
+          info.Gm_dB = 20.0 * std::log10(info.Gm);
+      }
+      wpc_found = true;
   }
 
-  // Improved phase unwrapping algorithm
-  // Handles both phase lead and phase lag systems
-  // Works by detecting discontinuities > 180° and adjusting
-  for (size_t i = 1; i < phase_deg.size(); ++i) {
-    double diff = phase_deg[i] - phase_deg[i - 1];
+  // ==========================================================
+  // 2. QUÉT TẦN SỐ DỰA TRÊN ĐẠI SỐ PHỨC (Tránh Phase Wrapping)
+  // ==========================================================
+  int steps = 2000;
+  double factor = std::pow(omega_max / omega_min, 1.0 / steps);
+  double current_w = omega_min;
+  
+  std::complex<double> c1 = G.eval(std::complex<double>(0, current_w));
+  double mag1 = std::abs(c1);
 
-    // Detect and correct for +360° jumps (phase wrapping from -180 to +180)
-    while (diff > 180.0) {
-      phase_deg[i] -= 360.0;
-      diff = phase_deg[i] - phase_deg[i - 1];
+  for (int i = 0; i < steps; ++i) {
+    double next_w = current_w * factor;
+    std::complex<double> c2 = G.eval(std::complex<double>(0, next_w));
+    double mag2 = std::abs(c2);
+
+    // --- Tìm Wgc: |G(jw)| cắt 1 ---
+    if (!wgc_found && (mag1 - 1.0) * (mag2 - 1.0) <= 0) {
+        double low = current_w, high = next_w;
+        double sign_low = std::abs(G.eval(std::complex<double>(0, low))) - 1.0;
+        
+        // Nhị phân siết nghiệm 100% hội tụ
+        for(int b = 0; b < 25; ++b) {
+            double mid = (low + high) / 2.0;
+            double m = std::abs(G.eval(std::complex<double>(0, mid))) - 1.0;
+            if (sign_low * m <= 0) high = mid;
+            else { low = mid; sign_low = m; }
+        }
+        info.Wgc = (low + high) / 2.0;
+        
+        std::complex<double> c_gc = G.eval(std::complex<double>(0, info.Wgc));
+        info.Pm = 180.0 + std::arg(c_gc) * 180.0 / M_PI;
+        
+        while (info.Pm <= -180.0) info.Pm += 360.0;
+        while (info.Pm > 180.0) info.Pm -= 360.0;
+        if (std::abs(info.Pm - 180.0) < 1e-4 || std::abs(info.Pm + 180.0) < 1e-4) info.Pm = -180.0;
+        wgc_found = true;
     }
 
-    // Detect and correct for -360° jumps (phase wrapping from +180 to -180)
-    while (diff < -180.0) {
-      phase_deg[i] += 360.0;
-      diff = phase_deg[i] - phase_deg[i - 1];
-    }
-  }
-
-  // For systems starting with positive phase (lead systems),
-  // check if we need to offset the entire phase curve
-  // Most control systems have phase starting near 0° or negative
-  // If starting phase is large positive, it's likely a lead system
-  if (phase_deg[0] > 90.0) {
-    // Possibly a differentiator or lead network at low frequency
-    // Shift to start from expected range
-    double offset = std::round(phase_deg[0] / 360.0) * 360.0;
-    for (size_t i = 0; i < phase_deg.size(); ++i) {
-      phase_deg[i] -= offset;
-    }
-  }
-
-  // Find gain crossover (|G| = 0 dB) - may have multiple crossovers
-  std::vector<double> gain_crossovers;
-  std::vector<double> phase_at_gc;
-
-  for (size_t i = 1; i < omega.size(); ++i) {
-    if ((mag_dB[i - 1] > 0 && mag_dB[i] <= 0) ||
-        (mag_dB[i - 1] >= 0 && mag_dB[i] < 0)) {
-      // Linear interpolation for gain crossover frequency
-      double w_gc = omega[i - 1] + (0 - mag_dB[i - 1]) *
-                                       (omega[i] - omega[i - 1]) /
-                                       (mag_dB[i] - mag_dB[i - 1]);
-
-      // Phase at gain crossover
-      double phase_gc =
-          phase_deg[i - 1] + (w_gc - omega[i - 1]) *
-                                 (phase_deg[i] - phase_deg[i - 1]) /
-                                 (omega[i] - omega[i - 1]);
-
-      gain_crossovers.push_back(w_gc);
-      phase_at_gc.push_back(phase_gc);
-    }
-  }
-
-  // Use the first (lowest frequency) gain crossover for primary margin
-  if (!gain_crossovers.empty()) {
-    info.Wgc = gain_crossovers[0];
-    info.Pm = 180.0 + phase_at_gc[0];
-  }
-
-  // Find phase crossover (phase = -180°) - may have multiple crossovers
-  std::vector<double> phase_crossovers;
-  std::vector<double> mag_at_pc;
-
-  for (size_t i = 1; i < omega.size(); ++i) {
-    double p1 = phase_deg[i - 1];
-    double p2 = phase_deg[i];
-
-    // Guard against numerical noise when phase is asymptotically tracking near
-    // -180 Example: double integrator 1/s^2 system staying identically at -180
-    if (std::abs(p1 + 180.0) < 1e-4 && std::abs(p2 + 180.0) < 1e-4) {
-      continue; // Not a true transversal crossing
+    // --- Tìm Wpc: Im(G) cắt 0 VÀ Re(G) < 0 ---
+    if (!wpc_found && (c1.imag() * c2.imag() <= 0) && (c1.real() < 0) && (c2.real() < 0)) {
+        double low = current_w, high = next_w;
+        double sign_low = c1.imag();
+        
+        for(int b = 0; b < 25; ++b) {
+            double mid = (low + high) / 2.0;
+            std::complex<double> c_mid = G.eval(std::complex<double>(0, mid));
+            if (sign_low * c_mid.imag() <= 0) high = mid;
+            else { low = mid; sign_low = c_mid.imag(); }
+        }
+        info.Wpc = (low + high) / 2.0;
+        
+        std::complex<double> c_pc = G.eval(std::complex<double>(0, info.Wpc));
+        double mag_pc = std::abs(c_pc);
+        if (mag_pc > 1e-12) {
+            info.Gm = 1.0 / mag_pc;
+            info.Gm_dB = 20.0 * std::log10(info.Gm);
+        }
+        wpc_found = true;
     }
 
-    if ((p1 >= -180.0 && p2 < -180.0) || (p1 <= -180.0 && p2 > -180.0)) {
-      // Linear interpolation for phase crossover frequency
-      double w_pc = omega[i - 1] + (-180 - phase_deg[i - 1]) *
-                                       (omega[i] - omega[i - 1]) /
-                                       (phase_deg[i] - phase_deg[i - 1]);
+    if (wgc_found && wpc_found) break;
 
-      // Magnitude at phase crossover
-      double mag_pc = mag_dB[i - 1] + (w_pc - omega[i - 1]) *
-                                          (mag_dB[i] - mag_dB[i - 1]) /
-                                          (omega[i] - omega[i - 1]);
-
-      phase_crossovers.push_back(w_pc);
-      mag_at_pc.push_back(mag_pc);
-    }
+    current_w = next_w;
+    c1 = c2;
+    mag1 = mag2;
   }
 
-  // Use the first (lowest frequency) phase crossover for primary margin
-  if (!phase_crossovers.empty()) {
-    info.Wpc = phase_crossovers[0];
-    info.Gm_dB = -mag_at_pc[0];
-    info.Gm = std::pow(10, info.Gm_dB / 20.0);
-  }
+  // ==========================================================
+  // 3. ĐÁNH GIÁ ỔN ĐỊNH
+  // ==========================================================
+  auto poles_list = G.poles();
+  int P = 0;
+  for (const auto& p : poles_list) if (p.real() > 1e-9) P++;
 
-  // Determine stability: both margins must be positive
-  info.stable = (info.Gm > 1.0) && (info.Pm > 0);
+  if (P == 0) info.stable = (info.Gm_dB > 0) && (info.Pm > 0);
+  else        info.stable = (info.Pm > 0);
 
   return info;
 }

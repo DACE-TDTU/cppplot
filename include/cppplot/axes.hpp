@@ -1039,6 +1039,29 @@ public:
     ylabel_ = label;
     return *this;
   }
+
+  // Update style for an existing series by index (best-effort)
+  Axes &set_series_style(size_t index,
+                         const std::string &color,
+                         double linewidth,
+                         const std::string &linestyle,
+                         const std::string &marker,
+                         double markersize,
+                         const std::string &label) {
+    if (index >= elements_.size()) return *this;
+    auto &elem = elements_[index];
+    if (!color.empty()) {
+      elem->style.line.color = Color::fromHex(color);
+      elem->style.marker.faceColor = Color::fromHex(color);
+      elem->style.marker.edgeColor = Color::fromHex(color);
+    }
+    if (linewidth > 0) elem->style.line.width = linewidth;
+    if (!linestyle.empty()) elem->style.line.style = linestyle;
+    if (!marker.empty()) elem->style.marker.marker = marker;
+    if (markersize > 0) elem->style.marker.size = markersize;
+    elem->style.label = label;
+    return *this;
+  }
   Axes &set_ylabel2(const std::string &label) {
     ylabel2_ = label;
     return *this;
@@ -1224,6 +1247,7 @@ public:
     grid_ = g;
     return *this;
   }
+  bool gridShow() const { return grid_.show; }
 
   // Legend
   Axes &legend(bool show = true) {
@@ -1234,6 +1258,17 @@ public:
     legend_ = l;
     return *this;
   }
+
+  // ============ Metadata Accessors ============
+  const std::string &xlabel() const { return xlabel_; }
+  const std::string &ylabel() const { return ylabel_; }
+  const std::string &title() const { return title_; }
+  const Limits &xlim() const { return xlim_; }
+  const Limits &ylim() const { return ylim_; }
+  bool xlimSet() const { return xlimSet_; }
+  bool ylimSet() const { return ylimSet_; }
+  const LegendStyle &legendStyle() const { return legend_; }
+  const std::vector<std::shared_ptr<PlotElement>> &elements() const { return elements_; }
 
   // ============ Plotting Methods ============
 

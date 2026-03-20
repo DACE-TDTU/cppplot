@@ -7,8 +7,7 @@
  * 2. LQG Controller (optimal control with noise)
  * 3. MPC Controller (predictive control with constraints)
  *
- * Compile: g++ -std=c++14 -I "../include" research_tools_demo.cpp -o
- * research_demo.exe
+ * Compile: g++ -std=c++17 -I "../include" research_tools_demo.cpp -o research_demo.exe
  */
 
 #include <cmath>

@@ -20,7 +20,7 @@
 
 #ifndef CPPPLOT_CONTROL_ROBUST_HINF_HPP
 #define CPPPLOT_CONTROL_ROBUST_HINF_HPP
-
+#include "cppplot/control/nonlinear/lyapunov.hpp"
 #include "../analysis.hpp"
 #include "../controller_design.hpp"
 #include "../state_space.hpp"

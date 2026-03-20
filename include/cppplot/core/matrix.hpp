@@ -28,7 +28,11 @@
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <cstddef>   // std::size_t — required for MinGW/older GCC
+#include <cstdint>
+#include <functional>
 #include <iomanip>
+#include <limits>
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
@@ -704,6 +708,28 @@ public:
   struct SchurResult;
   SchurResult schur() const;
 
+// ================================================================
+  //  Singular Value Decomposition (SVD) & Pseudo-inverse
+  // ================================================================
+
+  /**
+   * @brief Singular Value Decomposition (One-sided Jacobi method)
+   * * Decomposes A = U * S * V^T
+   * - U is m x m orthogonal matrix (if full) or m x n (thin)
+   * - S is diagonal matrix of singular values
+   * - V is n x n orthogonal matrix
+   * * Highly accurate for small-to-medium matrices.
+   */
+  struct SVDResult;
+  SVDResult svd() const;
+
+
+  /**
+   * @brief Moore-Penrose Pseudo-inverse via SVD
+   * @param tol Tolerance for dropping small singular values
+   */
+  Matrix pinv(double tol = 1e-12) const;
+
   // ================================================================
   //  Matrix Exponential: expm(A)
   // ================================================================
@@ -814,6 +840,48 @@ public:
   }
 
   // ================================================================
+  //  Eigenvectors
+  // ================================================================
+
+  /**
+   * @brief Compute eigenvalues and eigenvectors via Real Schur decomposition
+   *
+   * Algorithm:
+   *   1. Compute Real Schur: A = Q * T * Q^T
+   *   2. For each 1×1 block (real eigenvalue λ): solve (T-λI)z=0 by
+   *      back-substitution, then v = Q*z (normalized).
+   *   3. For each 2×2 block (complex pair σ±iω): solve complex back-subst,
+   *      store Re and Im parts separately.
+   *
+   * @return EigenDecomposition: eigenvalues + real/imag parts of eigenvectors
+   *         Column i of vectors_real/vectors_imag = Re/Im of eigenvector i.
+   *         For real eigenvalues: vectors_imag column i = zeros.
+   *         For complex pair (i, i+1): col i+1 = conjugate of col i.
+   */
+  struct EigenDecomposition;
+  EigenDecomposition eigenvectors() const;
+
+  // ================================================================
+  //  Schur Reordering
+  // ================================================================
+
+  /**
+   * @brief Reorder Real Schur decomposition so "selected" blocks come first
+   *
+   * Uses adjacent-swap bubble sort on Schur blocks (1×1 or 2×2).
+   * Each swap solves a small Sylvester equation to maintain A = Q*T*Q^T.
+   *
+   * @param sr     Input Schur decomposition from schur()
+   * @param select Predicate: return true for eigenvalues to move to top
+   *               CARE: [](auto z){ return z.real() < 0; }
+   *               DARE: [](auto z){ return std::abs(z) < 1.0; }
+   * @return Reordered {T_new, Q_new} with selected blocks in top-left
+   */
+  static SchurResult schur_reorder(
+      const SchurResult &sr,
+      std::function<bool(std::complex<double>)> select);
+
+  // ================================================================
   //  String Representation
   // ================================================================
 
@@ -890,7 +958,24 @@ struct Matrix::HessenbergResult {
 
 struct Matrix::SchurResult {
   Matrix T; // Quasi-upper-triangular
-  Matrix Q; // Orthogonal
+  Matrix Q; // Orthogonal: A = Q * T * Q^T
+};
+
+struct Matrix::EigenDecomposition {
+  std::vector<std::complex<double>> values;
+  // Column i of vectors_real/vectors_imag = Re/Im of eigenvector i
+  // For real eigenvalue:   vectors_imag[:,i] = zero vector
+  // For complex pair (i, i+1):
+  //   eigenvector i   = vectors_real[:,i] + j * vectors_imag[:,i]
+  //   eigenvector i+1 = vectors_real[:,i] - j * vectors_imag[:,i]
+  Matrix vectors_real;
+  Matrix vectors_imag;
+};
+
+struct Matrix::SVDResult {
+  Matrix U; // Left singular vectors
+  Matrix S; // Diagonal matrix of singular values
+  Matrix V; // Right singular vectors
 };
 
 // ================================================================
@@ -1257,8 +1342,777 @@ inline Matrix::SchurResult Matrix::schur() const {
   return {H, Q};
 }
 
+// ----------------------------------------------------------------
+//  eigenvectors() — via Real Schur decomposition
+// ----------------------------------------------------------------
+
+inline Matrix::EigenDecomposition Matrix::eigenvectors() const {
+  if (rows != cols)
+    throw std::runtime_error("eigenvectors() requires square matrix");
+  size_t n = rows;
+
+  if (n == 0) return {{}, Matrix(), Matrix()};
+  if (n == 1) {
+    EigenDecomposition ed;
+    ed.values = {std::complex<double>(data[0][0], 0.0)};
+    ed.vectors_real = Matrix::eye(1);
+    ed.vectors_imag = Matrix::zeros(1, 1);
+    return ed;
+  }
+
+  // --- Step 1: Real Schur decomposition A = Q * T * Q^T ---
+  auto sr = schur();
+  const Matrix &T = sr.T;
+  const Matrix &Q = sr.Q;
+
+  const double eps = 1e-12;
+
+  EigenDecomposition ed;
+  ed.values.reserve(n);
+  ed.vectors_real = Matrix::zeros(n, n);
+  ed.vectors_imag = Matrix::zeros(n, n);
+
+  // --- Step 2: Scan T diagonal to identify 1×1 and 2×2 blocks ---
+  int col = 0; // output column index
+  for (int i = 0; i < static_cast<int>(n); ) {
+
+    // Determine block size at position i
+    bool is_2x2 = (i + 1 < static_cast<int>(n)) &&
+                  (std::abs(T(i + 1, i)) >
+                   eps * (std::abs(T(i, i)) + std::abs(T(i + 1, i + 1))));
+
+    if (!is_2x2) {
+      // ─── 1×1 block: real eigenvalue λ = T[i,i] ──────────────────
+      double lam = T(i, i);
+      ed.values.push_back(std::complex<double>(lam, 0.0));
+
+      // Solve (T - λI)z = 0 by back-substitution
+      // Free variable: z[i] = 1, back-solve rows i-1 … 0
+      std::vector<double> z(n, 0.0);
+      z[i] = 1.0;
+
+      for (int k = i - 1; k >= 0; --k) {
+        double sum = 0.0;
+        for (int j = k + 1; j <= i; ++j)
+          sum += T(k, j) * z[j];
+        double denom = T(k, k) - lam;
+        z[k] = (std::abs(denom) > eps) ? (-sum / denom) : 0.0;
+      }
+
+      // Normalize z
+      double znorm = 0.0;
+      for (double v : z) znorm += v * v;
+      znorm = std::sqrt(znorm);
+      if (znorm < 1e-300) znorm = 1.0;
+      for (double &v : z) v /= znorm;
+
+      // Eigenvector v = Q * z
+      for (size_t r = 0; r < n; ++r) {
+        double val = 0.0;
+        for (size_t s = 0; s < n; ++s)
+          val += Q(r, s) * z[s];
+        ed.vectors_real(r, col) = val;
+        ed.vectors_imag(r, col) = 0.0;
+      }
+
+      ++col;
+      ++i;
+
+    } else {
+      // ─── 2×2 block: may have real or complex eigenvalues ─────────
+      double a = T(i, i),     b = T(i, i + 1);
+      double c = T(i + 1, i), d = T(i + 1, i + 1);
+
+      auto lam_pair = eigenvalues_2x2_block_(a, b, c, d);
+      std::complex<double> lam1 = lam_pair.first;
+      std::complex<double> lam2 = lam_pair.second;
+      ed.values.push_back(lam1);
+      ed.values.push_back(lam2);
+
+      if (lam1.imag() == 0.0) {
+        // ── Sub-case: real eigenvalues from 2×2 block ────────────────
+        // Compute 2 separate real eigenvectors via back-substitution
+        for (int ev = 0; ev < 2; ++ev) {
+          double lam = (ev == 0) ? lam1.real() : lam2.real();
+
+          // For 2×2 block [[a,b],[c,d]] at positions (i, i+1):
+          // Null vector of [a-λ, b; c, d-λ]: free in row with larger pivot
+          double r1 = std::abs(a - lam), r2 = std::abs(c);
+          std::vector<double> z(n, 0.0);
+
+          if (r1 > eps || r2 > eps) {
+            // Use row 0 of block: (a-λ)*z_i + b*z_{i+1} = 0
+            // Free: z_{i+1} = 1 if |b| > eps, else z_i = 1
+            if (std::abs(b) > eps) {
+              z[i + 1] = 1.0;
+              z[i]     = -b / (a - lam + 1e-300 * (std::abs(a - lam) < 1e-300));
+              if (std::abs(a - lam) > eps)
+                z[i] = -b / (a - lam);
+              else
+                z[i] = 0.0; // degenerate
+            } else if (std::abs(a - lam) > eps) {
+              z[i]     = 1.0;
+              z[i + 1] = 0.0;
+            } else {
+              z[i + ev] = 1.0; // last resort
+            }
+          } else {
+            z[i] = (ev == 0) ? 1.0 : 0.0;
+            z[i + 1] = (ev == 0) ? 0.0 : 1.0;
+          }
+
+          // Back-substitute rows above the block
+          for (int k = i - 1; k >= 0; --k) {
+            double sum = 0.0;
+            for (int j = k + 1; j <= i + 1; ++j)
+              sum += T(k, j) * z[j];
+            double denom = T(k, k) - lam;
+            z[k] = (std::abs(denom) > eps) ? (-sum / denom) : 0.0;
+          }
+
+          // Normalize
+          double znorm = 0.0;
+          for (double v : z) znorm += v * v;
+          znorm = std::sqrt(znorm);
+          if (znorm < 1e-300) znorm = 1.0;
+          for (double &v : z) v /= znorm;
+
+          // Eigenvector v = Q * z
+          for (size_t r = 0; r < n; ++r) {
+            double val = 0.0;
+            for (size_t s = 0; s < n; ++s)
+              val += Q(r, s) * z[s];
+            ed.vectors_real(r, col) = val;
+            ed.vectors_imag(r, col) = 0.0;
+          }
+          ++col;
+        }
+
+      } else {
+        // ── Sub-case: complex conjugate pair σ ± iω ──────────────────
+        std::complex<double> lam = lam1; // σ + iω
+
+        // Within the 2×2 block, second component:
+        //   row 0: (a-λ)*z_i + b*z_{i+1} = 0  → z_{i+1} = (λ-a)/b
+        std::complex<double> z2;
+        if (std::abs(b) > eps)
+          z2 = (lam - a) / b;
+        else if (std::abs(c) > eps)
+          z2 = std::complex<double>((d - lam).real(), -(d - lam).imag()) /
+               (std::abs(c) * std::abs(c)) * std::conj(std::complex<double>(0, 0) - (lam - d));
+          // simpler: use column 1 of block
+        else
+          z2 = std::complex<double>(0.0, 1.0); // fallback
+
+        // Rebuild z2 more robustly
+        if (std::abs(b) > eps)
+          z2 = (lam - a) / b;
+        else
+          z2 = std::complex<double>(1.0, 0.0); // use z_i as free instead
+
+        std::vector<std::complex<double>> z_c(n, std::complex<double>(0.0));
+        z_c[i]     = std::complex<double>(1.0, 0.0);
+        z_c[i + 1] = z2;
+
+        // Back-substitute rows above the block
+        // Note: T is quasi-upper-triangular, so when stepping through rows
+        // above, we may encounter 2×2 blocks — handle them as 2×2 complex systems
+        int k = i - 1;
+        while (k >= 0) {
+          // Check if k is the bottom of a 2×2 block above
+          bool in_upper_2x2 = (k > 0) &&
+              (std::abs(T(k, k-1)) > eps * (std::abs(T(k-1,k-1)) + std::abs(T(k,k))));
+          int kstart = in_upper_2x2 ? k - 1 : k;
+          int ksize  = in_upper_2x2 ? 2 : 1;
+
+          if (ksize == 1) {
+            std::complex<double> sum(0.0, 0.0);
+            for (int j = k + 1; j < static_cast<int>(n); ++j)
+              sum += T(k, j) * z_c[j];
+            std::complex<double> denom(T(k, k) - lam.real(), -lam.imag());
+            z_c[k] = (std::abs(denom) > eps) ? (-sum / denom)
+                                              : std::complex<double>(0.0, 0.0);
+            k -= 1;
+          } else {
+            // 2×2 sub-system: solve
+            // [ T[k-1,k-1]-λ   T[k-1,k]   ] [z[k-1]]   [rhs0]
+            // [ T[k,  k-1]     T[k,k]  -λ ] [z[k]  ] = [rhs1]
+            std::complex<double> rhs0(0.0, 0.0), rhs1(0.0, 0.0);
+            for (int j = k + 1; j < static_cast<int>(n); ++j) {
+              rhs0 -= T(k-1, j) * z_c[j];
+              rhs1 -= T(k,   j) * z_c[j];
+            }
+            std::complex<double> A00(T(k-1,k-1) - lam.real(), -lam.imag());
+            std::complex<double> A01(T(k-1,k),  0.0);
+            std::complex<double> A10(T(k,  k-1),0.0);
+            std::complex<double> A11(T(k,k) - lam.real(), -lam.imag());
+            std::complex<double> det2 = A00*A11 - A01*A10;
+            if (std::abs(det2) > eps * eps) {
+              z_c[k-1] = ( A11*rhs0 - A01*rhs1) / det2;
+              z_c[k]   = (-A10*rhs0 + A00*rhs1) / det2;
+            } else {
+              z_c[k-1] = std::complex<double>(0.0, 0.0);
+              z_c[k]   = std::complex<double>(0.0, 0.0);
+            }
+            k -= 2;
+          }
+        }
+
+        // Normalize
+        double znorm = 0.0;
+        for (const auto &v : z_c) znorm += std::norm(v);
+        znorm = std::sqrt(znorm);
+        if (znorm < 1e-300) znorm = 1.0;
+        for (auto &v : z_c) v /= znorm;
+
+        // Store: v for lam1 in col, conjugate (for lam2) in col+1
+        for (size_t r = 0; r < n; ++r) {
+          std::complex<double> val(0.0, 0.0);
+          for (size_t s = 0; s < n; ++s)
+            val += Q(r, s) * z_c[s];
+          ed.vectors_real(r, col)     =  val.real();
+          ed.vectors_imag(r, col)     =  val.imag();
+          ed.vectors_real(r, col + 1) =  val.real();
+          ed.vectors_imag(r, col + 1) = -val.imag();
+        }
+        col += 2;
+      }
+
+      i += 2;
+    }
+  }
+
+  return ed;
+}
+
+// ----------------------------------------------------------------
+//  schur_reorder() — bubble-sort Schur blocks by selector predicate
+// ----------------------------------------------------------------
+
+inline Matrix::SchurResult Matrix::schur_reorder(
+    const SchurResult &sr,
+    std::function<bool(std::complex<double>)> select) {
+
+  Matrix T = sr.T;
+  Matrix Q = sr.Q;
+  size_t n = T.rows;
+  const double eps = 1e-12;
+
+  // Helper: determine block size at position i.
+  // A sub-diagonal entry T(i+1,i) is considered "structural" (part of a 2×2
+  // block) only if it is significantly larger than rounding noise.
+  // LAPACK uses:  tol = ulp * max(|T(i,i)|, |T(i+1,i+1)|)
+  // where ulp = machine epsilon.  But QR deflation can leave sub-diagonal
+  // residuals as large as O(eps^{1/2} * ||T||), so we use a stronger floor:
+  //   tol = sqrt(eps) * ||T||_F  (conservative: catches noise up to ~1e-8 for
+  //                                ||T|| ~ 10, which covers the Hamiltonian case)
+  const double T_frob = T.norm();    // Frobenius norm
+  const double sqrteps = std::sqrt(eps);
+  auto block_size = [&](int i) -> int {
+    if (i + 1 >= static_cast<int>(n)) return 1;
+    double tol = sqrteps * T_frob;
+    return (std::abs(T(i + 1, i)) > tol) ? 2 : 1;
+  };
+
+  // Helper: eigenvalue(s) of block starting at i
+  // For 2×2 block with complex pair, returns the one with Im > 0.
+  // For 2×2 block with real eigenvalues, returns the larger-magnitude one.
+  auto block_eig = [&](int i) -> std::complex<double> {
+    if (block_size(i) == 1)
+      return std::complex<double>(T(i, i), 0.0);
+    auto e_pair = eigenvalues_2x2_block_(
+        T(i, i), T(i, i+1), T(i+1, i), T(i+1, i+1));
+    std::complex<double> e1 = e_pair.first;
+    std::complex<double> e2 = e_pair.second;
+    // Complex pair: return the one with Im > 0 (represents the whole block)
+    if (std::abs(e1.imag()) > eps)
+      return (e1.imag() >= 0) ? e1 : e2;
+    // Real eigenvalues: return the one with larger absolute value as representative
+    return (std::abs(e1.real()) >= std::abs(e2.real())) ? e1 : e2;
+  };
+
+  // Helper: check if a 2×2 block has real eigenvalues (discriminant ≥ 0)
+  auto block_is_real_pair = [&](int i) -> bool {
+    if (block_size(i) != 2) return false;
+    double a=T(i,i), b=T(i,i+1), c=T(i+1,i), d=T(i+1,i+1);
+    double disc = (a-d)*(a-d) + 4.0*b*c;
+    return disc >= 0.0;
+  };
+
+  // Helper: split a 2×2 block with real eigenvalues into two 1×1 blocks
+  // via a Givens rotation that diagonalizes the block.
+  // Post-condition: T(i+1,i) ≈ 0, T is still quasi-upper-triangular.
+  auto split_real_2x2_block = [&](int i) {
+    double a=T(i,i), b=T(i,i+1), c=T(i+1,i), d=T(i+1,i+1);
+    double disc = (a-d)*(a-d) + 4.0*b*c;
+    if (disc < 0.0) return;  // complex pair, nothing to split
+
+    // Eigenvalues of the 2×2 block
+    double sqrtDisc = std::sqrt(disc);
+    double lam1 = ((a+d) + sqrtDisc) / 2.0;
+    double lam2 = ((a+d) - sqrtDisc) / 2.0;
+    // Put the one selected first (or larger-magnitude first)
+    // We just need to find a Givens rotation Z s.t. Z^T * [[a,b],[c,d]] * Z is triangular
+    // Use the eigenvector of the 2×2 block for lam1:
+    //   (a - lam1)*v0 + b*v1 = 0  →  v = [b, lam1-a]  (if b≠0)
+    //   or v = [lam1-d, c]  (if c≠0)
+    double gx, gy;
+    if (std::abs(b) > std::abs(c)) {
+      gx = b;  gy = lam1 - a;
+    } else if (std::abs(c) > eps) {
+      gx = lam1 - d;  gy = c;
+    } else {
+      return;  // already diagonal
+    }
+    double norm_g = std::sqrt(gx*gx + gy*gy);
+    if (norm_g < eps) return;
+    gx /= norm_g;  gy /= norm_g;
+
+    // Build 2×2 Givens: Z = [gx, -gy; gy, gx]
+    // Apply similarity: 2×2 sub-block → Z^T * sub * Z
+    // Then apply globally to T and Q
+    int sz = 2;
+    Matrix Z_loc(2, 2);
+    Z_loc(0,0)= gx; Z_loc(0,1)=-gy;
+    Z_loc(1,0)= gy; Z_loc(1,1)= gx;
+
+    // Update T rows
+    Matrix Trows(2, static_cast<int>(n));
+    for (int r=0;r<2;++r) for(size_t c=0;c<n;++c) Trows(r,c)=T(i+r,c);
+    Matrix Trows_new = Z_loc.T() * Trows;
+    for (int r=0;r<2;++r) for(size_t c=0;c<n;++c) T(i+r,c)=Trows_new(r,c);
+
+    // Update T cols
+    Matrix Tcols(static_cast<int>(n), 2);
+    for(size_t r=0;r<n;++r) for(int c=0;c<2;++c) Tcols(r,c)=T(r,i+c);
+    Matrix Tcols_new = Tcols * Z_loc;
+    for(size_t r=0;r<n;++r) for(int c=0;c<2;++c) T(r,i+c)=Tcols_new(r,c);
+
+    // Update Q cols
+    Matrix Qcols(static_cast<int>(n), 2);
+    for(size_t r=0;r<n;++r) for(int c=0;c<2;++c) Qcols(r,c)=Q(r,i+c);
+    Matrix Qcols_new = Qcols * Z_loc;
+    for(size_t r=0;r<n;++r) for(int c=0;c<2;++c) Q(r,i+c)=Qcols_new(r,c);
+
+    // Zero out the sub-diagonal element
+    const double tol_zero = eps * T.normInf();
+    if (std::abs(T(i+1,i)) < tol_zero) T(i+1,i) = 0.0;
+  };
+
+  // ── Local helper: apply sz×sz orthogonal Z at position pos ──────
+  // T[pos:pos+sz, :]  ← Z^T * T[pos:pos+sz, :]
+  // T[:, pos:pos+sz]  ← T[:, pos:pos+sz] * Z
+  // Q[:, pos:pos+sz]  ← Q[:, pos:pos+sz] * Z
+  auto apply_local_Z = [&](const Matrix& Z, int pos, int sz) {
+    {
+      Matrix Trows(sz, static_cast<int>(n));
+      for (int r=0;r<sz;++r) for(size_t c=0;c<n;++c) Trows(r,c)=T(pos+r,c);
+      Matrix Tnew = Z.T()*Trows;
+      for (int r=0;r<sz;++r) for(size_t c=0;c<n;++c) T(pos+r,c)=Tnew(r,c);
+    }
+    {
+      Matrix Tcols(static_cast<int>(n), sz);
+      for(size_t r=0;r<n;++r) for(int c=0;c<sz;++c) Tcols(r,c)=T(r,pos+c);
+      Matrix Tnew = Tcols*Z;
+      for(size_t r=0;r<n;++r) for(int c=0;c<sz;++c) T(r,pos+c)=Tnew(r,c);
+    }
+    {
+      Matrix Qcols(static_cast<int>(n), sz);
+      for(size_t r=0;r<n;++r) for(int c=0;c<sz;++c) Qcols(r,c)=Q(r,pos+c);
+      Matrix Qnew = Qcols*Z;
+      for(size_t r=0;r<n;++r) for(int c=0;c<sz;++c) Q(r,pos+c)=Qnew(r,c);
+    }
+    // Zero strict sub-diagonal elements in the affected block
+    double tol_zero = eps * T.normInf();
+    for (int r=pos+1;r<pos+sz;++r)
+      for (int c=pos;c<r-1&&c<pos+sz;++c)
+        if (std::abs(T(r,c)) < tol_zero*100) T(r,c)=0.0;
+  };
+
+  // ── Re-Schur a local sz×sz block at position pos ─────────────────
+  // Restores quasi-upper-triangular form after a swap operation.
+  auto re_schur_local = [&](int pos, int sz) {
+    Matrix Tsz(sz,sz,0.0);
+    for(int r=0;r<sz;++r) for(int c=0;c<sz;++c) Tsz(r,c)=T(pos+r,pos+c);
+    auto sr_loc = Tsz.schur();
+    apply_local_Z(sr_loc.Q, pos, sz);
+  };
+
+  // ── 2×2 Sylvester for swap(2,2): T22*X - X*T11 = C ──────────────
+  // All matrices are 2×2. Solved via 4×4 vec-form (Kronecker product).
+  auto sylv2x2_local = [&](const Matrix& T22l, const Matrix& T11l,
+                            const Matrix& C) -> Matrix {
+    double a=T22l(0,0),b=T22l(0,1),cv=T22l(1,0),d=T22l(1,1);
+    double p=T11l(0,0),q=T11l(0,1),r=T11l(1,0),s=T11l(1,1);
+    // (I⊗T22 - T11^T⊗I) * vec(X) = vec(C)  — col-major vec
+    Matrix M(4,4,0.0);
+    M(0,0)=a-p; M(0,1)=b;   M(0,2)=-r;  M(0,3)=0;
+    M(1,0)=cv;  M(1,1)=d-p; M(1,2)=0;   M(1,3)=-r;
+    M(2,0)=-q;  M(2,1)=0;   M(2,2)=a-s; M(2,3)=b;
+    M(3,0)=0;   M(3,1)=-q;  M(3,2)=cv;  M(3,3)=d-s;
+    Matrix rhs(4,1,0.0);
+    rhs(0,0)=C(0,0); rhs(1,0)=C(1,0); rhs(2,0)=C(0,1); rhs(3,0)=C(1,1);
+    Matrix sol = M.solve(rhs);
+    Matrix X(2,2,0.0);
+    X(0,0)=sol(0,0); X(1,0)=sol(1,0); X(0,1)=sol(2,0); X(1,1)=sol(3,0);
+    return X;
+  };
+
+  // ── swap_blocks: LAPACK dtrexc — correct for all (si,sj) ─────────
+  //
+  // Goal: Z^T * [T11 T12] * Z = [T22  * ]
+  //             [0   T22]       [0    T11]
+  //
+  // Cases (si,sj):
+  //   (1,1): Givens rotation via scalar x = T12/(T22-T11)
+  //   (1,2): Solve (T22-t11*I)*Xv = T12^T, then QR(W)
+  //   (2,1): Solve (t22*I-T11)^T*Xv = T12^T, then QR(W)
+  //   (2,2): Solve 2×2 Sylvester T22*X-X*T11=T12, QR(W), then re-Schur
+  //   All cases with T12≈0: block permutation, then re-Schur if sz>2
+  //
+  // Post-condition: T remains quasi-upper-triangular; A = Q*T*Q^T preserved.
+  auto swap_blocks = [&](int pos, int si, int sj) {
+    int sz = si + sj;
+
+    Matrix T11(si,si,0.0), T12(si,sj,0.0), T22(sj,sj,0.0);
+    for(int r=0;r<si;++r) for(int c=0;c<si;++c) T11(r,c)=T(pos+r,   pos+c);
+    for(int r=0;r<si;++r) for(int c=0;c<sj;++c) T12(r,c)=T(pos+r,   pos+si+c);
+    for(int r=0;r<sj;++r) for(int c=0;c<sj;++c) T22(r,c)=T(pos+si+r,pos+si+c);
+
+    double t12n  = T12.norm();
+    double tol_t = eps * (T11.norm() + T22.norm() + 1.0);
+
+    if (t12n <= tol_t) {
+      // Decoupled blocks: plain permutation [0 I_sj; I_si 0]
+      Matrix P(sz,sz,0.0);
+      for(int r=0;r<sj;++r) P(r,    si+r) = 1.0;
+      for(int r=0;r<si;++r) P(sj+r, r   ) = 1.0;
+      apply_local_Z(P, pos, sz);
+      if (sz > 2) re_schur_local(pos, sz);
+
+    } else if (si == 1 && sj == 1) {
+      // Exchange two 1×1 blocks.
+      // Build Z = [v0, -v1; v1, v0] where [v0;v1] is the unit eigenvector
+      // of T22 (the block we want to move to top-left) in the 2×2 sub-system.
+      //
+      // T_sub = [T11, T12; 0, T22] = [a, b; 0, d]
+      // Eigenvector of d: (T_sub - d*I)*v = 0 → v = [b/(d-a); 1] (normalized)
+      // Z with first col = v guarantees Z^T*T_sub*Z is upper triangular
+      // with d on top (i.e., sub-diagonal element T_out(1,0) = 0 exactly).
+      double a = T11(0,0), b = T12(0,0), d = T22(0,0);
+      double denom = d - a;
+      double v0, v1;
+      if (std::abs(denom) > eps) {
+        v0 = b / denom;  v1 = 1.0;
+      } else {
+        // Eigenvalues are equal — blocks already equivalent, use identity
+        v0 = 1.0;  v1 = 0.0;
+      }
+      double nrm = std::sqrt(v0*v0 + v1*v1);
+      if (nrm > eps) { v0 /= nrm;  v1 /= nrm; }
+      // Z = [v0 -v1; v1 v0]
+      Matrix Z2(2,2); Z2(0,0)=v0; Z2(0,1)=-v1; Z2(1,0)=v1; Z2(1,1)=v0;
+      apply_local_Z(Z2, pos, sz);
+
+    } else if (si == 1 && sj == 2) {
+      // Solve (T22 - t11*I)*Xv = [T12(0,0); T12(0,1)], Xv is 2×1
+      double t11v = T11(0,0);
+      Matrix A2 = T22 - eye(2)*t11v;
+      Matrix rhs(2,1,0.0); rhs(0,0)=T12(0,0); rhs(1,0)=T12(0,1);
+      Matrix Xv = A2.solve(rhs);
+      Matrix W = eye(3);
+      W(2,0) = -Xv(0,0); W(2,1) = -Xv(1,0);
+      apply_local_Z(W.qr().Q, pos, sz);
+      re_schur_local(pos, sz);
+      // Inline fixup: if re_schur placed unstable first, swap within the 3×3.
+      // This avoids oscillation when cppplot::schur() has a fixed ordering preference.
+      for (int fp = 0; fp < sz; ++fp) {
+        int mi = pos, changed = 0;
+        while (mi < pos + sz) {
+          int msi = block_size(mi), mj = mi + msi;
+          if (mj >= pos + sz) break;
+          int msj = block_size(mj);
+          if (!select(block_eig(mi)) && select(block_eig(mj))) {
+            int mszz = msi + msj;
+            if (msi==1 && msj==1) {
+              double ma=T(mi,mi),mb=T(mi,mj),md=T(mj,mj);
+              double den=md-ma,mv0=fabs(den)>eps?mb/den:1.0,mv1=fabs(den)>eps?1.0:0.0;
+              double mn=std::sqrt(mv0*mv0+mv1*mv1); if(mn>eps){mv0/=mn;mv1/=mn;}
+              Matrix mZ2(2,2);mZ2(0,0)=mv0;mZ2(0,1)=-mv1;mZ2(1,0)=mv1;mZ2(1,1)=mv0;
+              apply_local_Z(mZ2,mi,mszz);
+            } else if (msi==1 && msj==2) {
+              Matrix mT22m(2,2,0.0);for(int r=0;r<2;++r)for(int c=0;c<2;++c)mT22m(r,c)=T(mj+r,mj+c);
+              Matrix mA2m=mT22m-eye(2)*T(mi,mi);
+              Matrix mr2(2,1,0.0);mr2(0,0)=T(mi,mj);mr2(1,0)=T(mi,mj+1);
+              Matrix mXv2=mA2m.solve(mr2);
+              Matrix mW2=eye(3);mW2(2,0)=-mXv2(0,0);mW2(2,1)=-mXv2(1,0);
+              apply_local_Z(mW2.qr().Q,mi,mszz);
+            } else if (msi==2 && msj==1) {
+              Matrix mT11m(2,2,0.0);for(int r=0;r<2;++r)for(int c=0;c<2;++c)mT11m(r,c)=T(mi+r,mi+c);
+              Matrix mA2Tm=(eye(2)*T(mj,mj)-mT11m).T();
+              Matrix mr2(2,1,0.0);mr2(0,0)=T(mi,mj);mr2(1,0)=T(mi+1,mj);
+              Matrix mXv2=mA2Tm.solve(mr2);
+              Matrix mW2=eye(3);mW2(1,0)=-mXv2(0,0);mW2(2,0)=-mXv2(1,0);
+              apply_local_Z(mW2.qr().Q,mi,mszz);
+            }
+            changed = 1;
+            if (block_is_real_pair(mi)) split_real_2x2_block(mi);
+            mi += block_size(mi);
+          } else { mi += msi; }
+        }
+        if (!changed) break;
+      }
+
+    } else if (si == 2 && sj == 1) {
+      // Solve (t22*I - T11)^T * Xv = [T12(0,0); T12(1,0)], Xv is 2×1
+      double t22v = T22(0,0);
+      Matrix A2T = (eye(2)*t22v - T11).T();
+      Matrix rhs(2,1,0.0); rhs(0,0)=T12(0,0); rhs(1,0)=T12(1,0);
+      Matrix Xv = A2T.solve(rhs);
+      Matrix W = eye(3);
+      W(1,0) = -Xv(0,0); W(2,0) = -Xv(1,0);
+      apply_local_Z(W.qr().Q, pos, sz);
+      re_schur_local(pos, sz);
+      // Same inline fixup for (2,1) case
+      for (int fp = 0; fp < sz; ++fp) {
+        int mi = pos, changed = 0;
+        while (mi < pos + sz) {
+          int msi = block_size(mi), mj = mi + msi;
+          if (mj >= pos + sz) break;
+          int msj = block_size(mj);
+          if (!select(block_eig(mi)) && select(block_eig(mj))) {
+            int mszz = msi + msj;
+            if (msi==1 && msj==1) {
+              double ma=T(mi,mi),mb=T(mi,mj),md=T(mj,mj);
+              double den=md-ma,mv0=fabs(den)>eps?mb/den:1.0,mv1=fabs(den)>eps?1.0:0.0;
+              double mn=std::sqrt(mv0*mv0+mv1*mv1); if(mn>eps){mv0/=mn;mv1/=mn;}
+              Matrix mZ2(2,2);mZ2(0,0)=mv0;mZ2(0,1)=-mv1;mZ2(1,0)=mv1;mZ2(1,1)=mv0;
+              apply_local_Z(mZ2,mi,mszz);
+            } else if (msi==1 && msj==2) {
+              Matrix mT22m(2,2,0.0);for(int r=0;r<2;++r)for(int c=0;c<2;++c)mT22m(r,c)=T(mj+r,mj+c);
+              Matrix mA2m=mT22m-eye(2)*T(mi,mi);
+              Matrix mr2(2,1,0.0);mr2(0,0)=T(mi,mj);mr2(1,0)=T(mi,mj+1);
+              Matrix mXv2=mA2m.solve(mr2);
+              Matrix mW2=eye(3);mW2(2,0)=-mXv2(0,0);mW2(2,1)=-mXv2(1,0);
+              apply_local_Z(mW2.qr().Q,mi,mszz);
+            } else if (msi==2 && msj==1) {
+              Matrix mT11m(2,2,0.0);for(int r=0;r<2;++r)for(int c=0;c<2;++c)mT11m(r,c)=T(mi+r,mi+c);
+              Matrix mA2Tm=(eye(2)*T(mj,mj)-mT11m).T();
+              Matrix mr2(2,1,0.0);mr2(0,0)=T(mi,mj);mr2(1,0)=T(mi+1,mj);
+              Matrix mXv2=mA2Tm.solve(mr2);
+              Matrix mW2=eye(3);mW2(1,0)=-mXv2(0,0);mW2(2,0)=-mXv2(1,0);
+              apply_local_Z(mW2.qr().Q,mi,mszz);
+            }
+            changed = 1;
+            if (block_is_real_pair(mi)) split_real_2x2_block(mi);
+            mi += block_size(mi);
+          } else { mi += msi; }
+        }
+        if (!changed) break;
+      }
+
+    } else { // (2,2): port of LAPACK dtgex2 via Givens rotations
+      // LAPACK dtgex2 exchanges two adjacent 2×2 blocks in real Schur form
+      // by applying 4 Givens rotations (2 from left, 2 from right).
+      //
+      // Reference: LAPACK Working Note 155, Granat & Kågström (2009)
+      // "Parallel Eigenvalue Reordering in Real Schur Forms"
+      //
+      // The approach: solve a 4×4 linear system for a unit-norm vector d,
+      // then build orthogonal Z from d via Gram-Schmidt (4 Givens rotations).
+      // The resulting Z satisfies Z^T * T_sub * Z with the blocks exchanged.
+
+      // Pack the 4×4 block
+      double t[4][4];
+      for(int r=0;r<4;++r) for(int c=0;c<4;++c) t[r][c]=T(pos+r,pos+c);
+
+      // Build the 4×4 system from Bai-Demmel 1993, eq. (2.8):
+      // (T22 ⊗ I2 - I2 ⊗ T11) * vec(X) = vec(T12)
+      // i.e. the standard Sylvester equation T11*X - X*T22 = -T12
+      // Solve for X (2×2), then build Z from [X; I2] orthogonalized.
+
+      // Use sylvester: T11*X + X*(-T22) = -T12
+      // → X = sylvester(T11, -T22, -T12)
+      Matrix Y2(2,2,0.0);
+      bool ok = true;
+      try {
+        Y2 = Matrix::sylvester(T11, T22 * (-1.0), T12 * (-1.0));
+      } catch (...) { ok = false; }
+
+      if (!ok) {
+        // Fallback: permutation only (blocks degenerate/coincident eigenvalues)
+        Matrix P4(4,4,0.0);
+        P4(0,2)=P4(1,3)=P4(2,0)=P4(3,1)=1.0;
+        apply_local_Z(P4, pos, sz);
+        re_schur_local(pos, sz);
+      } else {
+        // Build candidate Z columns from [Y2; I2] (top block) and [-I2; Y2^T] (bottom)
+        // The 4 columns of Z_candidate:
+        //   col 0: [Y2(0,0); Y2(1,0); 1; 0]    col 1: [Y2(0,1); Y2(1,1); 0; 1]
+        //   col 2: [-1; 0; Y2(0,0); Y2(0,1)]   col 3: [0; -1; Y2(1,0); Y2(1,1)]
+        // Orthogonalize via Gram-Schmidt (4 Givens rotations per pair):
+        Matrix Zcand(4,4,0.0);
+        Zcand(0,0)=Y2(0,0); Zcand(1,0)=Y2(1,0); Zcand(2,0)=1; Zcand(3,0)=0;
+        Zcand(0,1)=Y2(0,1); Zcand(1,1)=Y2(1,1); Zcand(2,1)=0; Zcand(3,1)=1;
+        Zcand(0,2)=-1; Zcand(1,2)=0; Zcand(2,2)=Y2(0,0); Zcand(3,2)=Y2(1,0);
+        Zcand(0,3)=0; Zcand(1,3)=-1; Zcand(2,3)=Y2(0,1); Zcand(3,3)=Y2(1,1);
+
+        // Orthogonalize Zcand via QR
+        auto qrZ = Zcand.qr();
+        Matrix Z4 = qrZ.Q;
+
+        // Apply Z4 as local similarity: T and Q at position pos
+        apply_local_Z(Z4, pos, sz);
+
+        // Re-Schur the 4×4 block to restore quasi-triangular form.
+        re_schur_local(pos, sz);
+
+        // After re-Schur, split any real 2×2 blocks in the entire T
+        // (the similarity can affect off-diagonal coupling, regenerating
+        // real blocks outside the swap position).
+        {
+          int i = 0;
+          while (i < static_cast<int>(n)) {
+            if (block_is_real_pair(i)) split_real_2x2_block(i);
+            i += block_size(i);
+          }
+        }
+
+        // Mini selector-aware sort within the 4×4 block to prevent oscillation.
+        // Without this, re_schur_local may place stable/unstable blocks in random
+        // order, causing the outer bubble-sort to oscillate indefinitely.
+        for (int mp = 0; mp < sz * sz; ++mp) {
+          bool msw = false;
+          int mi = pos;
+          while (mi < pos + sz) {
+            if (block_is_real_pair(mi)) split_real_2x2_block(mi);
+            int msi = block_size(mi);
+            int mj  = mi + msi;
+            if (mj >= pos + sz) break;
+            if (block_is_real_pair(mj)) split_real_2x2_block(mj);
+            int msj = block_size(mj);
+            bool mi_sel = select(block_eig(mi));
+            bool mj_sel = select(block_eig(mj));
+            if (!mi_sel && mj_sel) {
+              // Inline swap (no re_schur_local to avoid recursion/oscillation)
+              Matrix mT11(msi,msi,0.0),mT12(msi,msj,0.0),mT22(msj,msj,0.0);
+              for(int r=0;r<msi;++r) for(int c=0;c<msi;++c) mT11(r,c)=T(mi+r,mi+c);
+              for(int r=0;r<msi;++r) for(int c=0;c<msj;++c) mT12(r,c)=T(mi+r,mi+msi+c);
+              for(int r=0;r<msj;++r) for(int c=0;c<msj;++c) mT22(r,c)=T(mi+msi+r,mi+msi+c);
+              int mszz = msi + msj;
+              double mt12n = mT12.norm(), mtol = eps*(mT11.norm()+mT22.norm()+1.0);
+              if (mt12n <= mtol) {
+                Matrix mP(mszz,mszz,0.0);
+                for(int r=0;r<msj;++r) mP(r,msi+r)=1.0;
+                for(int r=0;r<msi;++r) mP(msj+r,r)=1.0;
+                apply_local_Z(mP, mi, mszz);
+              } else if (msi==1 && msj==1) {
+                double ma=mT11(0,0),mb=mT12(0,0),md=mT22(0,0);
+                double den=md-ma, mv0=(fabs(den)>eps)?mb/den:1.0, mv1=(fabs(den)>eps)?1.0:0.0;
+                double mn=std::sqrt(mv0*mv0+mv1*mv1); if(mn>eps){mv0/=mn;mv1/=mn;}
+                Matrix mZ2(2,2); mZ2(0,0)=mv0;mZ2(0,1)=-mv1;mZ2(1,0)=mv1;mZ2(1,1)=mv0;
+                apply_local_Z(mZ2, mi, mszz);
+              } else if (msi==1 && msj==2) {
+                Matrix mA2=mT22-eye(2)*mT11(0,0);
+                Matrix mr(2,1,0.0); mr(0,0)=mT12(0,0); mr(1,0)=mT12(0,1);
+                Matrix mXv=mA2.solve(mr);
+                Matrix mW=eye(3); mW(2,0)=-mXv(0,0); mW(2,1)=-mXv(1,0);
+                apply_local_Z(mW.qr().Q, mi, mszz);
+              } else if (msi==2 && msj==1) {
+                Matrix mA2T=(eye(2)*mT22(0,0)-mT11).T();
+                Matrix mr(2,1,0.0); mr(0,0)=mT12(0,0); mr(1,0)=mT12(1,0);
+                Matrix mXv=mA2T.solve(mr);
+                Matrix mW=eye(3); mW(1,0)=-mXv(0,0); mW(2,0)=-mXv(1,0);
+                apply_local_Z(mW.qr().Q, mi, mszz);
+              } else if (msi==2 && msj==2) {
+                // (2,2) mini-swap: use Zcand QR approach (same as outer swap_blocks).
+                // Solve T11*Y - Y*T22 = -T12, build Zcand, apply, split (no re_schur).
+                Matrix mY2(2,2,0.0);
+                bool mok=true;
+                try { mY2=Matrix::sylvester(mT11,mT22*(-1.0),mT12*(-1.0)); }
+                catch(...){mok=false;}
+                if(mok){
+                  Matrix mZcand(4,4,0.0);
+                  mZcand(0,0)=mY2(0,0);mZcand(1,0)=mY2(1,0);mZcand(2,0)=1;mZcand(3,0)=0;
+                  mZcand(0,1)=mY2(0,1);mZcand(1,1)=mY2(1,1);mZcand(2,1)=0;mZcand(3,1)=1;
+                  mZcand(0,2)=-1;mZcand(1,2)=0;mZcand(2,2)=mY2(0,0);mZcand(3,2)=mY2(1,0);
+                  mZcand(0,3)=0;mZcand(1,3)=-1;mZcand(2,3)=mY2(0,1);mZcand(3,3)=mY2(1,1);
+                  apply_local_Z(mZcand.qr().Q, mi, mszz);
+                  // Split any real pairs created — do NOT call re_schur_local
+                  {int ii=mi; while(ii<mi+mszz){
+                    if(block_is_real_pair(ii))split_real_2x2_block(ii);ii+=block_size(ii);}}
+                } else {
+                  Matrix mP4(4,4,0.0);mP4(0,2)=mP4(1,3)=mP4(2,0)=mP4(3,1)=1.0;
+                  apply_local_Z(mP4,mi,mszz);
+                }
+              }
+              if (block_is_real_pair(mi)) split_real_2x2_block(mi);
+              mi += block_size(mi);
+              msw = true;
+            } else {
+              mi += msi;
+            }
+          }
+          if (!msw) break;
+        }
+      }
+    }
+  };  // ── end swap_blocks lambda ──────────────────────────────────────
+
+  // ── Bubble-sort over Schur blocks ─────────────────────────────────
+  const int maxPasses = static_cast<int>(n) * static_cast<int>(n) * static_cast<int>(n);
+  for (int pass = 0; pass < maxPasses; ++pass) {
+    // Split ALL real 2×2 blocks at start of each pass
+    {
+      int i = 0;
+      while (i < static_cast<int>(n)) {
+        if (block_is_real_pair(i)) split_real_2x2_block(i);
+        i += block_size(i);
+      }
+    }
+
+    bool swapped = false;
+    int i = 0;
+    while (i < static_cast<int>(n)) {
+      int si = block_size(i);
+      int j  = i + si;
+      if (j >= static_cast<int>(n)) break;
+      int sj = block_size(j);
+
+      bool i_sel = select(block_eig(i));
+      bool j_sel = select(block_eig(j));
+
+      if (!i_sel && j_sel) {
+        swap_blocks(i, si, sj);
+        swapped = true;
+        if (block_is_real_pair(i)) split_real_2x2_block(i);
+        i += block_size(i);
+      } else {
+        i += si;
+      }
+    }
+    if (!swapped) break;
+  }
+
+  return {T, Q};
+}
+
 inline Matrix Matrix::sylvester(const Matrix &A, const Matrix &B,
                                 const Matrix &C) {
+  // Bartels-Stewart algorithm — full support for 1×1 and 2×2 Schur blocks.
+  //
+  // Solves AX + XB = C.
+  //
+  // Steps:
+  //   1. A = Qa*Ta*Qa^T,  B = Qb*Tb*Qb^T  (real Schur decompositions)
+  //   2. Transform: Chat = Qa^T * C * Qb
+  //   3. Solve Ta*Y + Y*Tb = Chat  column-block by column-block
+  //      - sj=1 block: (Ta + tb_jj*I) * y_j = r_j          [m×m system]
+  //      - sj=2 block: block-2m×2m Kronecker system          [2m×2m system]
+  //   4. X = Qa * Y * Qb^T
+  //
+  // Handles complex eigenvalues in both A and B correctly.
+
   size_t m = A.rows, n = B.rows;
   if (A.rows != A.cols || B.rows != B.cols)
     throw std::runtime_error("sylvester: A and B must be square");
@@ -1267,32 +2121,239 @@ inline Matrix Matrix::sylvester(const Matrix &A, const Matrix &B,
 
   auto schurA = A.schur();
   auto schurB = B.schur();
-
-  Matrix C_hat = schurA.Q.T() * C * schurB.Q;
-  Matrix Y(m, n);
-
   const Matrix &Ta = schurA.T;
   const Matrix &Tb = schurB.T;
+  Matrix Chat = schurA.Q.T() * C * schurB.Q;
+  Matrix Y(m, n, 0.0);
 
-  for (int j = 0; j < static_cast<int>(n); ++j) {
-    std::vector<double> rhs(m);
-    for (size_t i = 0; i < m; ++i) {
-      rhs[i] = C_hat(i, j);
-      for (int k = 0; k < j; ++k)
-        rhs[i] -= Y(i, k) * Tb(k, j);
+  const double eps = 1e-12;
+
+  // Block size of Tb at column j
+  auto bsizeB = [&](int j) -> int {
+    if (j + 1 >= static_cast<int>(n)) return 1;
+    double tol = eps * (std::abs(Tb(j,j)) + std::abs(Tb(j+1,j+1)));
+    return (std::abs(Tb(j+1,j)) > tol) ? 2 : 1;
+  };
+
+  int j = 0;
+  while (j < static_cast<int>(n)) {
+    int sj = bsizeB(j);
+
+    // Build RHS block: R = Chat[:,j:j+sj] - Y[:,0:j] * Tb[0:j, j:j+sj]
+    Matrix R(m, sj, 0.0);
+    for (int p = 0; p < sj; ++p)
+      for (size_t i = 0; i < m; ++i) {
+        double val = Chat(i, j + p);
+        for (int k = 0; k < j; ++k)
+          val -= Y(i, k) * Tb(k, j + p);
+        R(i, p) = val;
+      }
+
+    if (sj == 1) {
+      // Solve (Ta + Tb(j,j)*I) * y = R[:,0]
+      Matrix Ashift = Ta + eye(m) * Tb(j, j);
+      Matrix rhs(m, 1);
+      for (size_t i = 0; i < m; ++i) rhs(i, 0) = R(i, 0);
+      Matrix yj = Ashift.solve(rhs);
+      for (size_t i = 0; i < m; ++i) Y(i, j) = yj(i, 0);
+
+    } else {
+      // sj == 2: Tb has a 2×2 block at (j,j).
+      //
+      // We need: Ta*Y0 + Y0*Tb(0,0) + Y1*Tb(1,0) = R0   [col j  of Ta*Y+Y*Tb=R]
+      //          Ta*Y1 + Y0*Tb(0,1) + Y1*Tb(1,1) = R1   [col j+1]
+      // where Y0 = Y[:,j], Y1 = Y[:,j+1]  (each is m×1 column vector).
+      //
+      // Coupling is via COLUMNS of Tb: col p of (Y*Tb) = sum_k Y[:,k]*Tb(k,p)
+      // So for the 2-block: col j   picks up Y0*Tb(j,j)   + Y1*Tb(j+1,j)
+      //                     col j+1 picks up Y0*Tb(j,j+1) + Y1*Tb(j+1,j+1)
+      //
+      // Rearranged as 2m×2m system [vec(Y0); vec(Y1)]:
+      // [Ta + Tb(j,j)*I,    Tb(j+1,j)*I  ] [Y0]   [R0]
+      // [Tb(j,j+1)*I,    Ta+Tb(j+1,j+1)*I] [Y1] = [R1]
+      double t00 = Tb(j,   j),   t10 = Tb(j+1, j);    // col j   of Tb
+      double t01 = Tb(j,   j+1), t11 = Tb(j+1, j+1);  // col j+1 of Tb
+
+      Matrix Asys(2*m, 2*m, 0.0);
+      for (size_t r = 0; r < m; ++r) {
+        for (size_t c = 0; c < m; ++c) {
+          Asys(r,     c    ) = Ta(r,c) + (r==c ? t00 : 0.0);  // top-left
+          Asys(m+r,   m+c  ) = Ta(r,c) + (r==c ? t11 : 0.0);  // bottom-right
+        }
+        Asys(r,   m+r) = t10;  // top-right:    Y1 contributes Tb(j+1,j) to col j
+        Asys(m+r, r  ) = t01;  // bottom-left:  Y0 contributes Tb(j,j+1) to col j+1
+      }
+
+      Matrix rhs(2*m, 1, 0.0);
+      for (size_t i = 0; i < m; ++i) {
+        rhs(i,   0) = R(i, 0);
+        rhs(m+i, 0) = R(i, 1);
+      }
+
+      Matrix sol = Asys.solve(rhs);
+      for (size_t i = 0; i < m; ++i) {
+        Y(i, j  ) = sol(i,   0);
+        Y(i, j+1) = sol(m+i, 0);
+      }
     }
 
-    Matrix Ashift = Ta + eye(m) * Tb(j, j);
-    Matrix rhsMat(m, 1);
-    for (size_t i = 0; i < m; ++i)
-      rhsMat(i, 0) = rhs[i];
-
-    Matrix yj = Ashift.solve(rhsMat);
-    for (size_t i = 0; i < m; ++i)
-      Y(i, j) = yj(i, 0);
+    j += sj;
   }
 
   return schurA.Q * Y * schurB.Q.T();
+}
+
+// ----------------------------------------------------------------
+//  SVD (One-sided Jacobi) & Pseudo-inverse
+// ----------------------------------------------------------------
+
+inline Matrix::SVDResult Matrix::svd() const {
+  // 1. Handle Wide matrices (m < n) by transposing
+  if (rows < cols) {
+    auto res = this->T().svd();
+    // A^T = U * S * V^T  =>  A = V * S * U^T
+    // For compact SVD, S is always a square diagonal matrix
+    return {res.V, res.S, res.U};
+  }
+
+  size_t m = rows, n = cols;
+  Matrix W = *this;
+  Matrix V = eye(n);
+  
+  const double eps = 1e-15;
+  const int max_sweeps = 30;
+  bool converged = false;
+
+  // 2. Jacobi sweeps to orthogonalize columns of W
+  for (int sweep = 0; sweep < max_sweeps; ++sweep) {
+    converged = true;
+    for (size_t j = 0; j < n - 1; ++j) {
+      for (size_t k = j + 1; k < n; ++k) {
+        double p = 0.0, q = 0.0, r = 0.0;
+        for (size_t i = 0; i < m; ++i) {
+          p += W(i, j) * W(i, k);
+          q += W(i, j) * W(i, j);
+          r += W(i, k) * W(i, k);
+        }
+
+        if (std::abs(p) > eps * std::sqrt(q * r)) {
+          converged = false;
+          double q_minus_r = q - r;
+          double t;
+          
+          if (std::abs(q_minus_r) < eps * std::max(q, r)) {
+            t = (p < 0) ? -1.0 : 1.0;
+          } else {
+            double theta = q_minus_r / (2.0 * p);
+            t = std::copysign(1.0 / (std::abs(theta) + std::sqrt(1.0 + theta * theta)), theta);
+          }
+          
+          double c = 1.0 / std::sqrt(1.0 + t * t);
+          double s = t * c;
+
+          for (size_t i = 0; i < m; ++i) {
+            double w_ij = W(i, j), w_ik = W(i, k);
+            W(i, j) = c * w_ij + s * w_ik;
+            W(i, k) = -s * w_ij + c * w_ik;
+          }
+          for (size_t i = 0; i < n; ++i) {
+            double v_ij = V(i, j), v_ik = V(i, k);
+            V(i, j) = c * v_ij + s * v_ik;
+            V(i, k) = -s * v_ij + c * v_ik;
+          }
+        }
+      }
+    }
+    if (converged) break;
+  }
+
+  Matrix U = Matrix::zeros(m, n);
+  Matrix S = Matrix::zeros(n, n);
+  std::vector<double> sigmas(n);
+
+  // 3. Extract singular values and normalize W to get U
+  for (size_t j = 0; j < n; ++j) {
+    double norm = 0.0;
+    for (size_t i = 0; i < m; ++i) norm += W(i, j) * W(i, j);
+    sigmas[j] = std::sqrt(norm);
+    
+    // Check if singular value is practically zero
+    if (sigmas[j] > eps * std::max(1.0, std::sqrt(static_cast<double>(m)))) {
+      for (size_t i = 0; i < m; ++i) U(i, j) = W(i, j) / sigmas[j];
+    } else {
+      sigmas[j] = 0.0; 
+      // Null space handled in step 4
+    }
+  }
+
+  // 4. Gram-Schmidt to invent orthogonal vectors for Null-space (Rank-deficient cases)
+  for (size_t j = 0; j < n; ++j) {
+    if (sigmas[j] == 0.0) {
+      // Try to project standard basis vectors until we find a non-zero orthogonal vector
+      for (size_t k = 0; k < m; ++k) {
+        std::vector<double> e(m, 0.0);
+        e[k] = 1.0;
+        
+        // Subtract projections of all previously validated columns
+        for (size_t c = 0; c < n; ++c) {
+          if (c == j) continue;
+          if (sigmas[c] > 0.0 || c < j) { 
+            double dot = 0.0;
+            for (size_t i = 0; i < m; ++i) dot += U(i, c) * e[i];
+            for (size_t i = 0; i < m; ++i) e[i] -= dot * U(i, c);
+          }
+        }
+        
+        double normE = 0.0;
+        for (size_t i = 0; i < m; ++i) normE += e[i] * e[i];
+        normE = std::sqrt(normE);
+        
+        if (normE > 1e-6) {
+          for (size_t i = 0; i < m; ++i) U(i, j) = e[i] / normE;
+          break; // Found our null-space basis vector!
+        }
+      }
+    }
+  }
+
+  // 5. Sort singular values in descending order
+  for (size_t j = 0; j < n - 1; ++j) {
+    for (size_t k = j + 1; k < n; ++k) {
+      if (sigmas[k] > sigmas[j]) {
+        std::swap(sigmas[j], sigmas[k]);
+        for (size_t i = 0; i < m; ++i) std::swap(U(i, j), U(i, k));
+        for (size_t i = 0; i < n; ++i) std::swap(V(i, j), V(i, k));
+      }
+    }
+  }
+
+  for (size_t j = 0; j < n; ++j) S(j, j) = sigmas[j];
+
+  return {U, S, V};
+}
+
+inline Matrix Matrix::pinv(double tol) const {
+  if (rows == 0 || cols == 0) return Matrix(cols, rows);
+  
+  auto svd_res = svd();
+  size_t k = std::min(rows, cols);
+  Matrix S_inv = Matrix::zeros(k, k);
+  
+  double max_s = 0.0;
+  for (size_t i = 0; i < k; ++i) {
+    max_s = std::max(max_s, svd_res.S(i, i));
+  }
+  
+  double threshold = tol * max_s * std::max(rows, cols);
+  
+  for (size_t i = 0; i < k; ++i) {
+    if (svd_res.S(i, i) > threshold) {
+      S_inv(i, i) = 1.0 / svd_res.S(i, i);
+    }
+  }
+  
+  // A^+ = V * S^+ * U^T
+  return svd_res.V * S_inv * svd_res.U.T();
 }
 
 // ================================================================

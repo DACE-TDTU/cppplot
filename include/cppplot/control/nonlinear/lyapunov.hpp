@@ -39,6 +39,7 @@
 #define CPPPLOT_CONTROL_NONLINEAR_LYAPUNOV_HPP
 
 #include "../../pyplot.hpp"
+#include "../../core/matrix.hpp"   // Matrix, Matrix::eigenvalues() — required for lyapunov()
 #include "../state_space.hpp"
 #include <algorithm>
 #include <cmath>
@@ -111,17 +112,17 @@ inline double lie_derivative_V(const LyapunovFunc &V,
  * @return   P  n×n positive definite solution
  * @throws   std::runtime_error if A is not stable
  */
-inline Matrix lyapunov_equation(const Matrix &A, const Matrix &Q) {
+inline Matrix lyapunov(const Matrix &A, const Matrix &Q) {
   size_t n = A.rows;
   if (n != A.cols || n != Q.rows || n != Q.cols)
     throw std::runtime_error("lyapunov_equation: dimension mismatch");
 
-  // Check stability
+  // Check stability — Matrix::eigenvalues() is the correct API (no poles() method)
   auto eigs = A.eigenvalues();
   for (const auto &ev : eigs) {
     if (ev.real() >= 0)
       throw std::runtime_error(
-          "lyapunov_equation: A must be stable (all Re(λ) < 0)");
+          "lyapunov: A must be stable (all Re(λ) < 0)");
   }
 
   // Vectorization approach: solve (A^T ⊗ I + I ⊗ A) p = -q
@@ -130,7 +131,7 @@ inline Matrix lyapunov_equation(const Matrix &A, const Matrix &Q) {
   size_t n2 = n * n;
   Matrix M(n2, n2, 0.0);
   Matrix I = Matrix::eye(n);
-  Matrix AT = A.transpose();
+  Matrix AT = A.T();
 
   for (size_t i = 0; i < n; ++i) {
     for (size_t j = 0; j < n; ++j) {
@@ -343,7 +344,7 @@ verify_barrier_certificate(const LyapunovFunc &B, const LyapunovDotAuto &Bdot,
   BarrierCertificateResult result{true, true, true, false};
 
   double dx = (x1_range.second - x1_range.first) / resolution;
-  double dy = (x2_range.second - y2_range.first) / resolution;
+  double dy = (x2_range.second - x2_range.first) / resolution;
   // Note: y2 → x2 fix
   dy = (x2_range.second - x2_range.first) / resolution;
 
@@ -564,6 +565,14 @@ lasalle_invariant_set(const LyapunovFunc &V, const LyapunovDotAuto &Vdot,
 }
 
 } // namespace nonlinear
+} // namespace control
+} // namespace cppplot
+
+// ── Convenience: pull lyapunov() into cppplot::control so that
+//    hinf.hpp (and other control/ headers) can call it unqualified.
+namespace cppplot {
+namespace control {
+  using nonlinear::lyapunov;   // AᵀP + PA = -Q  solver
 } // namespace control
 } // namespace cppplot
 

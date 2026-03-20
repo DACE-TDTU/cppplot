@@ -70,7 +70,7 @@
 // State-space representation
 #include "state_space.hpp"
 
-// Controller design
+// Controller design (Riccati helpers require including core/riccati.hpp)
 #include "controller_design.hpp"
 #include "block_diagram.hpp"
 

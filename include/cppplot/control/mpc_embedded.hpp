@@ -69,6 +69,12 @@
 #ifndef DCAS_MPC_EMBEDDED_HPP
 #define DCAS_MPC_EMBEDDED_HPP
 
+// Tell qp_solver.hpp to skip bridge functions that depend on
+// cppplot::Matrix and std::vector — not needed for embedded targets.
+#ifndef CPPPLOT_QP_STANDALONE
+#define CPPPLOT_QP_STANDALONE
+#endif
+
 #include "cppplot/control/qp_solver.hpp"   // qp::Vec, Mat, ADMMSolver, Params
 #include <cmath>
 #include <cstring>

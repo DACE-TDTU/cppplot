@@ -386,7 +386,16 @@ private:
 
 // ============================================================
 //        BRIDGE: cppplot::Matrix  <->  qp::Vec / Mat
+//
+//  Excluded when CPPPLOT_QP_STANDALONE is defined.
+//  Define this macro when using qp_solver.hpp in embedded
+//  targets that do not have the full cppplot Matrix class.
+//
+//  mpc_embedded.hpp defines CPPPLOT_QP_STANDALONE automatically
+//  before including qp_solver.hpp.
 // ============================================================
+
+#ifndef CPPPLOT_QP_STANDALONE
 
 /**
  * @brief Copy cppplot::Matrix (dynamic) into fixed-size Mat<N>
@@ -438,6 +447,8 @@ template <int N> Matrix to_matrix(const Vec<N> &v) {
     out(i, 0) = v[i];
   return out;
 }
+
+#endif // CPPPLOT_QP_STANDALONE
 
 // ============================================================
 //        BENCHMARK UTILITIES
