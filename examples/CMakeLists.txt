@@ -38,6 +38,11 @@ add_executable(polar_demo polar_demo.cpp)
 target_link_libraries(polar_demo PRIVATE cppplot)
 target_compile_definitions(polar_demo PRIVATE _USE_MATH_DEFINES)
 
+# Robotics examples
+add_executable(robotics_diffdrive_demo robotics_diffdrive_demo.cpp)
+target_link_libraries(robotics_diffdrive_demo PRIVATE cppplot)
+target_compile_definitions(robotics_diffdrive_demo PRIVATE _USE_MATH_DEFINES)
+
 # Copy output directory structure
 add_custom_target(create_output_dir ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/output

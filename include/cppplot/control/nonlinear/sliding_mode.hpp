@@ -378,7 +378,7 @@ public:
                 u = computeConventional(x, s);
                 break;
             case SMCType::SUPER_TWISTING:
-                u = computeSuperTwisting(s, dt);
+                u = computeSuperTwisting(x, s, dt);
                 break;
             case SMCType::INTEGRAL:
                 u = computeIntegralSMC(x, s, error);
@@ -489,7 +489,7 @@ private:
      * v̇ = -β·sign(s)
      * 
      * Provides continuous control with finite-time convergence
-     */
+     
     double computeSuperTwisting(double s, double dt) {
         double alpha = config_.sta_alpha;
         double beta = config_.sta_beta;
@@ -502,7 +502,22 @@ private:
         
         return u;
     }
+    */
+double computeSuperTwisting(const std::vector<double>& x, double s, double dt) {
+    // Thêm equivalent control
+    double gx = g_(x);
+    if (std::abs(gx) < 1e-10) gx = 1.0;
+    double u_eq = -f_(x) / gx;          // ← THÊM DÒNG NÀY
     
+    double alpha = config_.sta_alpha;
+    double beta = config_.sta_beta;
+
+    double u_sta = -alpha * std::sqrt(std::abs(s)) * SlidingSurface::sign(s) + sta_integral_;
+    sta_integral_ -= beta * SlidingSurface::sign(s) * dt;
+    
+    return u_eq + u_sta;                 // ← SỬA DÒNG NÀY
+}
+
     /**
      * @brief Integral Sliding Mode Control
      * 

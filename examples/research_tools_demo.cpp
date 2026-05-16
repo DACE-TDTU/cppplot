@@ -103,6 +103,8 @@ void demo_kalman_vehicle_tracking() {
   }
 
   std::cout << "\n✓ Kalman filter smooths noisy GPS measurements!" << std::endl;
+figure();
+plot(t, true_pos, "r-", {{"label","true-pos"}}
 }
 
 // ============================================================

@@ -45,4 +45,7 @@
 // High-level API (pyplot-style)
 #include "pyplot.hpp"
 
+// Robotics helpers
+#include "robotics/robotics.hpp"
+
 #endif // CPPPLOT_CPPPLOT_HPP

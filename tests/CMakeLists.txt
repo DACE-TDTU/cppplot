@@ -107,10 +107,12 @@ cppplot_add_test(test_control_systems  test_control_systems.cpp)
 cppplot_add_test(test_layout           test_layout.cpp)
 cppplot_add_test(test_numerical        test_numerical.cpp)
 cppplot_add_test(test_fixes            test_fixes.cpp)
+cppplot_add_test(test_robotics_mobile_base test_robotics_mobile_base.cpp)
 
 set_tests_properties(
     test_basic_plot test_svg_validity test_plot_types
     test_control_systems test_layout test_numerical test_fixes
+    test_robotics_mobile_base
     PROPERTIES LABELS "extended"
 )
 

@@ -917,7 +917,28 @@ private:
     // Calculate legend size
     double itemHeight = legend_.textStyle.fontSize + legend_.spacing;
     double legendHeight = legendItems.size() * itemHeight + legend_.padding * 2;
-    double legendWidth = 100; // TODO: calculate based on text
+    // double legendWidth = 150; // TODO: calculate based on text
+    // Auto-size width: estimate text width bằng heuristic per-char
+    // (SVG backend không có font metrics → dùng average 0.60 * fontSize)
+    const double sampleW = 25.0; // chiều dài line/marker sample (hiện tại x+20)
+    const double gapW = 5.0; // gap sample ↔ text  (hiện tại x+25 = padding+25)
+    const double fs = legend_.textStyle.fontSize;
+    double maxLabelW = 0.0;
+    for (const auto &item : legendItems) {
+      double w = 0.0;
+      for (unsigned char c : item.first) {
+        if (std::string("il|1.,;:'\"! ").find(c) != std::string::npos)
+          w += 0.35 * fs;
+        else if (std::string("mwMW").find(c) != std::string::npos)
+          w += 0.85 * fs;
+        else
+          w += 0.60 * fs;
+      }
+      if (w > maxLabelW)
+        maxLabelW = w;
+    }
+    double legendWidth =
+        legend_.padding + sampleW + gapW + maxLabelW + legend_.padding;
 
     // Position
     double lx = plotArea.right() - legendWidth - 10;
@@ -1041,24 +1062,26 @@ public:
   }
 
   // Update style for an existing series by index (best-effort)
-  Axes &set_series_style(size_t index,
-                         const std::string &color,
-                         double linewidth,
-                         const std::string &linestyle,
-                         const std::string &marker,
-                         double markersize,
+  Axes &set_series_style(size_t index, const std::string &color,
+                         double linewidth, const std::string &linestyle,
+                         const std::string &marker, double markersize,
                          const std::string &label) {
-    if (index >= elements_.size()) return *this;
+    if (index >= elements_.size())
+      return *this;
     auto &elem = elements_[index];
     if (!color.empty()) {
       elem->style.line.color = Color::fromHex(color);
       elem->style.marker.faceColor = Color::fromHex(color);
       elem->style.marker.edgeColor = Color::fromHex(color);
     }
-    if (linewidth > 0) elem->style.line.width = linewidth;
-    if (!linestyle.empty()) elem->style.line.style = linestyle;
-    if (!marker.empty()) elem->style.marker.marker = marker;
-    if (markersize > 0) elem->style.marker.size = markersize;
+    if (linewidth > 0)
+      elem->style.line.width = linewidth;
+    if (!linestyle.empty())
+      elem->style.line.style = linestyle;
+    if (!marker.empty())
+      elem->style.marker.marker = marker;
+    if (markersize > 0)
+      elem->style.marker.size = markersize;
     elem->style.label = label;
     return *this;
   }
@@ -1268,7 +1291,9 @@ public:
   bool xlimSet() const { return xlimSet_; }
   bool ylimSet() const { return ylimSet_; }
   const LegendStyle &legendStyle() const { return legend_; }
-  const std::vector<std::shared_ptr<PlotElement>> &elements() const { return elements_; }
+  const std::vector<std::shared_ptr<PlotElement>> &elements() const {
+    return elements_;
+  }
 
   // ============ Plotting Methods ============
 
